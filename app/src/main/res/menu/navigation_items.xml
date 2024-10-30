@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+    android:id="@+id/mapaId"
+    android:icon="@drawable/mapa_municipal_de_catalunya"
+    android:title="Mapa" />
+
+    <item
+        android:id="@+id/estadistiquesId"
+        android:icon="@drawable/baseline_query_stats_24"
+        android:title="Estadístiques" />
+
+    <item
+        android:id="@+id/configuracioId"
+        android:icon="@drawable/baseline_settings_24"
+        android:title="Configuració" />
+
+    <item
+        android:id="@+id/altreId"
+        android:icon="@drawable/baseline_auto_awesome_24"
+        android:title="Altre" />
+</menu>

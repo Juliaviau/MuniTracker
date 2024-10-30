@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="groc">#FFEB3B</color>
+    <color name="blau_mapa">#9ea9ba</color>
+    <color name="blau_mapa_fosc">#6D7C93</color>
+    <color name="lila_clar">#9ea1ea</color>
+    <color name="taronja">#EA998F</color>
+</resources>
