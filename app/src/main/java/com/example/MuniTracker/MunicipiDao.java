@@ -30,14 +30,21 @@ public interface MunicipiDao {
     @Query("SELECT COUNT(*) FROM municipis WHERE comarca_id = :comarcaId AND visitat = 1")
     int getVisitadosMunicipisInComarca(String comarcaId);
 
-    default int getPorcentajeVisitadosInComarca(String comarcaId) {
+    @Query("SELECT COUNT(*) FROM municipis WHERE provincia_id = :provinciaId AND visitat = 1")
+    int getVisitadosMunicipisInProvincia(String provinciaId);
+
+    @Query("SELECT COUNT(*) FROM municipis WHERE vegueria_id = :vegueriaId AND visitat = 1")
+    int getVisitadosMunicipisInVegueria(String vegueriaId);
+
+
+    /*default int getPorcentajeVisitadosInComarca(String comarcaId) {
 
         int total = getTotalMunicipisInComarca(comarcaId);
         int visitados = getVisitadosMunicipisInComarca(comarcaId);
         //Log.d("MUNUCUOU", "total " + total + " visi " + visitados + " com " + comarcaId);
         return visitados;
         //return total == 0 ? 0 : (visitados * 100) / total;
-    }
+    }*/
 
 
 

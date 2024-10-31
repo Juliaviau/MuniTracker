@@ -52,7 +52,7 @@ public class MunicipiViewModel extends AndroidViewModel {
         return porcentaje;
     }
 
-    /*public LiveData<Integer> obtenerPorcentajeVisitadosProvincia(String provinciaId) {
+    public LiveData<Integer> obtenerPorcentajeVisitadosProvincia(String provinciaId) {
         MutableLiveData<Integer> porcentaje = new MutableLiveData<>();
         Executors.newSingleThreadExecutor().execute(() -> {
             int resultado = municipiRepository.getPorcentajeVisitadosProvincia(provinciaId);
@@ -68,7 +68,7 @@ public class MunicipiViewModel extends AndroidViewModel {
             porcentaje.postValue(resultado);
         });
         return porcentaje;
-    }*/
+    }
 
 
 

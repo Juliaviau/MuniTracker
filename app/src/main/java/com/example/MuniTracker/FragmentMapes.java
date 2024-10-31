@@ -94,10 +94,28 @@ public class FragmentMapes extends Fragment {
         Button buttonComarques = view.findViewById(R.id.btComarques);
         Button buttonMunicipis = view.findViewById(R.id.btMunicipis);
 
-        buttonProvincies.setOnClickListener(v -> loadMap(R.raw.provinvies));
-        buttonVegueries.setOnClickListener(v -> loadMap(R.raw.vegueries));
+        buttonProvincies.setOnClickListener(v -> {
+            loadMap(R.raw.provinscies);
+            webView.setWebViewClient(new WebViewClient() {
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    super.onPageFinished(view, url);
+                    pintarProvinciesPerVisites();
+                }
+            });
+        });
+        buttonVegueries.setOnClickListener(v -> {
+            loadMap(R.raw.vegueries);
+            webView.setWebViewClient(new WebViewClient() {
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    super.onPageFinished(view, url);
+                    pintarVegueriesPerVisites();
+                }
+            });
+        });
         buttonComarques.setOnClickListener(v -> {
-            loadMap(R.raw.comarques);
+            loadMap(R.raw.comarquesactu);
             webView.setWebViewClient(new WebViewClient() {
                 @Override
                 public void onPageFinished(WebView view, String url) {
@@ -114,38 +132,90 @@ public class FragmentMapes extends Fragment {
         return view;
     }
 
+    private void pintarVegueriesPerVisites() {
+        MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
 
+        List<String> listaVegueries = obtenerListaDeVegueries();
+
+        //Per a cada comarca
+        for (String vegueriaId : listaVegueries) {
+            Log.d("PROVINCIES", vegueriaId);
+            //Retorna quants municipis estan visitats
+            viewModel.obtenerPorcentajeVisitadosVegueria(vegueriaId).observe(getViewLifecycleOwner(), porcentaje -> {
+                //Log.d("PROVINCIES", vegueriaId + " " + porcentaje);
+                //Quantitat municipis per comarca
+                int quantitat = territoryHelper.getCantidadMunicipiosPorVegueria(vegueriaId);
+                //Calcula el percentatge
+                double percentarge = quantitat == 0 ? 0 : (double) (porcentaje * 100) / quantitat;
+
+                Log.d("PROVINCIES", vegueriaId + " " + porcentaje+ " " + quantitat+ " " + percentarge);
+                //I assigna el color
+                int color = obtenerColorPorPorcentaje(percentarge);
+                canviarColorSVG(vegueriaId, String.format("#%06X", (0xFFFFFF & color)));  // Cambia el color de la comarca en el mapa
+            });
+        }
+    }
+
+    private void pintarProvinciesPerVisites() {
+        MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
+
+        List<String> listaProvincies = obtenerListaDeProvincies();
+
+        //Per a cada comarca
+        for (String provinciaId : listaProvincies) {
+            //Retorna quants municipis estan visitats
+            viewModel.obtenerPorcentajeVisitadosProvincia(provinciaId).observe(getViewLifecycleOwner(), porcentaje -> {
+                //Quantitat municipis per comarca
+                int quantitat = territoryHelper.getCantidadMunicipiosPorProvincia(provinciaId);
+                //Calcula el percentatge
+                double percentarge = quantitat == 0 ? 0 : (double) (porcentaje * 100) / quantitat;
+
+                //I assigna el color
+                int color = obtenerColorPorPorcentaje(percentarge);
+                canviarColorSVG(provinciaId, String.format("#%06X", (0xFFFFFF & color)));  // Cambia el color de la comarca en el mapa
+            });
+        }
+    }
 
     private void colorearComarcasPorVisitas() {
         MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
 
-        List<String> listaComarcas = obtenerListaDeComarcas();  // Implementa este método para obtener la lista de IDs de comarcas
-        Log.d("COMARQUES ", "colorear");
+        List<String> listaComarcas = obtenerListaDeComarcas();
+
+        //Per a cada comarca
         for (String comarcaId : listaComarcas) {
-
+            //Retorna quants municipis estan visitats
             viewModel.obtenerPorcentajeVisitadosComarca(comarcaId).observe(getViewLifecycleOwner(), porcentaje -> {
-
+                //Quantitat municipis per comarca
                 int quantitat = territoryHelper.getCantidadMunicipiosPorComarca(comarcaId);
-
-                int percentarge = quantitat == 0 ? 0 : (porcentaje * 100) / quantitat;
-
+                //Calcula el percentatge
+                double percentarge = quantitat == 0 ? 0 : (double) (porcentaje * 100) / quantitat;
+                //I assigna el color
                 int color = obtenerColorPorPorcentaje(percentarge);
-                Log.d("COMARQUES col", comarcaId + " " + color);
                 canviarColorSVG(comarcaId, String.format("#%06X", (0xFFFFFF & color)));  // Cambia el color de la comarca en el mapa
             });
         }
     }
 
     private List<String> obtenerListaDeComarcas() {
-        // Retorna una lista de IDs de comarcas para recorrerlas y colorearlas.
-        return Arrays.asList("Alta Ribagorça", "Alt Urgell", "Cerdanya", "Pallars Jussà", "Pallars Sobirà", "Val d'Aran",
-                "Anoia", "Bages", "Baix Llobregat", "Barcelonès", "Garraf", "Maresme", "Osona", "Vallès Occidental", "Vallès Oriental",
-                "Alt Camp", "Baix Camp", "Baix Penedès", "Conca de Barberà", "Priorat", "Tarragonès",
-                "Anoia", "Bages", "Berguedà", "Moianès", "Osona", "Solsonès", "Ripollès",
-                "Alt Empordà", "Baix Empordà", "Cerdanya", "Garrotxa", "Gironès", "Pla de l'Estany", "Selva",
-                "Alta Ribagorça", "Garrigues", "Noguera", "Pla d'Urgell", "Segarra", "Segrià", "Solsonès", "Urgell",
-                "Alt Penedès", "Anoia", "Baix Penedès", "Garraf",
-                "Baix Ebre", "Montsià", "Ribera d'Ebre", "Terra Alta"); // Reemplaza con tus IDs reales
+        return Arrays.asList(
+                "Alt Empordà","Garrotxa","Pla de l'Estany","Gironès","Baix Empordà", "Ripollès","La Selva","Montsià",
+                "Baix Ebre", "Terra Alta","Ribera d'Ebre","Priorat","Baix Camp","Segrià","Garrigues","Tarragonès",
+                "Alt Camp", "Conca de Barberà", "Pla d'Urgell","Baix Penedès","Garraf", "Alt Penedès","Urgell",
+                "Noguera", "Segarra","Anoia","Pallars Jussà","Alta Ribagorça","Val d'Aran","Pallars Sobirà",
+                "Alt Urgell","Baix Llobregat","Barcelonès","Maresme","Solsonès","Cerdanya","Lluçanès", "Berguedà",
+                "Osona","Bages","Moianès","Vallès Occidental","Vallès Oriental");
+    }
+
+    private List<String> obtenerListaDeVegueries() {
+        return Arrays.asList(
+                "Alt Pirineu i Aran","Barcelona","Camp de Tarragona","Catalunya Central","Girona",
+                "Lleida","Penedès","Terres de l'Ebre");
+    }
+
+    private List<String> obtenerListaDeProvincies() {
+        return Arrays.asList(
+                "Província de Barcelona","Província de Girona","Província de Lleida","Província de Tarragona");
     }
 
 
@@ -248,7 +318,7 @@ public class FragmentMapes extends Fragment {
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
 
         TextView comarcaInfo = bottomSheetView.findViewById(R.id.zonaNom);
-        comarcaInfo.setText("Informació sobre la comarca: " + comarcaId);
+        comarcaInfo.setText(comarcaId);
 
         // Cambiar el color de la comarca pulsada a verde
         canviarColorSVG(comarcaId, "white");
@@ -267,6 +337,18 @@ public class FragmentMapes extends Fragment {
             resetZoom(originalViewBox); // Restaurar el viewBox original
         });
 
+        TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
+        NestedScrollView scroll = bottomSheetView.findViewById(R.id.scrollView);
+        Button markAsVisitedButton = bottomSheetView.findViewById(R.id.visit);
+        View viewBottom = bottomSheetView.findViewById(R.id.viewbottom);
+
+        infoMuni.setText("");
+        closeButton.setVisibility(View.GONE);
+        scroll.setVisibility(View.GONE);  // Oculta el scroll si no hay visitas
+        markAsVisitedButton.setVisibility(View.GONE);
+        viewBottom.setVisibility(View.GONE);
+
+
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
     }
@@ -276,7 +358,7 @@ public class FragmentMapes extends Fragment {
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
 
         TextView provinciaInfo = bottomSheetView.findViewById(R.id.zonaNom);
-        provinciaInfo.setText("Informació sobre la província: " + provinciaId);
+        provinciaInfo.setText(provinciaId);
 
         // Cambiar el color de la comarca pulsada a verde
         canviarColorSVG(provinciaId, "white");
@@ -295,6 +377,18 @@ public class FragmentMapes extends Fragment {
             resetZoom(originalViewBox); // Restaurar el viewBox original
         });
 
+
+        TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
+        NestedScrollView scroll = bottomSheetView.findViewById(R.id.scrollView);
+        Button markAsVisitedButton = bottomSheetView.findViewById(R.id.visit);
+        View viewBottom = bottomSheetView.findViewById(R.id.viewbottom);
+
+        infoMuni.setText("");
+        closeButton.setVisibility(View.GONE);
+        scroll.setVisibility(View.GONE);  // Oculta el scroll si no hay visitas
+        markAsVisitedButton.setVisibility(View.GONE);
+        viewBottom.setVisibility(View.GONE);
+
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
     }
@@ -304,7 +398,7 @@ public class FragmentMapes extends Fragment {
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
 
         TextView vegueriaInfo = bottomSheetView.findViewById(R.id.zonaNom);
-        vegueriaInfo.setText("Informació sobre la vegueria: " + vegueriaId);
+        vegueriaInfo.setText(vegueriaId);
 
         // Cambiar el color de la comarca pulsada a verde
         canviarColorSVG(vegueriaId, "white");
@@ -322,6 +416,18 @@ public class FragmentMapes extends Fragment {
             canviarColorSVG(vegueriaId, originalColor); // Restaurar el color original
             resetZoom(originalViewBox); // Restaurar el viewBox original
         });
+
+
+        TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
+        NestedScrollView scroll = bottomSheetView.findViewById(R.id.scrollView);
+        Button markAsVisitedButton = bottomSheetView.findViewById(R.id.visit);
+        View viewBottom = bottomSheetView.findViewById(R.id.viewbottom);
+
+        infoMuni.setText("");
+        closeButton.setVisibility(View.GONE);
+        scroll.setVisibility(View.GONE);  // Oculta el scroll si no hay visitas
+        markAsVisitedButton.setVisibility(View.GONE);
+        viewBottom.setVisibility(View.GONE);
 
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
@@ -348,6 +454,12 @@ public class FragmentMapes extends Fragment {
         NestedScrollView scroll = bottomSheetView.findViewById(R.id.scrollView);
 
         if (municipiVisitat) {
+
+            closeButton.setVisibility(View.VISIBLE);
+            scroll.setVisibility(View.VISIBLE);  // Oculta el scroll si no hay visitas
+            markAsVisitedButton.setVisibility(View.VISIBLE);
+            viewBottom.setVisibility(View.VISIBLE);
+
 
             infoMuni.setText("Visites anteriors");
             markAsVisitedButton.setText("Afegir visita");
@@ -403,6 +515,7 @@ public class FragmentMapes extends Fragment {
                         }
                     }
                     if (!isVisited.get()) {
+                        Log.d("CREA MUNI ", municipiId + " " + territoryData.comarcaId+ " " + territoryData.vegueriaId+ " " + territoryData.provinciaId);
                         Municipi municipi = new Municipi(municipiId, municipiId, true, territoryData.comarcaId, territoryData.vegueriaId, territoryData.provinciaId);
                         viewModel.afegirMunicipi(municipi);
                     }
@@ -438,10 +551,8 @@ public class FragmentMapes extends Fragment {
 
     private boolean comparaColor (String color1, String color2) {
         if (color1.equalsIgnoreCase(color2)) {
-            Log.d("SVG", "El color coincideix amb " + color1 + " actual es " + color2);
             return true;
         } else {
-            Log.d("SVG", "El color actual no coincideix amb " + color1 + " actual es " + color2);
             return false;
         }
     }
@@ -469,12 +580,11 @@ public class FragmentMapes extends Fragment {
         webView.evaluateJavascript(jsCode, null);
     }
 
-    public int obtenerColorPorPorcentaje(int porcentaje) {
-        Log.d("COMARQUES", String.valueOf(porcentaje));
-        if (porcentaje == 0) return ContextCompat.getColor(context, R.color.blau_mapa);
-        else if (porcentaje < 25) return ContextCompat.getColor(context, R.color.lleg25);
-        else if (porcentaje < 50) return ContextCompat.getColor(context, R.color.lleg50);
-        else if (porcentaje < 75) return ContextCompat.getColor(context, R.color.lleg75);
+    public int obtenerColorPorPorcentaje(double porcentaje) {
+        if (porcentaje == 0.0) return ContextCompat.getColor(context, R.color.blau_mapa);
+        else if (porcentaje < 25.0) return ContextCompat.getColor(context, R.color.lleg25);
+        else if (porcentaje < 50.0) return ContextCompat.getColor(context, R.color.lleg50);
+        else if (porcentaje < 75.0) return ContextCompat.getColor(context, R.color.lleg75);
         else return ContextCompat.getColor(context, R.color.llegComplet);
     }
 

@@ -67,20 +67,16 @@ public class MunicipiRepository {
 
 
     public int getPorcentajeVisitadosComarca(String comarcaId) {
-        return municipiDao.getPorcentajeVisitadosInComarca(comarcaId);
+        return municipiDao.getVisitadosMunicipisInComarca(comarcaId);
     }
 
-    /*public int getPorcentajeVisitadosProvincia(String provinciaId) {
-        int total = municipiDao.getTotalMunicipisInProvincia(provinciaId);
-        int visitados = municipiDao.getVisitadosMunicipisInProvincia(provinciaId);
-        return total == 0 ? 0 : (visitados * 100) / total;
+    public int getPorcentajeVisitadosProvincia(String provinciaId) {
+        return municipiDao.getVisitadosMunicipisInProvincia(provinciaId);
     }
 
     public int getPorcentajeVisitadosVegueria(String vegueriaId) {
-        int total = municipiDao.getTotalMunicipisInVegueria(vegueriaId);
-        int visitados = municipiDao.getVisitadosMunicipisInVegueria(vegueriaId);
-        return total == 0 ? 0 : (visitados * 100) / total;
-    }*/
+        return municipiDao.getVisitadosMunicipisInVegueria(vegueriaId);
+    }
 
 
 

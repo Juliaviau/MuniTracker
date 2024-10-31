@@ -55,11 +55,11 @@
       "Benifallet","Paüls", "Xerta","Tivenys","El Perelló","Alfara de Carles","Tortosa","Aldover",
       "Roquetes","Camarles","L'Aldea","Deltebre","L'Ametlla de Mar","L'Ampolla"],
 
-    "Gandesa": [
+    "Terra Alta": [
       "La Pobla de Massaluca","La Fatarella","Vilalba dels Arcs","Batea","Corbera d'Ebre","Gandesa",
       "El Pinell de Brai","Bot","El Prat del Comte","Arnes","Horta de Sant Joan","Caseres"],
 
-    "Mora d'Ebre": [
+    "Ribera d'Ebre": [
       "Riba-roja d'Ebre","La Palma d'Ebre","Vinebre","La Torre de l'Espanyol","Ascó","Garcia",
       "Móra d'Ebre","Móra la Nova","Miravet","Rasquera","Tivissa","Benissanet","Flix","Ginestar"],
 
@@ -95,7 +95,7 @@
       "Roda de Berà","Creixell","La Pobla de Montornès","Vespella de Gaià","Vilallonga del Camp",
       "La Secuita","Renau","Salomó"],
 
-    "Valls": [
+    "Alt Camp": [
       "Querol","Cabra del Camp","Figuerola del Camp","El Pla de Santa Maria","Valls","Vila-rodona",
       "Aiguamúrcia","El Pont d'Armentera","Mont-ral","La Riba","Alió","L'Arboç","Alcover","El Rourell",
       "Els Garidells","Puigpelat","Rodonyà","Bràfim","Montferri","Vallmoll","Vilabella","Nulles",
@@ -198,6 +198,8 @@
       "Meranges","Llívia","Guls de Cerdanya","Ger","Bellver de Cerdanya","Puigcerdà","Bolvir",
       "Prullans","Alp","Urús","Riu de Cerdanya","Das"],
 
+    "Lluçanès": [
+      "Alpens","Sant Martí d'Albars","Perafita","Prats de LLuçanès","Olost","Sobremunt","Oristà","Lluçà"],
 
     "Berguedà": [
       "Castellar del Riu","Viver i Serrateix","Bagà","Castellar de n'Hug","Guardiola de Berguedà","Gisclareny",
@@ -207,13 +209,13 @@
 
     "Osona": [
       "Seva","Sant Martí de Centelles","Muntanyola","Centelles","El Brull","Tona","Taradell","Vidrà",
-      "Santa Eulàlia de Riuprimer","Espinelves","Viladrau","Alpens","Santa Maria de Besora","Sora",
-      "Sant Agustí de Lluçanès","Orís","Rupit i Pruit","Balenyà","Sant Quirze de Besora","L'Esquirol",
+      "Santa Eulàlia de Riuprimer","Espinelves","Viladrau","Santa Maria de Besora","Sora",
+      "Orís","Rupit i Pruit","Balenyà","Sant Quirze de Besora","L'Esquirol",
       "Montesquiu","Sant Pere de Torelló","Sant Agustí de LLuçanès","Sant Vicenç de Torelló","Sant Boi de Lluçanès",
-      "Perafita","Sant Martí d'Albars","Les Masies de Voltregà","Sobremunt","Travertet","Olost","Malla",
+      "Les Masies de Voltregà","Travertet","Malla",
       "Torelló","Manlleu","Sant Hipòlit de Voltregà","Santa Cecilia de Voltregà","Sant Bartolomeu del Grau",
-      "Les Masies de Roda","Gurb","Vilanova de Sau","Roda de Ter","Tavèrnoles","Prats de LLuçanès","Folgueroles",
-      "Vic","Sant Julià de Vilatorta","Oristà","Calldetenes","Sant Sadurní d'Osmort","Santa Eugènia de Berga" ],
+      "Les Masies de Roda","Gurb","Vilanova de Sau","Roda de Ter","Tavèrnoles","Folgueroles",
+      "Vic","Sant Julià de Vilatorta","Calldetenes","Sant Sadurní d'Osmort","Santa Eugènia de Berga" ],
 
     "Bages": [
       "El Pont de Vilomara i Rocafort","Navarcles","Castellbell i el Vilar","Sant Feliu Sasserra","Gaià",
@@ -242,20 +244,421 @@
       "Canovelles","Lliçà de Vall","Mollet del Vallès","Montmeló","Montornès del Vallès","Vallromanes",
       "Martorelles","Santa Maria de Martorelles","Sant Fost de Campsentelles","La Llagosta"]
 },
+
+
+
+  "provinciesMUN": {
+    "Província de Barcelona": [
+      "Castellet i la Gornal","Olesa de Bonesvalls", "Mediona","Torrelavit","Font-rubí","Subirats",
+      "Avinyonet del Penedès","Castellví de la Marca","Olèrdola","Santa Margarida i els Monjos",
+      "Sant Llorenç d'Hortons", "Torrelles de Foix","El Pla del Penedès","Sant Martí Sarroca",
+      "Puigdàlber","Santa Fe del Penedès", "La Granada","Les Cabanyes","Pacs del Penedès",
+      "Vilafranca del Penedès","Sant Cugat Sesgarrigues","Vilobí del Penedès", "Pontons",
+      "Sant Quintí de Mediona","Sant Pere de Riudebitlles","Sant Sadurní d'Anoia","Gelida",
+
+      "Orpí", "Cabrera d'Anoia","Castellfollit de Riubregós","Calonge de Segarra","Pujalt","Calaf",
+      "Sant Martí Sesgueioles","Veciana","Rubió", "Copons","Òdena","El Bruc", "Argençola","Montmaneu",
+      "Jorba", "Castellolí", "Igualada", "Sant Martí de Tous",  "Santa Margarida de Montbui","La Pobla de Claramunt",
+      "Vilanova del Camí", "Piera", "Els Hostalets de Pierola","Vallbona d'Anoia", "Carme", "La Torre de Claramunt",
+      "Santa Maria de Miralles","Bellprat","Capellades", "La Llacuna","Masquefa","Els Prats de Rei","St. Pere Sallavinera",
+
+      "El Pont de Vilomara i Rocafort","Navarcles","Castellbell i el Vilar","Sant Feliu Sasserra","Gaià",
+      "Cardona", "Navàs", "Avinyó","Sallent","Balsareny", "Castellnou de Bages","Sant Mateu de Bages",
+      "Suria","Callús","Artés","Santpedor","Fonollosa","Aguilar de Segarra","Sant Fruitós de Bages",
+      "Sant Joan de Vilatorrada","Manresa", "Rajadell","Talamanca","Mura","Castellfollit del Boix",
+      "Sant Salvador de Guardiola", "Marganell", "Monistrol de Montserrat", "Castellgalí","Sant Vicenç de Castellet",
+
+      "El Papiol","Corbera de Llobregat",
+      "El Prat de Llobregat","Castellví de Rosanes","Esparreguera","Colbató","Abrera",
+      "Sant Esteve Sesrovires","Martorell","Olesa de Montserrat","Sant Andreu de la Barca",
+      "Sant Feliu de LLobregat","Cervelló","Sant Vicenç dels Horts","Sant Just Desvern",
+      "Vallirana","Esplugues de Llobregat","Santa Coloma de Cervelló","Cornellà de Llobregat",
+      "Sant Joan Despí","Sant Climent de Llobregat","Sant Boi de Llobregat","Sant Climent de Llobregat",
+      "Begues","Viladecans","Castelldefels", "Gavà",
+
+      "Barcelona","Santa Coloma de Gramenet","Badalona","Sant Adrià del Besòs","Hospitalet de Llobregat",
+
+      "Canyelles","Olivella", "Sitges","Vilanova i la Geltrú","Cubelles","Sant Pere de Ribes",
+
+      "Tordera","Mataró","Caldes d'Estrac","Òrrius","Vilassar de Dalt","Cabrils","Premià de Dalt","Teià",
+      "Vilassar de Mar","Alella","Tiana","Premià de Mar","El Masnou","Montgat","Santa Susanna","Palafolls",
+      "Malgrat de Mar","Sant Iscle de Vilalta","Sant Cebrià de Vallalta","Pineda de Mar","Dosrius","Arenys de Munt",
+      "Calella","Sant Vicenç de Montalt","Sant Andreu de Llavaneres","Canet de Mar","Sant Pol de Mar","Argentona","Arenys de Mar",
+
+      "Seva","Sant Martí de Centelles","Muntanyola","Centelles","El Brull","Tona","Taradell","Vidrà",
+      "Santa Eulàlia de Riuprimer","Espinelves","Viladrau","Santa Maria de Besora","Sora",
+      "Orís","Rupit i Pruit","Balenyà","Sant Quirze de Besora","L'Esquirol",
+      "Montesquiu","Sant Pere de Torelló","Sant Agustí de LLuçanès","Sant Vicenç de Torelló","Sant Boi de Lluçanès",
+      "Les Masies de Voltregà","Travertet","Malla",
+      "Torelló","Manlleu","Sant Hipòlit de Voltregà","Santa Cecilia de Voltregà","Sant Bartolomeu del Grau",
+      "Les Masies de Roda","Gurb","Vilanova de Sau","Roda de Ter","Tavèrnoles","Folgueroles",
+      "Vic","Sant Julià de Vilatorta","Calldetenes","Sant Sadurní d'Osmort","Santa Eugènia de Berga",
+
+      "Castellbisbal","Sant Cugat del Vallès","Badia del Vallès","Cerdanyola del Vallès","Ripollet",
+      "Montcada i Reixac","Galifa","Sant Llorenç Savall","Santmenat","Matadepera","Castellar del Vallès",
+      "Rellinars","Vacarisses","Terrassa","Palau-solità i Plegamans","Sabadell","Viladecavalls",
+      "Polinyà","Santa Perpètua de Mogoda","Rubí","Sant Quirze del Vallès","Barberà del Vallès","Ullastrell",
+
+      "Fogars de Montclús","Cànoves i Samalús","Figaró-Montmany","Bigues i Riells","Montseny","Gualba",
+      "Les Franqueses del Vallès","Aiguafreda","Tagamanent","Sant Pere de Vilamajor","Campins",
+      "Sant Esteve de Palautordera","Sant Celoni","La Garriga","Sant Feliu de Codines",
+      "Santa Maria de Palautordera","L'Ametlla del Vallès","Caldes de Montbui","Sant Antoni de Vilamajor",
+      "Llinars del Vallès","Cardedeu","Vallgorguina","Santa Eulàlia de Ronçana","Vilalba Sasserra",
+      "Lliçà d'Amunt","La Roca del Vallès","Granollers","Parets del Vallès","Vilanova del Vallès",
+      "Canovelles","Lliçà de Vall","Mollet del Vallès","Montmeló","Montornès del Vallès","Vallromanes",
+      "Martorelles","Santa Maria de Martorelles","Sant Fost de Campsentelles","La Llagosta"
+    ],
+
+  "Província de Girona": [
+      "Agullana", "Albanyà","L'Escala","La Jonquera", "Llançà", "Castelló d'Empúries", "Figueres",
+      "Roses",  "Vilafant","Cadaqués", "Peralada", "Sant Pere Pescador",
+      "Palau-saverdera", "Empuriabrava","Portbou","Colera","Sant Climent Sescebes",
+      "Vilajuïga","Cistella","Biure", "Maçanet de Cabrenys", "Espolla",
+      "Llers", "Pont de Molins", "Capmany","Torroella de Fluvià", "Garriguella",
+      "Borrassà","Darnius", "Ordis","Avinyonet de Puigventós", "Vila-sacra", "Siurana",
+      "Vilabertran","Pau", "Vilamacolum",  "Sant Miquel de Fluvià","Vilanova de la Muga",
+
+      "Palafrugell","Palamós","Castell-Platja d'Aro","Sant Feliu de Guíxols",
+      "Torroella de Montgrí", "La Bisbal d'Empordà","Begur","Pals", "Calonge i Sant Antoni",
+      "Santa Cristina d'Aro", "Bellcaire d'Empordà", "Ullà", "La Pera", "Forallac",
+      "Mont-ras","Cruïlles, Monells i Sant Sadurní de l'Heura", "Gualta", "Regencós",
+      "Torrent", "Parlavà","Verges", "Corçà", "Fontanilles", "Ullastret", "Jafre",
+
+      "Alp", "Bolvir", "Das","Fontanals de Cerdanya","Guils de Cerdanya","Isòvol",
+      "Llívia", "Meranges", "Prats i Sansor", "Puigcerdà","Urús",
+
+      "Olot","Besalú","Les Planes d'Hostoles", "Les Preses","Argelaguer", "Beuda",
+      "Castellfollit de la Roca", "Maià de Montcal","Mieres","Montagut i Oix",
+      "Riudaura","Sales de Llierca","Sant Aniol de Finestres","Sant Feliu de Pallerols",
+      "Sant Jaume de Llierca", "Santa Pau","Vall d'en Bas",  "Vall de Bianya",
+
+      "Girona", "Salt","Sant Gregori", "Llagostera","Cassà de la Selva","Bordils",
+      "Sant Julià de Ramis","Quart", "Fornells de la Selva", "Celrà", "Vilablareix",
+      "Sarrià de Ter","Aiguaviva","Llambilles","Madremanya", "Sant Martí Vell",
+      "Sant Andreu Salou","Campllong", "Cruïlles, Monells i Sant Sadurní de l'Heura","Juià",
+
+      "Banyoles", "Porqueres","Fontcoberta","Cornellà del Terri","Crespià", "Esponellà",
+      "Palol de Revardit","Sant Miquel de Campmajor","Serinyà","Vilademuls",
+      "Camós",
+
+      "Ripoll", "Campdevànol", "Ribes de Freser",  "Sant Joan de les Abadesses", "Camprodon",
+      "Vallfogona de Ripollès","Gombrèn", "Llanars", "Molló","Ogassa", "Pardines",
+      "Planoles", "Queralbs", "Sant Pau de Segúries", "Setcases","Vilallonga de Ter",
+
+      "Blanes", "Lloret de Mar", "Sant Hilari Sacalm", "Sils", "Santa Coloma de Farners",
+      "Breda", "Riudarenes","Anglès", "Amer", "Arbúcies","Massanes","Vidreres",
+      "Tossa de Mar","Maçanet de la Selva", "Osor", "Sant Julià del Llor i Bonmatí",
+      "Brunyola i Sant Martí Sapresa", "Caldes de Malavella", "Vilobí d'Onyar", "Susqueda"
+    ],
+
+  "Província de Lleida": [
+    "Abella de la Conca","Àger","Agramunt","Aitona","Alàs i Cerc","Albagés","Albatàrrec",
+    "Albesa", "Alcanó","Alcarràs","Alcoletge","Alfarràs", "Alfés","Algerri", "Alguaire",
+    "Alins", "Almacelles","Almatret", "Almenar","Alòs de Balaguer", "Alpicat","Alt Àneu",
+    "Anglesola","Arbeca","Arres","Arsèguel","Artesa de Lleida","Artesa de Segre", "Aspa",
+    "Avellanes i Santa Linya","Baix Pallars","Balaguer","Barbens","Baronia de Rialb",
+    "Bassella","Bausen","Belianes","Bellaguarda","Bellcaire d'Urgell","Bell-lloc d'Urgell",
+    "Bellmunt d'Urgell","Bellpuig","Bellver de Cerdanya","Bellvís","Benavent de Segrià",
+    "Biosca", "Bòrdes", "Borges Blanques","Bossòst","Cabanabona","Camarasa","Canejan",
+    "Castell de Mur","Castellar de la Ribera", "Castelldans","Castellnou de Seana",
+    "Castelló de Farfanya","Castellserà","Cava","Cervera","Cervià de les Garrigues",
+    "Ciutadilla","Clariana de Cardener","Cogul","Coll de Nargó","Coma i la Pedra",
+    "Corbins","Cubells","Es Bòrdes","Espluga Calba","Espot","Estamariu","Estaràs",
+    "Esterri d'Àneu","Esterri de Cardós", "Farrera","Fígols i Alinyà", "Fondarella",
+    "Foradada","Fulleda","Gavet de la Conca","Gimenells i el Pla de la Font",
+    "Golmés","Gósol", "Granadella","Granja d'Escarp","Guimerà","Guingueta d'Àneu",
+    "Guissona","Guixers","Isona i Conca Dellà","Ivars de Noguera","Ivars d'Urgell",
+    "Ivorra","Josa i Tuixén","Juncosa","Juneda","Les","Linyola","Lladorre","Lladurs",
+    "Lles de Cerdanya","Llimiana","Llobera","Maials", "Maldà","Massalcoreig",
+    "Massoteres","Menàrguens","Miralcamp","Mollerussa","Molsosa","Montellà i Martinet",
+    "Montferrer i Castellbò","Montgai","Montoliu de Lleida","Montoliu de Segarra",
+    "Nalec","Naut Aran","Navès","Odèn","Oliana","Oliola","Olius","Ossó de Sió",
+    "Palau d'Anglesola","Penelles","Peramola","Pinell de Solsonès","Pinós",
+    "Plans de Sió","Poal", "Pobla de Cérvoles","Pobla de Segur","Pont de Bar",
+    "Ponts","Portella","Prats i Sansor","Preixana","Preixens", "Prullans",
+    "Puiggròs","Puigverd d'Agramunt","Puigverd de Lleida", "Rialp",
+    "Ribera d'Ondara","Riner","Riu de Cerdanya","Rosselló","Salàs de Pallars",
+    "Sanaüja","Sant Esteve de la Sarga","Sant Guim de Freixenet",
+    "Sant Guim de la Plana", "Sant Llorenç de Morunys","Sant Martí de Riucorb","Sant Ramon",
+    "Sarroca de Bellera", "Sarroca de Lleida","Senterada","Sentiu de Sió","Seròs",
+    "Sidamon","Soleràs","Solsona","Soriguera","Sort","Soses","Sudanell","Sunyer",
+    "Talarn","Talavera","Tarroja de Segarra","Tàrrega","Térmens","Tírvia", "Tiurana", "Torà","Torms","Tornabous",
+    "Torrebesses","Torrefarrera","Torregrossa","Torrelameu","Torres de Segre","Tremp", "Vall de Boí",
+    "Vallfogona de Balaguer", "Vansa i Fórnols","Verdú", "Vielha e Mijaran","Vilagrassa", "Vilaller",
+    "Vilamòs","Vilanova de Bellpuig","Vilanova de l'Aguda",
+    "Vilanova de Meià", "Vilanova de Segrià","Vila-sana", "Vilosell", "Vinaixa"
+  ],
+
+"Província de Tarragona": [
+      "Querol","Cabra del Camp","Figuerola del Camp","El Pla de Santa Maria","Valls","Vila-rodona",
+      "Aiguamúrcia","El Pont d'Armentera","Mont-ral","La Riba","Alió","L'Arboç","Alcover","El Rourell",
+      "Els Garidells","Puigpelat","Rodonyà","Bràfim","Montferri","Vallmoll","Vilabella","Nulles",
+      "El Milà","La Masó",
+
+      "Vinyols i els Arcs","Prades","Capafonts","La Febró","Vilaplana","L'Albiol","Arbolí","Maspujols",
+      "Castellvell del Camp","Les Borjes del Camp","Almoster","Alforja","L'Aleixar","La Selva del Camp",
+      "Riudecols","Riudecanyes","Riudoms","L'Argentera","Montbrió del Camp","Vilanova d'Escornalbou",
+      "Reus","Duesaigües","Botarell","Colldejou","Mont-roig del Camp","Cambrils","Pratdip",
+      "Vandellòs i l'Hospitalet de l'Infant",
+
+      "Benifallet","Paüls", "Xerta","Tivenys","El Perelló","Alfara de Carles","Tortosa","Aldover",
+      "Roquetes","Camarles","L'Aldea","Deltebre","L'Ametlla de Mar","L'Ampolla",
+
+      "Llorenç del Penedès","La Bisbal del Penedès", "Sant Jaume dels Domenys","Banyeres del Penedès",
+      "Masllorenç","Santa Oliva","Albinyana","Bellvei","Bonastre","El Vendrell","Calafell","Cunit","El Montmell",
+
+      "Sarral","Solivella","Les Piles","Pontils","Senan","Rocafort de Queralt","Llorac",
+      "Forès","Vallfogona de Riucorb","Santa Coloma de Queralt","Savallà del Comtat",
+      "Passanant i Belltall","Conesa","Blancafort","L'Espluga de Francolí", "Montblanc",
+      "Barberà de la Conca","Vimbodí i Poblet","Pira","Vallclara","Vilanova de Prades","Vilaverd",
+
+      "La Galera","Godall","Ulldecona","Freginals","Alcanar","Sant Jaume d'Enveja",
+      "La Sènia","Mas de Barberans","Amposta","Santa Bàrbara","Masdenverge","Sant Carles de la Ràpita",
+
+      "Margalef","Ulldemolins","Cornudella de Montsant","La Morera de Montsant","Poboleda",
+      "La Morera de Montsant","La Bisbal de Falset","La Vilella Alta","Torroja del Priorat","Cabaçés",
+      "La Vilella Baixa","La Figuera","El Lloar","Gratallops","Pradell de la Teixeta","Porrera",
+      "La Torre de Fontaubella","El Molar","Falset","Bellmunt del Proiorat","El Masroig","Marçà",
+      "Els Guiamets","Capçanes",
+
+      "Riba-roja d'Ebre","La Palma d'Ebre","Vinebre","La Torre de l'Espanyol","Ascó","Garcia",
+      "Móra d'Ebre","Móra la Nova","Miravet","Rasquera","Tivissa","Benissanet","Flix","Ginestar",
+
+      "La Pobla de Mafumet", "Altafulla","Salou", "Tarragona","Els Pallaresos","El Catllar","Perafort",
+      "Vila-seca","Torredembarra","La Riera de Gaià","Constantí","El Morell","La Nou de Gaià",
+      "Roda de Berà","Creixell","La Pobla de Montornès","Vespella de Gaià","Vilallonga del Camp",
+      "La Secuita","Renau","Salomó",
+
+      "La Pobla de Massaluca","La Fatarella","Vilalba dels Arcs","Batea","Corbera d'Ebre","Gandesa",
+      "El Pinell de Brai","Bot","El Prat del Comte","Arnes","Horta de Sant Joan","Caseres"
+    ]
+  },
+  "vegueriesMUN": {
+    "Alt Pirineu i Aran": [
+      "El Pont de Suert", "La Vall de Boí", "Vilaller",
+
+      "Alàs i Cerc","Cava","Montferrer i Castellbó","La Vansa i Fórnols","Josa i Tuixén",
+      "Ribera d'Uregellet","Fígols i Alinyà","Les Valls d'Aguilar","Les Valls de Valira",
+      "El Pont de Bar","Estamariu","La Seu d'Urgell","Cabó","Organyà","Coll de Nargó",
+      "Arsèguel","Oliana","Peramola","Bassella",
+
+      "Isòvol","Frontanals de Cerdanya","Prats i Sansor","Montellà i Martinet","Lles de Cerdanya",
+      "Meranges","Llívia","Guls de Cerdanya","Ger","Bellver de Cerdanya","Puigcerdà","Bolvir",
+      "Prullans","Alp","Urús","Riu de Cerdanya","Das",
+
+      "Conca de Dalt","Castell de Mur","La Torre de Cabdella","Sarroca de Bellera","Tremp","Senterada",
+      "La Pobla de Segur","Salàs de Pallars", "Abella de la Conca","Gavet de la Conca","Sant Esteve de la Sarga",
+      "Talarn","Llimiana","Isona i Conca Dellà",
+
+      "Alt Àneu","Vall de Cardós","Farrera","Baix Pallars","Ladorre","La Guingueta d'Àneu","Alins",
+      "Esterri d'Àneu","Espot","Esterri de Cardós","Llavorsí","Tírvia","Sort","Rialp","Soriguera",
+
+      "Naut Aran","Vielha e Mijaran","Arres","Bausen","Canejan","Les","Bossòst",  "Es Bòrdes", "Vilamòs"],
+    "Terres de l'Ebre": [
+      "Benifallet","Paüls", "Xerta","Tivenys","El Perelló","Alfara de Carles","Tortosa","Aldover",
+      "Roquetes","Camarles","L'Aldea","Deltebre","L'Ametlla de Mar","L'Ampolla",
+
+      "La Galera","Godall","Ulldecona","Freginals","Alcanar","Sant Jaume d'Enveja",
+      "La Sènia","Mas de Barberans","Amposta","Santa Bàrbara","Masdenverge","Sant Carles de la Ràpita",
+
+      "Riba-roja d'Ebre","La Palma d'Ebre","Vinebre","La Torre de l'Espanyol","Ascó","Garcia",
+      "Móra d'Ebre","Móra la Nova","Miravet","Rasquera","Tivissa","Benissanet","Flix","Ginestar",
+
+      "La Pobla de Massaluca","La Fatarella","Vilalba dels Arcs","Batea","Corbera d'Ebre","Gandesa",
+      "El Pinell de Brai","Bot","El Prat del Comte","Arnes","Horta de Sant Joan","Caseres"],
+    "Camp de Tarragona": [
+      "Querol","Cabra del Camp","Figuerola del Camp","El Pla de Santa Maria","Valls","Vila-rodona",
+      "Aiguamúrcia","El Pont d'Armentera","Mont-ral","La Riba","Alió","L'Arboç","Alcover","El Rourell",
+      "Els Garidells","Puigpelat","Rodonyà","Bràfim","Montferri","Vallmoll","Vilabella","Nulles",
+      "El Milà","La Masó",
+
+      "Vinyols i els Arcs","Prades","Capafonts","La Febró","Vilaplana","L'Albiol","Arbolí","Maspujols",
+      "Castellvell del Camp","Les Borjes del Camp","Almoster","Alforja","L'Aleixar","La Selva del Camp",
+      "Riudecols","Riudecanyes","Riudoms","L'Argentera","Montbrió del Camp","Vilanova d'Escornalbou",
+      "Reus","Duesaigües","Botarell","Colldejou","Mont-roig del Camp","Cambrils","Pratdip",
+      "Vandellòs i l'Hospitalet de l'Infant",
+
+      "Sarral","Solivella","Les Piles","Pontils","Senan","Rocafort de Queralt","Llorac",
+      "Forès","Vallfogona de Riucorb","Santa Coloma de Queralt","Savallà del Comtat",
+      "Passanant i Belltall","Conesa","Blancafort","L'Espluga de Francolí", "Montblanc",
+      "Barberà de la Conca","Vimbodí i Poblet","Pira","Vallclara","Vilanova de Prades","Vilaverd",
+
+      "Margalef","Ulldemolins","Cornudella de Montsant","La Morera de Montsant","Poboleda",
+      "La Morera de Montsant","La Bisbal de Falset","La Vilella Alta","Torroja del Priorat","Cabaçés",
+      "La Vilella Baixa","La Figuera","El Lloar","Gratallops","Pradell de la Teixeta","Porrera",
+      "La Torre de Fontaubella","El Molar","Falset","Bellmunt del Proiorat","El Masroig","Marçà",
+      "Els Guiamets","Capçanes",
+
+      "La Pobla de Mafumet", "Altafulla","Salou", "Tarragona","Els Pallaresos","El Catllar","Perafort",
+      "Vila-seca","Torredembarra","La Riera de Gaià","Constantí","El Morell","La Nou de Gaià",
+      "Roda de Berà","Creixell","La Pobla de Montornès","Vespella de Gaià","Vilallonga del Camp",
+      "La Secuita","Renau","Salomó"],
+    "Catalunya Central": [
+      "El Pont de Vilomara i Rocafort","Navarcles","Castellbell i el Vilar","Sant Feliu Sasserra","Gaià",
+      "Cardona", "Navàs", "Avinyó","Sallent","Balsareny", "Castellnou de Bages","Sant Mateu de Bages",
+      "Suria","Callús","Artés","Santpedor","Fonollosa","Aguilar de Segarra","Sant Fruitós de Bages",
+      "Sant Joan de Vilatorrada","Manresa", "Rajadell","Talamanca","Mura","Castellfollit del Boix",
+      "Sant Salvador de Guardiola", "Marganell", "Monistrol de Montserrat", "Castellgalí","Sant Vicenç de Castellet",
+
+      "Castellar del Riu","Viver i Serrateix","Bagà","Castellar de n'Hug","Guardiola de Berguedà","Gisclareny",
+      "Saldes","La Pobla de Lillet","Gósol","Vallcebre","Sant Jaume de Cerdanyola","Sant Jaume de Frontanyà",
+      "La Nou de Berguedà","Castell de l'Areny","Cercs","Vilada","Borredà","La Quar","Berga","Montmajor",
+      "Olvan","L'Espunyols","Sagàs","Avià","Capolat","Casserres","Montclar","Gironella","Santa Maria de Merlès","Puig-reig",
+
+      "Santa Maria d'Oló","L'Estany","Calders","Moià","Collsupina","Castellcir","Monistrol de Calders",
+      "Castellterçol", "Sant Quirze Safaja","Granera",
+
+      "Seva","Sant Martí de Centelles","Muntanyola","Centelles","El Brull","Tona","Taradell","Vidrà",
+      "Santa Eulàlia de Riuprimer","Espinelves","Viladrau","Santa Maria de Besora","Sora",
+      "Orís","Rupit i Pruit","Balenyà","Sant Quirze de Besora","L'Esquirol",
+      "Montesquiu","Sant Pere de Torelló","Sant Agustí de LLuçanès","Sant Vicenç de Torelló","Sant Boi de Lluçanès",
+      "Les Masies de Voltregà","Travertet","Malla",
+      "Torelló","Manlleu","Sant Hipòlit de Voltregà","Santa Cecilia de Voltregà","Sant Bartolomeu del Grau",
+      "Les Masies de Roda","Gurb","Vilanova de Sau","Roda de Ter","Tavèrnoles","Folgueroles",
+      "Vic","Sant Julià de Vilatorta","Calldetenes","Sant Sadurní d'Osmort","Santa Eugènia de Berga",
+
+      "Sant Llorenç de Morunys","Lladurs","Clariana de Cardener", "Solsona","La Molosa","Olius",
+      "Pinell de Solsonès","Navès","Pinós","Riner","Llobera","Castellar de la Ribera","La Coma i la Pedra",
+      "Odèn","Guixers",
+
+      "Alpens","Sant Martí d'Albars","Perafita","Prats de LLuçanès","Olost","Sobremunt","Oristà","Lluçà"],
+    "Girona": [
+      "La Jonquera", "Colera","Llançà","El Port de la Selva","Cadaqués","Roses","Castelló d'Empúries",
+      "La Selva de Mar","Palau-saverdera","Terrades","Pont de Molins","Boadella d'Empordà","Pedret i Marzà",
+      "Santa Eulàlia","Saus, Camallera i Llampaies","Espolla","Rabós","Cantallops","Agullana","Portbou",
+      "Sant Climent Sescebes","Maçanet de Cabrenys","La Vajol","Darnius","Capmany","Vilamaniscle",
+      "Albanyà","Garriguella","Masarac","Biure","Peralada","Vilajüiga","Sant Llorenç de la Muga","Mollet de Peralada",
+      "Cabanes","Pau","Llers","Cabanelles","Cistella","Vilabertran","Figueres","Vilanant","Avinyonet de Puigventós",
+      "Lladó","Vilafant","Fortià","Santa Llogaia d'Alguema","Riumors","Navata","Sta. Llogaia d'Alguema",
+      "Vilamalla","Borrassà","Ordis","Siurana","Sant Pere Pescador","Torroella de Fluvià","Garrigàs",
+      "Vilamacolum","Pontós","Sant Miquel de Fluvià","L'Arementera","Ventalló","Sant Mori","Bàscara",
+      "Vilaür","Viladamat","L'Escala",
+
+      "Vilopriu","Forallac","Cruïlles, Monells i Sant Sadurní de l'Heura","Castell-Platja d'Aro",
+      "Garrigoles","Albons","La Tallada d'Empordà","Torroella de Montgrí","Bellcaire d'Empordà",
+      "Colomers","Jafre","Verges","Foixà","Ullà","Ultramort","Fontanilles","Gualta","Corçà",
+      "Serra de Daró","Ullastret","Rupià","Parlavà","La Pera","Pals","Palau-Sator","La Bisbal d'Empordà",
+      "Begur","Torrent","Palafrugell","Regencós","Mont-ras","Calonge","Vall-llobrega","Palamós",
+      "Santa Cristina d'Aro","Sant Feliu de Guíxols",
+
+      "Hostalnou de Bianya","Castellfollit de la Roca","Ridaura","Montagut i Oix","Sant Esteve d'en Bas",
+      "Sant Esteve de Llémena","Sales de Lierca","Beuda","Tortellà","Maià de Montcal","Sant Joan les Fonts",
+      "Juïnyà","Sant Jaume de Lierca","Arguelaguer","Besalú","Olot","Santa Pau","Les Preses","Mieres",
+      "Sant Feliu de Pallerols","Les Planes d'Hostoles",
+
+      "Sant Julià de Ramis","Vilablareix","Viladesens","Sant Jordi Desvalls","Canet d'Adri","Sant Martí de Llémena",
+      "Cervià de Ter","Bordils","Flaçà","Sant Joan de Mollet","Celrà","Sant Gregori","Sant Martí Vell",
+      "Juià","Girona","Sarrià de Ter","Aiguaviva","Madremanya","Salt","Quart","Bescanó","Fornells de la Selva",
+      "Llambilles","Campllong","Cassà de la Selva","Sant Andreu Salou","Llagostera",
+
+      "Palol de Revardit","Porqueres","Crespià","Vilademuls","Esponellà","Serinyà","St. Miquel de Campmajor",
+      "Fontcoberta","Banyoles","Cornella del Terri","Camós",
+
+      "Sant Julià de Llor i Bonmatí","Susqueda","Riells i Viabrea","Osor","Amer","Sant Hilari Sacalm",
+      "La Cellera de Ter","Anglès","Vilobí d'Onyar","Santa Coloma de Farners","Riudellots de la Selva",
+      "Caldes de Malavella","Masssnes","Vidreres","Maçanet de la Selva","Tossa de Mar","Breda","Lloret de Mar",
+      "Hostalric","Fogars de la Selva","Blanes","Arbúcies","Sils","Riudarenes","Sant Feliu de Buixalleu","Brunyola",
+
+      "Setcases","Queralbs","Molló","Vallfogona de Ter","Llanars","Camprodon","Toses","Planoles",
+      "Ribes de Freser","Pardines","Campelles","Ogassa","Gombrèn","Sant Pau de Segúries","Campdevànol",
+      "Sant Joan de les Abadesses", "Ripoll","Les Lloses","Vallfogona de Ripollès"],
+    "Lleida": [
+      "Artesa de Segre","Àger","Camarasa","Vilanova de Meià", "Os de Balaguer","Tiurana",
+      "Alòs de Balaguer","Vilanova de l'Aguda","Ponts","Oliola","Ivars de Noguera","Foradada",
+      "Algerri","Preixens","Montgai","La Sentiu de Sió","Balaguer","Vallfogona de Balaguer",
+      "Albesa","Bellmunt d'Urgell","Menàrguens","Penelles","Térmens","Torrelameu","Bellcaire d'Urgell",
+      "Cubells","Cabanabona","Castelló de Farfanya","La Baronia de Rialb","Les Avellanes i Santa Linya",
+
+      "Sant Guim de la Plana","Guissona","Ivorra","Massoteres","Torà","Sanaüja","Biosca","Granyanella",
+      "Els Plans de Sió","Ribera d'Ondara","Sant Ramon","Tarroja de Segarra","Estaràs","Les Oluges",
+      "Torrefeta i Florejacs","Cervera","Sant Guim de Freixenet","Montoliu de Segarra","Talavera",
+      "Granyena de Segarra", "Montornès de Segarra",
+
+      "Puigverd d'Agramunt","Agramunt","Castellserà","Tornabous","Tàrrega","La Fuliola","Vilagrassa",
+      "Sant Martí de Riucorb","Ossó de Sió","Anglesola","Bellpuig","Preixana","Verdú","Guimerà",
+      "Bellianes","Ciutadilla","Nalec","Maldà","Vallbona de les Monges","Els Omells de na Gaia",
+
+      "Castellnou de Seana","El Palau d'Anglesola","Bell-lloc d'Urgell","Mollerussa","Fondarella",
+      "Miralcamp","Torregrossa","Sidamon","Vilanova de Bellpuig","Golmés","Vila-sana","Barbens",
+      "El Poal","Ivars d'Urgell","Bellvís","Linyola",
+
+      "Alfarràs","Almenar","Almacelles","Alguaire","La Portella","Lleida","Vilanova de Segrià",
+      "Gimenells i el Pla de la Font","Corbins","Vilanova de la Barca","Rosselló","Benavent de Segrià",
+      "Torre-serona","Alpicat","Torrefarrera","Montoliu de Lleida","Artesa de Lleida","Albatàrrec",
+      "Sudanell","Soses","Torres de Segre","Els Alamús","Alcarràs","Alcoletge","Puigverd de Lleida",
+      "Alfés","Aspa","Sarroca de Lleida","Seròs","Torrebesses","Maials","Almatret","Llardecans",
+      "La Granja d'Escalp","Alcanó","Massalcoreig","Aitona","Sunyer",
+
+      "La Floresta","Els Omellons","Castelldans","Les Borges Blanques","Arbeca","Puiggrós","Vinaixa",
+      "Juneda","Espluga Calba","Fulleda","L'Albagés","El Cogul","El Soleràs","Juncosa","Tarrés",
+      "Granyena de les Garrigues","L'Albi","Cervià de les Garrigues","Els Torms","La Granadella",
+      "El Vilosell","Bellaguarda","Bovera","La Pobla de Cérvoles"],
+    "Barcelona": [
+      "Tordera","Mataró","Caldes d'Estrac","Òrrius","Vilassar de Dalt","Cabrils","Premià de Dalt","Teià",
+      "Vilassar de Mar","Alella","Tiana","Premià de Mar","El Masnou","Montgat","Santa Susanna","Palafolls",
+      "Malgrat de Mar","Sant Iscle de Vilalta","Sant Cebrià de Vallalta","Pineda de Mar","Dosrius","Arenys de Munt",
+      "Calella","Sant Vicenç de Montalt","Sant Andreu de Llavaneres","Canet de Mar","Sant Pol de Mar","Argentona","Arenys de Mar",
+
+      "Castellbisbal","Sant Cugat del Vallès","Badia del Vallès","Cerdanyola del Vallès","Ripollet",
+      "Montcada i Reixac","Galifa","Sant Llorenç Savall","Santmenat","Matadepera","Castellar del Vallès",
+      "Rellinars","Vacarisses","Terrassa","Palau-solità i Plegamans","Sabadell","Viladecavalls",
+      "Polinyà","Santa Perpètua de Mogoda","Rubí","Sant Quirze del Vallès","Barberà del Vallès","Ullastrell",
+
+      "Fogars de Montclús","Cànoves i Samalús","Figaró-Montmany","Bigues i Riells","Montseny","Gualba",
+      "Les Franqueses del Vallès","Aiguafreda","Tagamanent","Sant Pere de Vilamajor","Campins",
+      "Sant Esteve de Palautordera","Sant Celoni","La Garriga","Sant Feliu de Codines",
+      "Santa Maria de Palautordera","L'Ametlla del Vallès","Caldes de Montbui","Sant Antoni de Vilamajor",
+      "Llinars del Vallès","Cardedeu","Vallgorguina","Santa Eulàlia de Ronçana","Vilalba Sasserra",
+      "Lliçà d'Amunt","La Roca del Vallès","Granollers","Parets del Vallès","Vilanova del Vallès",
+      "Canovelles","Lliçà de Vall","Mollet del Vallès","Montmeló","Montornès del Vallès","Vallromanes",
+      "Martorelles","Santa Maria de Martorelles","Sant Fost de Campsentelles","La Llagosta",
+
+      "El Papiol","Corbera de Llobregat",
+      "El Prat de Llobregat","Castellví de Rosanes","Esparreguera","Colbató","Abrera",
+      "Sant Esteve Sesrovires","Martorell","Olesa de Montserrat","Sant Andreu de la Barca",
+      "Sant Feliu de LLobregat","Cervelló","Sant Vicenç dels Horts","Sant Just Desvern",
+      "Vallirana","Esplugues de Llobregat","Santa Coloma de Cervelló","Cornellà de Llobregat",
+      "Sant Joan Despí","Sant Climent de Llobregat","Sant Boi de Llobregat","Sant Climent de Llobregat",
+      "Begues","Viladecans","Castelldefels", "Gavà",
+      "Barcelona","Santa Coloma de Gramenet","Badalona","Sant Adrià del Besòs","Hospitalet de Llobregat"
+
+
+],
+    "Penedès": ["Castellet i la Gornal","Olesa de Bonesvalls", "Mediona","Torrelavit","Font-rubí","Subirats",
+      "Avinyonet del Penedès","Castellví de la Marca","Olèrdola","Santa Margarida i els Monjos",
+      "Sant Llorenç d'Hortons", "Torrelles de Foix","El Pla del Penedès","Sant Martí Sarroca",
+      "Puigdàlber","Santa Fe del Penedès", "La Granada","Les Cabanyes","Pacs del Penedès",
+      "Vilafranca del Penedès","Sant Cugat Sesgarrigues","Vilobí del Penedès", "Pontons",
+      "Sant Quintí de Mediona","Sant Pere de Riudebitlles","Sant Sadurní d'Anoia","Gelida",
+
+      "Orpí", "Cabrera d'Anoia","Castellfollit de Riubregós","Calonge de Segarra","Pujalt","Calaf",
+      "Sant Martí Sesgueioles","Veciana","Rubió", "Copons","Òdena","El Bruc", "Argençola","Montmaneu",
+      "Jorba", "Castellolí", "Igualada", "Sant Martí de Tous",  "Santa Margarida de Montbui","La Pobla de Claramunt",
+      "Vilanova del Camí", "Piera", "Els Hostalets de Pierola","Vallbona d'Anoia", "Carme", "La Torre de Claramunt",
+      "Santa Maria de Miralles","Bellprat","Capellades", "La Llacuna","Masquefa","Els Prats de Rei","St. Pere Sallavinera",
+
+      "Llorenç del Penedès","La Bisbal del Penedès", "Sant Jaume dels Domenys","Banyeres del Penedès",
+      "Masllorenç","Santa Oliva","Albinyana","Bellvei","Bonastre","El Vendrell","Calafell","Cunit","El Montmell",
+      "Canyelles","Olivella", "Sitges","Vilanova i la Geltrú","Cubelles","Sant Pere de Ribes"]
+  },
+
+
+
+
   "vegueries": {
     "Alt Pirineu i Aran": ["Alta Ribagorça", "Alt Urgell", "Cerdanya", "Pallars Jussà", "Pallars Sobirà", "Val d'Aran"],
-    "Barcelona": ["Anoia", "Bages", "Baix Llobregat", "Barcelonès", "Garraf", "Maresme", "Osona", "Vallès Occidental", "Vallès Oriental"],
-    "Camp de Tarragona": ["Alt Camp", "Baix Camp", "Baix Penedès", "Conca de Barberà", "Priorat", "Tarragonès"],
-    "Catalunya Central": ["Anoia", "Bages", "Berguedà", "Moianès", "Osona", "Solsonès"],
-    "Girona": ["Alt Empordà", "Baix Empordà", "Cerdanya", "Garrotxa", "Gironès", "Pla de l'Estany", "Selva","Ripollès"],
-    "Lleida": ["Alta Ribagorça", "Garrigues", "Noguera", "Pla d'Urgell", "Segarra", "Segrià", "Solsonès", "Urgell"],
-    "Penedès": ["Alt Penedès", "Anoia", "Baix Penedès", "Garraf"],
-    "Terres de l'Ebre": ["Baix Ebre", "Montsià", "Ribera d'Ebre", "Terra Alta"]
+    "Terres de l'Ebre": ["Baix Ebre", "Montsià", "Ribera d'Ebre", "Terra Alta"],
+    "Camp de Tarragona": [ "Alt Camp", "Baix Camp",  "Conca de Barberà", "Priorat", "Tarragonès"],
+    "Catalunya Central": [ "Bages", "Berguedà", "Moianès", "Osona", "Solsonès","Lluçanès"],
+    "Girona": ["Alt Empordà", "Baix Empordà", "Garrotxa", "Gironès", "Pla de l'Estany", "Selva","Ripollès"],
+    "Lleida": ["Noguera","Segarra","Urgell","Pla d'Urgell","Segrià", "Garrigues" ],
+    "Barcelona": ["Maresme","Vallès Occidental", "Vallès Oriental","Baix Llobregat", "Barcelonès", "Bages",  "Garraf",  "Osona" ],
+    "Penedès": ["Alt Penedès", "Anoia", "Baix Penedès", "Garraf"]
   },
   "provincies": {
-    "Barcelona": ["Alt Penedès", "Anoia", "Bages", "Baix Llobregat", "Barcelonès", "Garraf", "Maresme", "Osona", "Vallès Occidental", "Vallès Oriental"],
-    "Girona": ["Alt Empordà", "Baix Empordà", "Cerdanya", "Garrotxa", "Gironès", "Pla de l'Estany", "Selva","Ripollès"],
-    "Lleida": ["Alta Ribagorça", "Alt Urgell", "Cerdanya", "Garrigues", "Noguera", "Pallars Jussà", "Pallars Sobirà", "Pla d'Urgell", "Segarra", "Segrià", "Solsonès", "Urgell", "Val d'Aran"],
-    "Tarragona": ["Alt Camp", "Baix Camp", "Baix Ebre", "Baix Penedès", "Conca de Barberà", "Montsià", "Priorat", "Ribera d'Ebre", "Tarragonès", "Terra Alta"]
+    "Província de Barcelona": ["Alt Penedès", "Anoia", "Bages", "Baix Llobregat", "Barcelonès", "Garraf", "Maresme", "Osona", "Vallès Occidental", "Vallès Oriental"],
+    "Província de Girona": ["Alt Empordà", "Baix Empordà", "Cerdanya", "Garrotxa", "Gironès", "Pla de l'Estany", "Selva","Ripollès"],
+    "Província de Lleida": ["Alta Ribagorça", "Alt Urgell", "Cerdanya", "Garrigues", "Noguera", "Pallars Jussà", "Pallars Sobirà", "Pla d'Urgell", "Segarra", "Segrià", "Solsonès", "Urgell", "Val d'Aran"],
+    "Província de Tarragona": ["Alt Camp", "Baix Camp", "Baix Ebre", "Baix Penedès", "Conca de Barberà", "Montsià", "Priorat", "Ribera d'Ebre", "Tarragonès", "Terra Alta"]
   }
 }

@@ -27,6 +27,42 @@ public class MapesHelper {
         }
     }
 
+    public int getCantidadMunicipiosPorVegueria(String vegueriaId) {
+        int cantidadMunicipios = 0;
+        try {
+            // Obtiene el objeto JSON de comarques
+            JSONObject vegueries = territorios.getJSONObject("vegueriesMUN");
+            // Verifica si la comarca existe y cuenta sus municipios
+            if (vegueries.has(vegueriaId)) {
+                JSONArray municipis = vegueries.getJSONArray(vegueriaId);
+                cantidadMunicipios = municipis.length();
+            } else {
+                System.out.println("Comarca con ID " + vegueriaId + " no encontrada.");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return cantidadMunicipios;
+    }
+
+    public int getCantidadMunicipiosPorProvincia(String provinciaId) {
+        int cantidadMunicipios = 0;
+        try {
+            // Obtiene el objeto JSON de comarques
+            JSONObject provincies = territorios.getJSONObject("provinciesMUN");
+            // Verifica si la comarca existe y cuenta sus municipios
+            if (provincies.has(provinciaId)) {
+                JSONArray municipis = provincies.getJSONArray(provinciaId);
+                cantidadMunicipios = municipis.length();
+            } else {
+                System.out.println("Comarca con ID " + provinciaId + " no encontrada.");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return cantidadMunicipios;
+    }
+
     public int getCantidadMunicipiosPorComarca(String comarcaId) {
         int cantidadMunicipios = 0;
         try {
@@ -83,13 +119,13 @@ public class MapesHelper {
             }
 
             // Paso 4: Encontrar la provincia de la veguería
-            if (vegueriaId != null) {
+            if (comarcaId != null) {
                 JSONObject provincies = territorios.getJSONObject("provincies");
                 for (Iterator<String> it = provincies.keys(); it.hasNext(); ) {
                     String provincia = it.next();
                     JSONArray vegueriesInProvincia = provincies.getJSONArray(provincia);
                     for (int i = 0; i < vegueriesInProvincia.length(); i++) {
-                        if (vegueriesInProvincia.getString(i).equals(vegueriaId)) {
+                        if (vegueriesInProvincia.getString(i).equals(comarcaId)) {
                             provinciaId = provincia;
                             break;
                         }
