@@ -13,7 +13,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,13 +26,14 @@ import androidx.lifecycle.ViewModelProvider;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.MuniTracker.databinding.FragmentLoginBinding;
 import com.example.MuniTracker.databinding.FragmentMapesBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -43,7 +43,8 @@ public class FragmentMapes extends Fragment {
     FragmentMapesBinding binding;
     private String lastComarcaId;
     private String originalViewBox;
-   // MunicipiViewModel viewModel;
+    MapesHelper territoryHelper;
+    // MunicipiViewModel viewModel;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -62,9 +63,8 @@ public class FragmentMapes extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-
         View view = inflater.inflate(R.layout.fragment_mapes, container, false);
-
+        territoryHelper = new MapesHelper(context);
         webView = view.findViewById(R.id.webView);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -96,21 +96,58 @@ public class FragmentMapes extends Fragment {
 
         buttonProvincies.setOnClickListener(v -> loadMap(R.raw.provinvies));
         buttonVegueries.setOnClickListener(v -> loadMap(R.raw.vegueries));
-        buttonComarques.setOnClickListener(v -> loadMap(R.raw.comarques));
-        buttonMunicipis.setOnClickListener(v -> loadMap(R.raw.municipis));
+        buttonComarques.setOnClickListener(v -> {
+            loadMap(R.raw.comarques);
+            webView.setWebViewClient(new WebViewClient() {
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    super.onPageFinished(view, url);
+                    //if (url.contains("comarques")) { // Verifica que el mapa de comarcas esté completamente cargado
+                        colorearComarcasPorVisitas();
+                    //}
+                }
+            });
+        });
 
+        buttonMunicipis.setOnClickListener(v -> loadMap(R.raw.municipis));
 
         return view;
     }
 
-    /*private void loadMap(int mapResource) {
-        String svgContent = loadSvgFromResources(mapResource);
-        if (svgContent != null) {
-            String svgData = "<html><body style=\"margin: 0; padding: 0;\">" + svgContent + "</body></html>";
-            webView.loadDataWithBaseURL(null, svgData, "text/html", "UTF-8", null);
-            marcarMunicipisVisitats();
+
+
+    private void colorearComarcasPorVisitas() {
+        MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
+
+        List<String> listaComarcas = obtenerListaDeComarcas();  // Implementa este método para obtener la lista de IDs de comarcas
+        Log.d("COMARQUES ", "colorear");
+        for (String comarcaId : listaComarcas) {
+
+            viewModel.obtenerPorcentajeVisitadosComarca(comarcaId).observe(getViewLifecycleOwner(), porcentaje -> {
+
+                int quantitat = territoryHelper.getCantidadMunicipiosPorComarca(comarcaId);
+
+                int percentarge = quantitat == 0 ? 0 : (porcentaje * 100) / quantitat;
+
+                int color = obtenerColorPorPorcentaje(percentarge);
+                Log.d("COMARQUES col", comarcaId + " " + color);
+                canviarColorSVG(comarcaId, String.format("#%06X", (0xFFFFFF & color)));  // Cambia el color de la comarca en el mapa
+            });
         }
-    }*/
+    }
+
+    private List<String> obtenerListaDeComarcas() {
+        // Retorna una lista de IDs de comarcas para recorrerlas y colorearlas.
+        return Arrays.asList("Alta Ribagorça", "Alt Urgell", "Cerdanya", "Pallars Jussà", "Pallars Sobirà", "Val d'Aran",
+                "Anoia", "Bages", "Baix Llobregat", "Barcelonès", "Garraf", "Maresme", "Osona", "Vallès Occidental", "Vallès Oriental",
+                "Alt Camp", "Baix Camp", "Baix Penedès", "Conca de Barberà", "Priorat", "Tarragonès",
+                "Anoia", "Bages", "Berguedà", "Moianès", "Osona", "Solsonès", "Ripollès",
+                "Alt Empordà", "Baix Empordà", "Cerdanya", "Garrotxa", "Gironès", "Pla de l'Estany", "Selva",
+                "Alta Ribagorça", "Garrigues", "Noguera", "Pla d'Urgell", "Segarra", "Segrià", "Solsonès", "Urgell",
+                "Alt Penedès", "Anoia", "Baix Penedès", "Garraf",
+                "Baix Ebre", "Montsià", "Ribera d'Ebre", "Terra Alta"); // Reemplaza con tus IDs reales
+    }
+
 
     private void loadMap(int mapResource) {
         String svgContent = loadSvgFromResources(mapResource);
@@ -316,6 +353,9 @@ public class FragmentMapes extends Fragment {
             markAsVisitedButton.setText("Afegir visita");
 
             LinearLayout visitasContainer = bottomSheetView.findViewById(R.id.visitasContainer);
+
+
+
             viewModel.getVisitasByMunicipiId(municipiId).observe(getViewLifecycleOwner(), visitas -> {
                 // Limpia el contenedor antes de agregar nuevos elementos
                 visitasContainer.removeAllViews();
@@ -346,7 +386,9 @@ public class FragmentMapes extends Fragment {
             viewBottom.setVisibility(View.GONE);
         }
 
+        // En tu código para marcar el municipio
 
+        MapesHelper.TerritoryData territoryData = territoryHelper.getTerritoryData(municipiId);
 
 
         markAsVisitedButton.setOnClickListener(v -> {
@@ -361,7 +403,7 @@ public class FragmentMapes extends Fragment {
                         }
                     }
                     if (!isVisited.get()) {
-                        Municipi municipi = new Municipi(municipiId, municipiId, true);
+                        Municipi municipi = new Municipi(municipiId, municipiId, true, territoryData.comarcaId, territoryData.vegueriaId, territoryData.provinciaId);
                         viewModel.afegirMunicipi(municipi);
                     }
                 });
@@ -403,6 +445,7 @@ public class FragmentMapes extends Fragment {
             return false;
         }
     }
+
     private void showNotasDialog(Visita visita) {
         // Puedes usar un AlertDialog para mostrar las notas
         new AlertDialog.Builder(context)
@@ -411,6 +454,7 @@ public class FragmentMapes extends Fragment {
                 .setPositiveButton("OK", null)
                 .show();
     }
+
     private void marcarMunicipisVisitats() {
         MunicipiViewModel viewModel = new ViewModelProvider(FragmentMapes.this).get(MunicipiViewModel.class);
         viewModel.getMunicipisVisitats().observe(getViewLifecycleOwner(), municipisVisitats -> {
@@ -418,32 +462,22 @@ public class FragmentMapes extends Fragment {
                 canviarColorSVG(municipi.id, "#60526e"); // Canvia el color de municipis visitats
             }
         });
-
-        /*
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> {
-            MunicipiViewModel viewModel = new ViewModelProvider(FragmentMapes.this).get(MunicipiViewModel.class);
-            /*List<Municipi> municipisVisitats = viewModel.getMunicipisVisitats();
-
-            getActivity().runOnUiThread(() -> {
-                for (Municipi municipi : municipisVisitats) {
-                    changeComarcaColor(municipi.id, "#60526e"); // Color verde para indicar visitado
-                }
-            });
-            /*viewModel.getMunicipisVisitats().observe(getViewLifecycleOwner(), municipisVisitats -> {
-                for (Municipi municipi : municipisVisitats) {
-                    changeComarcaColor(municipi.id, "#60526e"); // Cambia el color de municipios visitados
-                }
-            });
-
-        });*/
     }
-
 
     private void resetZoom(String originalViewBox) {
         String jsCode = "document.getElementsByTagName('svg')[0].setAttribute('viewBox', '" + originalViewBox + "');";
         webView.evaluateJavascript(jsCode, null);
     }
+
+    public int obtenerColorPorPorcentaje(int porcentaje) {
+        Log.d("COMARQUES", String.valueOf(porcentaje));
+        if (porcentaje == 0) return ContextCompat.getColor(context, R.color.blau_mapa);
+        else if (porcentaje < 25) return ContextCompat.getColor(context, R.color.lleg25);
+        else if (porcentaje < 50) return ContextCompat.getColor(context, R.color.lleg50);
+        else if (porcentaje < 75) return ContextCompat.getColor(context, R.color.lleg75);
+        else return ContextCompat.getColor(context, R.color.llegComplet);
+    }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -456,5 +490,4 @@ public class FragmentMapes extends Fragment {
         String jsCode = "document.getElementById('" + escapedComarcaId + "').style.fill = '" + color + "';";
         webView.evaluateJavascript(jsCode, null);
     }
-
 }

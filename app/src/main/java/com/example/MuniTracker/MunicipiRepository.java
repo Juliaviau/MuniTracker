@@ -17,10 +17,6 @@ public class MunicipiRepository {
         visitaDao = db.visitaDao();
     }
 
-    /*public List<Municipi> getMunicipisVisitats() {
-
-        return municipiDao.getMunicipisVisitats();
-    }*/
     public LiveData<List<Municipi>> getMunicipisVisitats() {
         return  municipiDao.getMunicipisVisitats(); // Verifica que tu DAO también devuelva LiveData o Flow
     }
@@ -28,10 +24,7 @@ public class MunicipiRepository {
     public LiveData<List<Visita>> getVisitasByMunicipiId(String municipiId) {
         return visitaDao.getVisitesByMunicipi(municipiId);
     }
-    /*public void marcarMunicipiComVisitant(Municipi municipi) {
-        //new UpdateMunicipiAsyncTask(municipiDao).execute(municipi);
-        municipiDao.insert(municipi);
-    }*/
+
     public void afegirMunicipi(Municipi municipi) {
         Executors.newSingleThreadExecutor().execute(() -> {
             municipiDao.insert(municipi);
@@ -43,12 +36,6 @@ public class MunicipiRepository {
             visitaDao.insert(visita);
         });
     }
-
-    /*public List<Visita> getVisitesPerMunicipi(String municipiId) {
-        return visitaDao.getVisitesByMunicipi(municipiId);
-    }*/
-
-
 
     private static class UpdateMunicipiAsyncTask extends AsyncTask<Municipi, Void, Void> {
         private final MunicipiDao municipiDao;
@@ -77,4 +64,30 @@ public class MunicipiRepository {
             return null;
         }
     }
+
+
+    public int getPorcentajeVisitadosComarca(String comarcaId) {
+        return municipiDao.getPorcentajeVisitadosInComarca(comarcaId);
+    }
+
+    /*public int getPorcentajeVisitadosProvincia(String provinciaId) {
+        int total = municipiDao.getTotalMunicipisInProvincia(provinciaId);
+        int visitados = municipiDao.getVisitadosMunicipisInProvincia(provinciaId);
+        return total == 0 ? 0 : (visitados * 100) / total;
+    }
+
+    public int getPorcentajeVisitadosVegueria(String vegueriaId) {
+        int total = municipiDao.getTotalMunicipisInVegueria(vegueriaId);
+        int visitados = municipiDao.getVisitadosMunicipisInVegueria(vegueriaId);
+        return total == 0 ? 0 : (visitados * 100) / total;
+    }*/
+
+
+
+
+
+
+
+
+
 }
