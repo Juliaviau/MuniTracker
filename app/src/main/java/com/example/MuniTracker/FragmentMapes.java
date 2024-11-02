@@ -18,6 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
@@ -26,6 +27,7 @@ import androidx.lifecycle.ViewModelProvider;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -75,6 +77,21 @@ public class FragmentMapes extends Fragment {
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setUseWideViewPort(true);
 
+        LinearLayout layout = view.findViewById(R.id.legendLayout);
+
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+               // filtrarMunicipios(newText);
+                return true;
+            }
+        });
+
         loadMap(R.raw.municipis);
 
         webView.setWebViewClient(new WebViewClient() {
@@ -84,7 +101,7 @@ public class FragmentMapes extends Fragment {
                 marcarMunicipisVisitats();  // Marcar municipios visitados una vez que se carga el SVG
             }
         });
-
+        layout.setVisibility(View.GONE);
 
         webView.addJavascriptInterface(new WebAppInterface(), "Android");
         webView.setWebViewClient(new WebViewClient());
@@ -100,6 +117,7 @@ public class FragmentMapes extends Fragment {
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
+                    layout.setVisibility(View.VISIBLE);
                     pintarProvinciesPerVisites();
                 }
             });
@@ -110,6 +128,7 @@ public class FragmentMapes extends Fragment {
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
+                    layout.setVisibility(View.VISIBLE);
                     pintarVegueriesPerVisites();
                 }
             });
@@ -120,17 +139,28 @@ public class FragmentMapes extends Fragment {
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
-                    //if (url.contains("comarques")) { // Verifica que el mapa de comarcas esté completamente cargado
-                        colorearComarcasPorVisitas();
-                    //}
+                    layout.setVisibility(View.VISIBLE);
+                    colorearComarcasPorVisitas();
                 }
             });
         });
 
-        buttonMunicipis.setOnClickListener(v -> loadMap(R.raw.municipis));
+        buttonMunicipis.setOnClickListener(v -> { layout.setVisibility(View.GONE);  loadMap(R.raw.municipis);});
 
         return view;
     }
+
+   /* private void filtrarMunicipios(String query) {
+        List<Municipi> filtrados = new ArrayList<>();
+        for (Municipi municipio : municipios) {
+            if (municipio.getNombre().toLowerCase().contains(query.toLowerCase())) {
+                filtrados.add(municipio);
+            }
+        }
+        adapter = new MunicipioAdapter(filtrados, municipio -> abrirMunicipioEnMapa(municipio));
+        recyclerView.setAdapter(adapter);
+        recyclerView.setVisibility(filtrados.isEmpty() ? View.GONE : View.VISIBLE);
+    }*/
 
     private void pintarVegueriesPerVisites() {
         MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
@@ -139,7 +169,6 @@ public class FragmentMapes extends Fragment {
 
         //Per a cada comarca
         for (String vegueriaId : listaVegueries) {
-            Log.d("PROVINCIES", vegueriaId);
             //Retorna quants municipis estan visitats
             viewModel.obtenerPorcentajeVisitadosVegueria(vegueriaId).observe(getViewLifecycleOwner(), porcentaje -> {
                 //Log.d("PROVINCIES", vegueriaId + " " + porcentaje);
@@ -148,7 +177,6 @@ public class FragmentMapes extends Fragment {
                 //Calcula el percentatge
                 double percentarge = quantitat == 0 ? 0 : (double) (porcentaje * 100) / quantitat;
 
-                Log.d("PROVINCIES", vegueriaId + " " + porcentaje+ " " + quantitat+ " " + percentarge);
                 //I assigna el color
                 int color = obtenerColorPorPorcentaje(percentarge);
                 canviarColorSVG(vegueriaId, String.format("#%06X", (0xFFFFFF & color)));  // Cambia el color de la comarca en el mapa
@@ -172,7 +200,7 @@ public class FragmentMapes extends Fragment {
 
                 //I assigna el color
                 int color = obtenerColorPorPorcentaje(percentarge);
-                canviarColorSVG(provinciaId, String.format("#%06X", (0xFFFFFF & color)));  // Cambia el color de la comarca en el mapa
+                canviarColorSVG(provinciaId, String.format("#%06X", (0xFFFFFF & color)));
             });
         }
     }
@@ -448,17 +476,19 @@ public class FragmentMapes extends Fragment {
         View viewBottom = bottomSheetView.findViewById(R.id.viewbottom);
 
         Log.d("Coloer " , originalColor);
-        boolean municipiVisitat = comparaColor(originalColor,"rgb(96, 82, 110)");
+        boolean municipiVisitat = comparaColor(originalColor,"rgb(27, 58, 95)");
         TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
         // Cambia el tipo de ScrollView a NestedScrollView
         NestedScrollView scroll = bottomSheetView.findViewById(R.id.scrollView);
 
+        closeButton.setVisibility(View.VISIBLE);
+        scroll.setVisibility(View.VISIBLE);
+        markAsVisitedButton.setVisibility(View.VISIBLE);
+        viewBottom.setVisibility(View.VISIBLE);
+
         if (municipiVisitat) {
 
-            closeButton.setVisibility(View.VISIBLE);
-            scroll.setVisibility(View.VISIBLE);  // Oculta el scroll si no hay visitas
-            markAsVisitedButton.setVisibility(View.VISIBLE);
-            viewBottom.setVisibility(View.VISIBLE);
+
 
 
             infoMuni.setText("Visites anteriors");
@@ -570,7 +600,7 @@ public class FragmentMapes extends Fragment {
         MunicipiViewModel viewModel = new ViewModelProvider(FragmentMapes.this).get(MunicipiViewModel.class);
         viewModel.getMunicipisVisitats().observe(getViewLifecycleOwner(), municipisVisitats -> {
             for (Municipi municipi : municipisVisitats) {
-                canviarColorSVG(municipi.id, "#60526e"); // Canvia el color de municipis visitats
+                canviarColorSVG(municipi.id,  String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(context, R.color.llegComplet)))); // Canvia el color de municipis visitats
             }
         });
     }

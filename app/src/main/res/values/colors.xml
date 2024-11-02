@@ -8,8 +8,10 @@
     <color name="lila_clar">#9ea1ea</color>
     <color name="taronja">#EA998F</color>
 
-    <color name="lleg25">#eb4034</color>
-    <color name="lleg50">#c3eb34</color>
-    <color name="lleg75">#34ebae</color>
-    <color name="llegComplet">#4634eb</color>
+    <color name="lilafosc">#60526e</color>
+
+    <color name="lleg25">#76c7c0</color>
+    <color name="lleg50">#4ea8de</color>
+    <color name="lleg75">#357ab7</color>
+    <color name="llegComplet">#1b3a5f</color>
 </resources>
