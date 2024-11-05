@@ -33,12 +33,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.MuniTracker.databinding.FragmentMapesBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -141,26 +141,6 @@ public class FragmentMapes extends Fragment {
 
 
 
-
-
-
-
-
-         /*binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(context,"hoal", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-               // filtrarMunicipios(newText);
-                return true;
-            }
-        });*/
-
-
         SearchView searchView = view.findViewById(R.id.searchView);
         RecyclerView resultsRecyclerView = view.findViewById(R.id.resultsRecyclerView);
 
@@ -182,7 +162,7 @@ public class FragmentMapes extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (municipis.contains(query)) {
-                    canviarColorSVG(query,"white");  // Pintem el municipi seleccionat
+                    //canviarColorSVG(query,"white");  // Pintem el municipi seleccionat
 
 
                     /*String a;
@@ -193,10 +173,11 @@ public class FragmentMapes extends Fragment {
                                 Log.d("WebViewLog", "Mapa inicializado con viewBox: " + originalViewBox); // Log de inicialización
                             }
                     );*/
+                    String color = obtenirColorSVG(query) ;
 
-                    Log.i("color municipi ", obtenirColorSVG(query));
+                    Log.i("color municipi ", query + " " + color);
 
-                    showMunicipiBottomSheet(query, obtenirColorSVG(query), "0 0 425 400");
+                    showMunicipiBottomSheet(query, color, "0 0 425 400");//colors per ocmparar
 
 
                     searchView.setQuery("", true);
@@ -226,29 +207,9 @@ public class FragmentMapes extends Fragment {
             }
         });
 
-
-
-
-
-
-
-
-
-
         return view;
     }
 
-   /* private void filtrarMunicipios(String query) {
-        List<Municipi> filtrados = new ArrayList<>();
-        for (Municipi municipio : municipios) {
-            if (municipio.getNombre().toLowerCase().contains(query.toLowerCase())) {
-                filtrados.add(municipio);
-            }
-        }
-        adapter = new MunicipioAdapter(filtrados, municipio -> abrirMunicipioEnMapa(municipio));
-        recyclerView.setAdapter(adapter);
-        recyclerView.setVisibility(filtrados.isEmpty() ? View.GONE : View.VISIBLE);
-    }*/
 
     private void pintarVegueriesPerVisites() {
         MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
@@ -800,35 +761,56 @@ public class FragmentMapes extends Fragment {
         else return ContextCompat.getColor(context, R.color.llegComplet);
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         marcarMunicipisVisitats();
     }
 
+    public interface ColorCallback {
+        void onColorReceived(String color);
+    }
+
+
     private String obtenirColorSVG(String id) {
-        // Obtener el color del path mediante su ID
-        final String[] colant = {""};
-        String jsCode = "document.getElementById('" + id + "').getAttribute('fill');";
+        final String[] colorResult = {null};
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        String jsCode = "document.getElementById('" + id + "').getAttribute('style');";
+
         webView.evaluateJavascript(jsCode, new ValueCallback<String>() {
             @Override
             public void onReceiveValue(String value) {
-                // Aquí 'value' contendrá el color del path
-                if (value != null) {
-                    // 'value' puede ser algo como '"red"' (incluyendo comillas)
-                    String color = value.replace("\"", ""); // Eliminar comillas
-                    Log.d("Color del Path", "El color del path es: " + color);
-                    colant[0] = color;
-                    // Ahora puedes usar el color en tu aplicación
-                } else {
-                    Log.d("Color del Path", "No se encontró el path o no tiene color");
-                }
+                if (value != null && !value.equals("null")) {
+                    value = value.replace("\"", ""); // Limpiar comillas
 
+                    // Buscar el valor de 'fill' dentro del estilo
+                    String color = null;
+                    String[] styles = value.split(";");
+                    for (String style : styles) {
+                        if (style.trim().startsWith("fill:")) {
+                            color = style.split(":")[1].trim();
+                            break;
+                        }
+                    }
+                    colorResult[0] = (color != null) ? color : ""; // Asignar color encontrado
+                } else {
+                    colorResult[0] = ""; // Si no se encontró el color
+                }
+                latch.countDown(); // Liberar el latch una vez recibido el color
             }
         });
-        return colant[0];
+
+        try {
+            latch.await(); // Esperar hasta que onReceiveValue llame a countDown()
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return colorResult[0];
     }
+
+
 
     private void canviarColorSVG(String comarcaId, String color) {
         //Toast.makeText(context,comarcaId,Toast.LENGTH_SHORT).show();
