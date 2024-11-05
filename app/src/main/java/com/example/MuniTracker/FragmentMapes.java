@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
+import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -23,6 +24,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,6 +38,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.MuniTracker.databinding.FragmentMapesBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -78,19 +82,6 @@ public class FragmentMapes extends Fragment {
         webSettings.setUseWideViewPort(true);
 
         LinearLayout layout = view.findViewById(R.id.legendLayout);
-
-        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-               // filtrarMunicipios(newText);
-                return true;
-            }
-        });
 
         loadMap(R.raw.municipis);
 
@@ -144,8 +135,105 @@ public class FragmentMapes extends Fragment {
                 }
             });
         });
-
         buttonMunicipis.setOnClickListener(v -> { layout.setVisibility(View.GONE);  loadMap(R.raw.municipis);});
+
+
+
+
+
+
+
+
+
+
+         /*binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Toast.makeText(context,"hoal", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+               // filtrarMunicipios(newText);
+                return true;
+            }
+        });*/
+
+
+        SearchView searchView = view.findViewById(R.id.searchView);
+        RecyclerView resultsRecyclerView = view.findViewById(R.id.resultsRecyclerView);
+
+        // Inicialitzem la llista de municipis i l'adapter
+        List<String> municipis = obtenerListaDeMunicipis(); // Llista dels noms dels municipis
+        SearchAdapter adapter = new SearchAdapter(municipis);
+        resultsRecyclerView.setAdapter(adapter);
+        resultsRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        // Configurar l'adapter amb l'element seleccionat
+        adapter.setOnItemClickListener(municipi -> {
+            //canviarColorSVG(municipi,"white");  // Funció que pintarà el municipi seleccionat al mapa SVG
+            searchView.setQuery(municipi, true); // Esborra el text del SearchView
+            searchView.clearFocus(); // Amaga el teclat
+            resultsRecyclerView.setVisibility(View.GONE); // Oculta la llista després de seleccionar un municipi
+        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (municipis.contains(query)) {
+                    canviarColorSVG(query,"white");  // Pintem el municipi seleccionat
+
+
+                    /*String a;
+                    webView.evaluateJavascript(
+                            "document.getElementsByTagName('svg')[0].getAttribute('viewBox');",
+                            value -> {
+                                originalViewBox = value; // Almacenar el viewBox original
+                                Log.d("WebViewLog", "Mapa inicializado con viewBox: " + originalViewBox); // Log de inicialización
+                            }
+                    );*/
+
+                    Log.i("color municipi ", obtenirColorSVG(query));
+
+                    showMunicipiBottomSheet(query, obtenirColorSVG(query), "0 0 425 400");
+
+
+                    searchView.setQuery("", true);
+                }
+                return false; // No cal fer res especial quan es prem "Enter"
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // Filtrar els municipis que contenen el text introduït
+                String query = newText.toLowerCase();
+                List<String> filteredMunicipis = new ArrayList<>();
+                for (String municipi : municipis) {
+                    if (municipi.toLowerCase().contains(query)) {
+                        filteredMunicipis.add(municipi);
+                    }
+                }
+                adapter.updateList(filteredMunicipis);
+
+                // Mostrar o ocultar la RecyclerView segons hi hagi resultats
+                if (filteredMunicipis.isEmpty()) {
+                    resultsRecyclerView.setVisibility(View.GONE);
+                } else {
+                    resultsRecyclerView.setVisibility(View.VISIBLE);
+                }
+                return true;
+            }
+        });
+
+
+
+
+
+
+
+
+
 
         return view;
     }
@@ -225,6 +313,102 @@ public class FragmentMapes extends Fragment {
         }
     }
 
+
+    @NonNull
+    private List<String> obtenerListaDeMunicipis() {
+
+
+        return Arrays.asList(
+                "Avinyonet del Penedès","Argençola","Avinyó","Artés","Aguilar de Segarra","Abrera", "Alella","Arenys de Munt","Argentona","Arenys de Mar","Aiguafreda",
+                "Agullana","Albanyà","Alp","Avinyonet de Puigventós","Argelaguer","Aiguaviva","Anglès", "Amer", "Arbúcies","Aiguamúrcia","Alió","Alcover","Arbolí","Almoster","Alforja",
+                "Albinyana","Alcanar","Amposta","Alfara de Carles","Aldover","Ascó","Altafulla", "Arnes",
+
+                "Bellprat","Balsareny","Begues","Barcelona","Badalona","Balenyà","Badia del Vallès","Barberà del Vallès","Bigues i Riells","Blanes",
+                "Begur","Bellcaire d'Empordà","Biure","Bolvir","Borrassà","Besalú","Beuda","Bordils","Banyoles","Blanes","Breda", "Brunyola i Sant Martí Sapresa","Bràfim","Botarell",
+                "Benifallet","Banyeres del Penedès","Bellvei","Bonastre","Blancafort","Barberà de la Conca","Batea","Benissanet","Bot","Bellmunt del Proiorat",
+
+                "Castellet i la Gornal","Castellví de la Marca","Cabrera d'Anoia","Castellfollit de Riubregós","Calonge de Segarra", "Calaf", "Copons","Castellolí","Carme",
+                "Capellades", "Castellbell i el Vilar","Cardona", "Castellnou de Bages","Callús","Castellfollit del Boix", "Castellgalí","Corbera de Llobregat",
+                "Castellví de Rosanes","Colbató","Cervelló", "Cornellà de Llobregat","Castelldefels","Canyelles","Cubelles","Caldes d'Estrac","Cabrils","Calella","Canet de Mar",
+                "Centelles","Calldetenes", "Castellbisbal","Cerdanyola del Vallès","Castellar del Vallès","Caldes de Montbui","Campins","Canovelles","Cardedeu","Cànoves i Samalús",
+                "Calonge i Sant Antoni","Cadaqués","Capmany","Castell-Platja d'Aro","Castelló d'Empúries","Cistella","Colera","Corçà","Cruïlles, Monells i Sant Sadurní de l'Heura",
+                "Castellfollit de la Roca","Cassà de la Selva","Celrà", "Campllong","Cornellà del Terri","Crespià","Camós","Campdevànol","Camprodon","Caldes de Malavella",
+                "Cabra del Camp","Capafonts","Castellvell del Camp","Colldejou","Cambrils","Camarles","Calafell","Cunit","Conesa","Cornudella de Montsant","Caseres","Cabaçés","Capçanes","Constantí","Creixell","Corbera d'Ebre",
+
+                "Dosrius","Darnius","Das","Duesaigües","Deltebre",
+
+                "El Pla del Penedès","El Bruc","Els Hostalets de Pierola","Els Prats de Rei","El Pont de Vilomara i Rocafort","El Papiol","El Prat de Llobregat", "Esparreguera",
+                "Esplugues de Llobregat", "El Masnou", "El Brull","Espinelves","Empuriabrava","Espolla", "Esponellà","El Pla de Santa Maria","El Pont d'Armentera","El Rourell",
+                "Els Garidells","El Milà","El Perelló","El Vendrell","El Montmell","Els Guiamets","El Molar","El Lloar","El Masroig","Els Pallaresos","El Catllar","El Morell",
+                "El Pinell de Brai","El Prat del Comte",
+
+                "Font-rubí","Fonollosa","Folgueroles","Figaró-Montmany","Fogars de Montclús","Finca de les Fonts","Fontanals de Cerdanya","Fontanilles","Fornells de la Selva",
+                "Fontcoberta","Figueres","Forallac","Figuerola del Camp","Forès","Freginals","Falset","Flix",
+
+                "Gelida","Gaià","Gavà","Gurb","Galifa","Gualba","Granollers","Gualta","Guils de Cerdanya","Garriguella","Girona", "Gombrèn","Godall","Gratallops","Garcia","Ginestar","Gandesa",
+
+                "Hospitalet de Llobregat","Horta de Sant Joan",
+
+                "Igualada","Isòvol",
+
+                "Jorba","Jafre","Juià",
+
+                "La Granada","Les Cabanyes","La Pobla de Claramunt","La Torre de Claramunt","La Llacuna","L'Esquirol","Les Masies de Voltregà","Les Masies de Roda","Llinars del Vallès",
+                "La Garriga", "La Llagosta","La Roca del Vallès","L'Ametlla del Vallès","Lliçà d'Amunt", "Lliçà de Vall","Les Franqueses del Vallès",
+                "La Bisbal d'Empordà","La Jonquera","La Pera","L'Escala","Llançà","Llers","Llívia","Les Planes d'Hostoles", "Les Preses", "Llagostera","Llambilles","Llanars","Lloret de Mar","La Riba",
+                "L'Arboç","La Masó","La Febró","L'Albiol","Les Borjes del Camp","L'Aleixar","La Selva del Camp","L'Argentera","L'Aldea","L'Ametlla de Mar","L'Ampolla","Llorenç del Penedès",
+                "La Bisbal del Penedès","Les Piles","Llorac", "L'Espluga de Francolí", "La Galera","La Sènia","La Pobla de Massaluca","La Fatarella","La Morera de Montsant","La Morera de Montsant",
+                "La Bisbal de Falset","La Torre de Fontaubella","La Palma d'Ebre","La Vilella Alta","La Vilella Baixa","La Figuera","La Torre de l'Espanyol","La Pobla de Mafumet","La Riera de Gaià",
+                "La Nou de Gaià","La Pobla de Montornès","La Secuita","Queralbs","Quart", "Querol",
+
+                "Mediona","Montmaneu","Masquefa","Manresa","Mura","Marganell","Monistrol de Montserrat","Martorell","Mataró","Montgat","Malgrat de Mar","Muntanyola","Montesquiu", "Malla","Manlleu","Montcada i Reixac","Matadepera",
+                "Martorelles","Mollet del Vallès", "Montmeló","Montornès del Vallès","Montseny","Maçanet de Cabrenys","Meranges","Mont-ras","Maià de Montcal","Mieres","Montagut i Oix","Molló",
+                "Massanes","Maçanet de la Selva","Madremanya","Mont-ral","Montferri", "Maspujols", "Mont-roig del Camp", "Masllorenç", "Montblanc", "Mas de Barberans", "Masdenverge", "Margalef",
+                "Marçà","Móra d'Ebre","Móra la Nova","Miravet", "Montbrió del Camp",
+
+                "Navarcles","Navàs","Nulles",
+
+                "Olesa de Bonesvalls", "Olèrdola","Orpí", "Òdena","Olesa de Montserrat","Olivella","Òrrius","Orís","Ordis","Olot","Ogassa","Osor",
+
+                "Puigdàlber","Pacs del Penedès",  "Pontons","Pujalt","Piera","Premià de Dalt","Premià de Mar", "Palafolls","Pineda de Mar","Palau-solità i Plegamans", "Polinyà","Parets del Vallès",
+                "Pau","Peralada","Palafrugell","Palamós","Pont de Molins","Parlavà",  "Portbou","Palol de Revardit", "Porqueres", "Pardines","Planoles","Puigpelat","Prades","Pratdip","Paüls","Pontils",
+                "Passanant i Belltall","Pira","Poboleda","Pradell de la Teixeta","Porrera","Perafort","Palau-saverdera","Pals","Prats i Sansor","Puigcerdà",
+
+                "Rubió","Rupit i Pruit","Roda de Ter","Rellinars","Rubí","Rajadell","Ripollet","Regencós","Roses","Riudaura","Ripoll",  "Ribes de Freser","Riudarenes","Rodonyà","Riudecols",
+                "Riudecanyes","Riudoms","Reus","Roquetes","Rocafort de Queralt","Riba-roja d'Ebre","Rasquera","Roda de Berà","Renau",
+
+                "Subirats", "Santa Margarida i els Monjos", "Sant Llorenç d'Hortons", "Sant Martí Sarroca", "Santa Fe del Penedès", "Sant Cugat Sesgarrigues", "Sant Quintí de Mediona",
+                "Sant Pere de Riudebitlles","Sant Sadurní d'Anoia", "Sant Martí Sesgueioles","Sant Martí de Tous", "Santa Margarida de Montbui", "Santa Maria de Miralles",
+                "St. Pere Sallavinera","Sant Feliu Sasserra","Sallent","Sant Mateu de Bages","Suria","Santpedor","Sant Fruitós de Bages", "Sant Joan de Vilatorrada",
+                "Sant Salvador de Guardiola","Sant Vicenç de Castellet","Sant Esteve Sesrovires","Sant Andreu de la Barca","Sant Feliu de LLobregat","Sant Vicenç dels Horts",
+                "Sant Just Desvern","Santa Coloma de Cervelló","Sant Joan Despí","Sant Climent de Llobregat","Sant Boi de Llobregat","Sant Climent de Llobregat","Santa Coloma de Gramenet",
+                "Sant Adrià del Besòs","Sitges","Sant Pere de Ribes","Santa Susanna","Sant Iscle de Vilalta","Sant Cebrià de Vallalta", "Sant Vicenç de Montalt","Sant Andreu de Llavaneres",
+                "Sant Pol de Mar","Seva","Sant Martí de Centelles","Santa Eulàlia de Riuprimer","Santa Maria de Besora", "Sora","Sant Quirze de Besora","Sant Pere de Torelló",
+                "Sant Agustí de LLuçanès","Sant Vicenç de Torelló","Sant Boi de Lluçanès","Sant Hipòlit de Voltregà","Santa Cecilia de Voltregà","Sant Bartolomeu del Grau","Sant Julià de Vilatorta",
+                "Sant Sadurní d'Osmort","Santa Eugènia de Berga","Sant Cugat del Vallès","Sant Llorenç Savall","Santmenat","Sabadell","Santa Perpètua de Mogoda", "Sant Quirze del Vallès",
+                "Sant Antoni de Vilamajor","Sant Celoni","Sant Esteve de Palautordera","Sant Feliu de Codines","Sant Fost de Campsentelles","Sant Pere de Vilamajor","Santa Eulàlia de Ronçana",
+                "Santa Maria de Martorelles","Santa Maria de Palautordera","Sant Climent Sescebes","Sant Feliu de Guíxols","Sant Miquel de Fluvià","Sant Pere Pescador","Siurana","Sales de Llierca",
+                "Sant Aniol de Finestres","Sant Feliu de Pallerols","Sant Jaume de Llierca", "Santa Pau","Salt","Sant Gregori", "Sant Julià de Ramis","Sarrià de Ter","Sant Martí Vell",
+                "Sant Andreu Salou","Sant Miquel de Campmajor","Serinyà", "Sant Joan de les Abadesses", "Sant Pau de Segúries", "Setcases","Sant Hilari Sacalm", "Sils", "Santa Coloma de Farners",
+                "Sant Julià del Llor i Bonmatí","Susqueda", "Sant Jaume dels Domenys","Santa Oliva","Sarral","Solivella","Senan","Santa Coloma de Queralt","Savallà del Comtat","Sant Jaume d'Enveja",
+                "Santa Bàrbara","Sant Carles de la Ràpita","Salomó","Salou",
+
+                "Torrelavit", "Torrelles de Foix","Talamanca","Tordera","Teià","Tiana","Tona","Taradell","Travertet","Torelló","Tavèrnoles","Terrassa","Tagamanent",
+                "Torrent","Tossa de Mar","Torroella de Fluvià","Torroella de Montgrí","Tivenys","Tortosa","Torroja del Priorat","Tivissa", "Tarragona","Torredembarra",
+
+                "Ullastrell","Ullà","Ullastret","Urús","Vilabertran","Vilafant","Vilajuïga","Vilamacolum","Vila-sacra","Vilanova de la Muga","Verges", "Ulldecona","Ulldemolins",
+
+                "Vilafranca del Penedès", "Vilobí del Penedès", "Veciana","Vilanova del Camí",  "Vallbona d'Anoia","Vallirana","Viladecans","Vilanova i la Geltrú","Vilassar de Dalt",
+                "Vilassar de Mar","Vidrà", "Viladrau","Vilanova de Sau","Vic", "Vacarisses","Viladecavalls","Vallgorguina","Vallromanes","Vilanova del Vallès","Vilalba Sasserra",
+                "Vall d'en Bas",  "Vall de Bianya","Vilablareix","Vilademuls","Vallfogona de Ripollès","Vilallonga de Ter","Vidreres", "Vilobí d'Onyar","Valls","Vila-rodona","Vallmoll",
+                "Vilabella","Vinyols i els Arcs","Vilaplana","Vilanova d'Escornalbou","Vandellòs i l'Hospitalet de l'Infant","Vallfogona de Riucorb","Vimbodí i Poblet","Vallclara",
+                "Vilanova de Prades","Vilaverd","Vinebre","Vila-seca","Vespella de Gaià","Vilallonga del Camp","Vilalba dels Arcs",
+
+                "Xerta"
+        );
+
+    }
+    @NonNull
     private List<String> obtenerListaDeComarcas() {
         return Arrays.asList(
                 "Alt Empordà","Garrotxa","Pla de l'Estany","Gironès","Baix Empordà", "Ripollès","La Selva","Montsià",
@@ -235,12 +419,14 @@ public class FragmentMapes extends Fragment {
                 "Osona","Bages","Moianès","Vallès Occidental","Vallès Oriental");
     }
 
+    @NonNull
     private List<String> obtenerListaDeVegueries() {
         return Arrays.asList(
                 "Alt Pirineu i Aran","Barcelona","Camp de Tarragona","Catalunya Central","Girona",
                 "Lleida","Penedès","Terres de l'Ebre");
     }
 
+    @NonNull
     private List<String> obtenerListaDeProvincies() {
         return Arrays.asList(
                 "Província de Barcelona","Província de Girona","Província de Lleida","Província de Tarragona");
@@ -372,7 +558,7 @@ public class FragmentMapes extends Fragment {
 
         infoMuni.setText("");
         closeButton.setVisibility(View.GONE);
-        scroll.setVisibility(View.GONE);  // Oculta el scroll si no hay visitas
+        scroll.setVisibility(View.GONE);
         markAsVisitedButton.setVisibility(View.GONE);
         viewBottom.setVisibility(View.GONE);
 
@@ -388,21 +574,18 @@ public class FragmentMapes extends Fragment {
         TextView provinciaInfo = bottomSheetView.findViewById(R.id.zonaNom);
         provinciaInfo.setText(provinciaId);
 
-        // Cambiar el color de la comarca pulsada a verde
         canviarColorSVG(provinciaId, "white");
 
-        // Cerrar el BottomSheetDialog con el botón de cerrar
         Button closeButton = bottomSheetView.findViewById(R.id.closeButton);
         closeButton.setOnClickListener(v -> {
-            canviarColorSVG(provinciaId, originalColor); // Restaurar el color original
-            resetZoom(originalViewBox); // Restaurar el viewBox original
-            bottomSheetDialog.dismiss(); // Cierra el BottomSheetDialog
+            canviarColorSVG(provinciaId, originalColor);
+            resetZoom(originalViewBox);
+            bottomSheetDialog.dismiss();
         });
 
-        // Restaurar el color y el viewBox original al cerrar el BottomSheetDialog (de cualquier manera)
         bottomSheetDialog.setOnDismissListener(dialog -> {
-            canviarColorSVG(provinciaId, originalColor); // Restaurar el color original
-            resetZoom(originalViewBox); // Restaurar el viewBox original
+            canviarColorSVG(provinciaId, originalColor);
+            resetZoom(originalViewBox);
         });
 
 
@@ -466,7 +649,6 @@ public class FragmentMapes extends Fragment {
 
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
-
         TextView municipiInfo = bottomSheetView.findViewById(R.id.zonaNom);
         municipiInfo.setText(municipiId);
 
@@ -487,9 +669,6 @@ public class FragmentMapes extends Fragment {
         viewBottom.setVisibility(View.VISIBLE);
 
         if (municipiVisitat) {
-
-
-
 
             infoMuni.setText("Visites anteriors");
             markAsVisitedButton.setText("Afegir visita");
@@ -606,6 +785,9 @@ public class FragmentMapes extends Fragment {
     }
 
     private void resetZoom(String originalViewBox) {
+
+        Log.d("NouZOOM", "Mapa inicializado con viewBox: " + originalViewBox);
+
         String jsCode = "document.getElementsByTagName('svg')[0].setAttribute('viewBox', '" + originalViewBox + "');";
         webView.evaluateJavascript(jsCode, null);
     }
@@ -625,7 +807,31 @@ public class FragmentMapes extends Fragment {
         marcarMunicipisVisitats();
     }
 
+    private String obtenirColorSVG(String id) {
+        // Obtener el color del path mediante su ID
+        final String[] colant = {""};
+        String jsCode = "document.getElementById('" + id + "').getAttribute('fill');";
+        webView.evaluateJavascript(jsCode, new ValueCallback<String>() {
+            @Override
+            public void onReceiveValue(String value) {
+                // Aquí 'value' contendrá el color del path
+                if (value != null) {
+                    // 'value' puede ser algo como '"red"' (incluyendo comillas)
+                    String color = value.replace("\"", ""); // Eliminar comillas
+                    Log.d("Color del Path", "El color del path es: " + color);
+                    colant[0] = color;
+                    // Ahora puedes usar el color en tu aplicación
+                } else {
+                    Log.d("Color del Path", "No se encontró el path o no tiene color");
+                }
+
+            }
+        });
+        return colant[0];
+    }
+
     private void canviarColorSVG(String comarcaId, String color) {
+        //Toast.makeText(context,comarcaId,Toast.LENGTH_SHORT).show();
         String escapedComarcaId = comarcaId.replace("'", "\\'");
         String jsCode = "document.getElementById('" + escapedComarcaId + "').style.fill = '" + color + "';";
         webView.evaluateJavascript(jsCode, null);
