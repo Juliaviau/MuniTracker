@@ -1,10 +1,12 @@
 package com.example.MuniTracker;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.animation.DecelerateInterpolator;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
@@ -12,6 +14,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -347,7 +350,7 @@ public class FragmentMapes extends Fragment {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
 
-        TextView comarcaInfo = bottomSheetView.findViewById(R.id.zonaNom);
+        TextView comarcaInfo = bottomSheetView.findViewById(R.id.zonacNom);
         comarcaInfo.setText(comarcaId);
 
         canviarColorSVG(comarcaId, "white");
@@ -365,15 +368,48 @@ public class FragmentMapes extends Fragment {
         });
 
         TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
-        NestedScrollView scroll = bottomSheetView.findViewById(R.id.scrollView);
-        Button markAsVisitedButton = bottomSheetView.findViewById(R.id.visit);
-        View viewBottom = bottomSheetView.findViewById(R.id.viewbottom);
 
-        infoMuni.setText("");
-        closeButton.setVisibility(View.GONE);
-        scroll.setVisibility(View.GONE);
-        markAsVisitedButton.setVisibility(View.GONE);
-        viewBottom.setVisibility(View.GONE);
+        //Quants municipis s'han visitat
+        String visitats = "3",total = "58";
+
+
+        ProgressBar progressBar = bottomSheetView.findViewById(R.id.progressBar);
+        progressBar.setProgress(0);
+
+
+
+
+
+        MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
+
+        viewModel.obtenirQuantitatMunicipisVisitatsComarca(comarcaId).observe(getViewLifecycleOwner(), nombreMunicipisVisitats -> {
+            int quantitatMunicipisComarca = mapesHelper.obtenirQuantitatMunicipisPerComarca(comarcaId);
+            double percentatge = quantitatMunicipisComarca == 0 ? 0 : (double) (nombreMunicipisVisitats * 100) / quantitatMunicipisComarca;
+            progressBar.setMax(quantitatMunicipisComarca);
+
+            ObjectAnimator animator = ObjectAnimator.ofInt(progressBar, "progress", nombreMunicipisVisitats);
+            animator.setDuration(400); // Duración de la animación en milisegundos
+            animator.setInterpolator(new DecelerateInterpolator()); // Suaviza la animación
+            animator.start();
+
+
+
+            infoMuni.setText("S'han visitat " + nombreMunicipisVisitats + " de " + quantitatMunicipisComarca + " municipis");
+
+        });
+
+
+
+
+
+
+
+
+
+
+
+        //closeButton.setVisibility(View.GONE);
+
 
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
@@ -382,7 +418,7 @@ public class FragmentMapes extends Fragment {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
 
-        TextView provinciaInfo = bottomSheetView.findViewById(R.id.zonaNom);
+        TextView provinciaInfo = bottomSheetView.findViewById(R.id.zonacNom);
         provinciaInfo.setText(provinciaId);
 
         canviarColorSVG(provinciaId, "white");
@@ -401,15 +437,11 @@ public class FragmentMapes extends Fragment {
 
 
         TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
-        NestedScrollView scroll = bottomSheetView.findViewById(R.id.scrollView);
-        Button markAsVisitedButton = bottomSheetView.findViewById(R.id.visit);
-        View viewBottom = bottomSheetView.findViewById(R.id.viewbottom);
+
 
         infoMuni.setText("");
         closeButton.setVisibility(View.GONE);
-        scroll.setVisibility(View.GONE);
-        markAsVisitedButton.setVisibility(View.GONE);
-        viewBottom.setVisibility(View.GONE);
+
 
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
@@ -418,7 +450,7 @@ public class FragmentMapes extends Fragment {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
 
-        TextView vegueriaInfo = bottomSheetView.findViewById(R.id.zonaNom);
+        TextView vegueriaInfo = bottomSheetView.findViewById(R.id.zonacNom);
         vegueriaInfo.setText(vegueriaId);
 
         canviarColorSVG(vegueriaId, "white");
@@ -437,15 +469,11 @@ public class FragmentMapes extends Fragment {
 
 
         TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
-        NestedScrollView scroll = bottomSheetView.findViewById(R.id.scrollView);
-        Button markAsVisitedButton = bottomSheetView.findViewById(R.id.visit);
-        View viewBottom = bottomSheetView.findViewById(R.id.viewbottom);
+
 
         infoMuni.setText("");
         closeButton.setVisibility(View.GONE);
-        scroll.setVisibility(View.GONE);
-        markAsVisitedButton.setVisibility(View.GONE);
-        viewBottom.setVisibility(View.GONE);
+
 
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
@@ -454,7 +482,7 @@ public class FragmentMapes extends Fragment {
 
 
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
-        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog_municipis, null);
         TextView municipiInfo = bottomSheetView.findViewById(R.id.zonaNom);
         municipiInfo.setText(municipiId);
 

@@ -1,0 +1,5 @@
+<!-- progress_bar_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <corners android:radius="16dp" />
+    <solid android:color="#D3D3D3"/> <!-- Fondo gris claro para la barra -->
+</shape>

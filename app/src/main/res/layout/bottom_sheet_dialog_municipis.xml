@@ -13,10 +13,10 @@
         android:layout_height="wrap_content"/>
     
     <TextView
-        android:id="@+id/zonacNom"
+        android:id="@+id/zonaNom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nom de la zona"
+        android:text="Informació de la zona"
         android:fontFamily="casual"
         android:textSize="24sp"
         android:textColor="@color/black"
@@ -24,7 +24,27 @@
         android:paddingBottom="10dp"
         android:gravity="center" />
 
+    <Button
+        android:id="@+id/visit"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:text="Vist"
+        android:layout_gravity="center"
+        style="@style/Widget.MaterialComponents.Button"
+        android:backgroundTint="@color/blau_mapa_fosc"
+        android:textColor="@android:color/white"
+        android:layout_marginVertical="10dp"
+        android:layout_marginBottom="10dp"
+        android:padding="12dp"
+        android:paddingHorizontal="24dp" />
 
+    <View
+        android:id="@+id/viewbottom"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@color/blau_mapa_fosc"/>
 
     <TextView
         android:id="@+id/zonaIfnfo"
@@ -38,15 +58,24 @@
         android:paddingBottom="2dp"
         android:gravity="center" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:progressDrawable="@drawable/progress_bar_progress"
-        android:max="100"
-        android:progress="0"
-        android:layout_margin="16dp"/>
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:visibility="visible"
+        android:background="@drawable/rounded_background"
+        android:padding="8dp"
+        android:scrollbars="vertical"
+        android:clipToPadding="false"
+        android:elevation="4dp">
+
+        <LinearLayout
+            android:id="@+id/visitasContainer"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:orientation="vertical"/>
+    </androidx.core.widget.NestedScrollView>
 
 
     <androidx.appcompat.widget.AppCompatButton
