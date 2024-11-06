@@ -27,7 +27,7 @@ public class MapesHelper {
         }
     }
 
-    public int getCantidadMunicipiosPorVegueria(String vegueriaId) {
+    public int obtenirQuantitatMunicipisPerVegueria(String vegueriaId) {
         int cantidadMunicipios = 0;
         try {
             // Obtiene el objeto JSON de comarques
@@ -45,7 +45,7 @@ public class MapesHelper {
         return cantidadMunicipios;
     }
 
-    public int getCantidadMunicipiosPorProvincia(String provinciaId) {
+    public int obtenirQuantitatMunicipisPerProvincia(String provinciaId) {
         int cantidadMunicipios = 0;
         try {
             // Obtiene el objeto JSON de comarques
@@ -63,7 +63,7 @@ public class MapesHelper {
         return cantidadMunicipios;
     }
 
-    public int getCantidadMunicipiosPorComarca(String comarcaId) {
+    public int obtenirQuantitatMunicipisPerComarca(String comarcaId) {
         int cantidadMunicipios = 0;
         try {
             // Obtiene el objeto JSON de comarques

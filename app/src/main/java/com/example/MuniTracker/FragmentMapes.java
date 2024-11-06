@@ -1,6 +1,4 @@
 package com.example.MuniTracker;
-
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
@@ -33,7 +31,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 
 import android.view.LayoutInflater;
@@ -44,13 +41,15 @@ import com.example.MuniTracker.databinding.FragmentMapesBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 public class FragmentMapes extends Fragment {
+
     private WebView webView;
     private Context context;
     FragmentMapesBinding binding;
-    private String lastComarcaId;
+    private String ultimID;
     private String originalViewBox;
-    MapesHelper territoryHelper;
-    // MunicipiViewModel viewModel;
+    MapesHelper mapesHelper;
+    String tipusMapa = "m";
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -60,9 +59,13 @@ public class FragmentMapes extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = FragmentMapesBinding.inflate(getLayoutInflater());
-       // setContentView(binding.getRoot());
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        pintarMunicipisVisitats();
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -70,7 +73,7 @@ public class FragmentMapes extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_mapes, container, false);
-        territoryHelper = new MapesHelper(context);
+        mapesHelper = new MapesHelper(context);
         webView = view.findViewById(R.id.webView);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -81,202 +84,586 @@ public class FragmentMapes extends Fragment {
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setUseWideViewPort(true);
 
-        LinearLayout layout = view.findViewById(R.id.legendLayout);
+        LinearLayout layoutLlegenda = view.findViewById(R.id.legendLayout);
+        layoutLlegenda.setVisibility(View.GONE);
 
-        loadMap(R.raw.municipis);
+        carregarMapa(R.raw.municipis);
 
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                marcarMunicipisVisitats();  // Marcar municipios visitados una vez que se carga el SVG
+                pintarMunicipisVisitats();
             }
         });
-        layout.setVisibility(View.GONE);
 
         webView.addJavascriptInterface(new WebAppInterface(), "Android");
         webView.setWebViewClient(new WebViewClient());
 
-        Button buttonProvincies = view.findViewById(R.id.btProvincies);
-        Button buttonVegueries = view.findViewById(R.id.btVegueries);
-        Button buttonComarques = view.findViewById(R.id.btComarques);
-        Button buttonMunicipis = view.findViewById(R.id.btMunicipis);
+        SearchView buscador = view.findViewById(R.id.searchView);
+        RecyclerView llistaResultatsBuscador = view.findViewById(R.id.resultsRecyclerView);
+        llistaResultatsBuscador.setLayoutManager(new LinearLayoutManager(context));
 
-        buttonProvincies.setOnClickListener(v -> {
-            loadMap(R.raw.provinscies);
+        List<String> llistaMunicipis = obtenirLlistaDeMunicipis();
+        List<String> llistaComarques = obtenirLlistaDeComarques();
+        List<String> llistaVegueries = obtenirLlistaDeVegueries();
+        List<String> llistaProvincies = obtenirLlistaDeProvincies();
+
+
+        SearchAdapter adapterMunicipis = new SearchAdapter(llistaMunicipis);
+        SearchAdapter adapterComarques = new SearchAdapter(llistaComarques);
+        SearchAdapter adapterVegueries = new SearchAdapter(llistaVegueries);
+        SearchAdapter adapterProvincies = new SearchAdapter(llistaProvincies);
+
+        llistaResultatsBuscador.setAdapter(adapterMunicipis);
+        final SearchAdapter[] adaptadorActual = {adapterMunicipis};
+
+        Button botoProvincies = view.findViewById(R.id.btProvincies);
+        Button botoVegueries = view.findViewById(R.id.btVegueries);
+        Button botoComarques = view.findViewById(R.id.btComarques);
+        Button botoMunicipis = view.findViewById(R.id.btMunicipis);
+
+        botoProvincies.setOnClickListener(v -> {
+            carregarMapa(R.raw.provincies);
             webView.setWebViewClient(new WebViewClient() {
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
-                    layout.setVisibility(View.VISIBLE);
+                    layoutLlegenda.setVisibility(View.VISIBLE);
+                    adaptadorActual[0] = adapterProvincies;
+                    llistaResultatsBuscador.setAdapter(adaptadorActual[0]);
                     pintarProvinciesPerVisites();
+                    tipusMapa = "p";
                 }
             });
         });
-        buttonVegueries.setOnClickListener(v -> {
-            loadMap(R.raw.vegueries);
+        botoVegueries.setOnClickListener(v -> {
+            carregarMapa(R.raw.vegueries);
             webView.setWebViewClient(new WebViewClient() {
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
-                    layout.setVisibility(View.VISIBLE);
+                    layoutLlegenda.setVisibility(View.VISIBLE);
+                    adaptadorActual[0] = adapterVegueries;
+                    llistaResultatsBuscador.setAdapter(adaptadorActual[0]);
                     pintarVegueriesPerVisites();
+                    tipusMapa = "v";
                 }
             });
         });
-        buttonComarques.setOnClickListener(v -> {
-            loadMap(R.raw.comarquesactu);
+        botoComarques.setOnClickListener(v -> {
+            carregarMapa(R.raw.comarquesactu);
             webView.setWebViewClient(new WebViewClient() {
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
-                    layout.setVisibility(View.VISIBLE);
-                    colorearComarcasPorVisitas();
+                    layoutLlegenda.setVisibility(View.VISIBLE);
+                    adaptadorActual[0] = adapterComarques;
+                    llistaResultatsBuscador.setAdapter(adaptadorActual[0]);
+                    pintarComarquesPerVisites();
+                    tipusMapa = "c";
                 }
             });
         });
-        buttonMunicipis.setOnClickListener(v -> { layout.setVisibility(View.GONE);  loadMap(R.raw.municipis);});
-
-
-
-
-
-        SearchView searchView = view.findViewById(R.id.searchView);
-        RecyclerView resultsRecyclerView = view.findViewById(R.id.resultsRecyclerView);
-
-        // Inicialitzem la llista de municipis i l'adapter
-        List<String> municipis = obtenerListaDeMunicipis(); // Llista dels noms dels municipis
-        SearchAdapter adapter = new SearchAdapter(municipis);
-        resultsRecyclerView.setAdapter(adapter);
-        resultsRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-
-        // Configurar l'adapter amb l'element seleccionat
-        adapter.setOnItemClickListener(municipi -> {
-            //canviarColorSVG(municipi,"white");  // Funció que pintarà el municipi seleccionat al mapa SVG
-            searchView.setQuery(municipi, true); // Esborra el text del SearchView
-            searchView.clearFocus(); // Amaga el teclat
-            resultsRecyclerView.setVisibility(View.GONE); // Oculta la llista després de seleccionar un municipi
+        botoMunicipis.setOnClickListener(v -> {
+            layoutLlegenda.setVisibility(View.GONE);
+           // adapter[0] = new SearchAdapter(llistaMunicipis);
+            adaptadorActual[0] = adapterMunicipis;
+            llistaResultatsBuscador.setAdapter(adaptadorActual[0]);
+            carregarMapa(R.raw.municipis);
         });
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        buscador.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (municipis.contains(query)) {
-                    //canviarColorSVG(query,"white");  // Pintem el municipi seleccionat
-
-
-                    /*String a;
-                    webView.evaluateJavascript(
-                            "document.getElementsByTagName('svg')[0].getAttribute('viewBox');",
-                            value -> {
-                                originalViewBox = value; // Almacenar el viewBox original
-                                Log.d("WebViewLog", "Mapa inicializado con viewBox: " + originalViewBox); // Log de inicialización
-                            }
-                    );*/
-                    String color = obtenirColorSVG(query) ;
-
-                    Log.i("color municipi ", query + " " + color);
-
-                    showMunicipiBottomSheet(query, color, "0 0 425 400");//colors per ocmparar
-
-
-                    searchView.setQuery("", true);
+                if (obtenirLlistaSegonsTipus().contains(query)) {
+                    processarCerca(query);
+                    buscador.setQuery("", true);
                 }
-                return false; // No cal fer res especial quan es prem "Enter"
+                return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                // Filtrar els municipis que contenen el text introduït
                 String query = newText.toLowerCase();
                 List<String> filteredMunicipis = new ArrayList<>();
-                for (String municipi : municipis) {
-                    if (municipi.toLowerCase().contains(query)) {
-                        filteredMunicipis.add(municipi);
+                for (String item : obtenirLlistaSegonsTipus()) {
+                    if (item.toLowerCase().contains(query)) {
+                        filteredMunicipis.add(item);
                     }
                 }
-                adapter.updateList(filteredMunicipis);
-
-                // Mostrar o ocultar la RecyclerView segons hi hagi resultats
-                if (filteredMunicipis.isEmpty()) {
-                    resultsRecyclerView.setVisibility(View.GONE);
-                } else {
-                    resultsRecyclerView.setVisibility(View.VISIBLE);
-                }
+                adaptadorActual[0].updateList(filteredMunicipis);
+                llistaResultatsBuscador.setVisibility(filteredMunicipis.isEmpty() ? View.GONE : View.VISIBLE);
                 return true;
             }
         });
+
+        setAdapterListeners(adapterMunicipis,buscador,llistaResultatsBuscador);
+        setAdapterListeners(adapterComarques, buscador, llistaResultatsBuscador);
+        setAdapterListeners(adapterVegueries, buscador, llistaResultatsBuscador);
+        setAdapterListeners(adapterProvincies, buscador, llistaResultatsBuscador);
 
         return view;
     }
 
 
-    private void pintarVegueriesPerVisites() {
-        MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
 
-        List<String> listaVegueries = obtenerListaDeVegueries();
+    private void setAdapterListeners(SearchAdapter adapter, SearchView searchView, RecyclerView resultsRecyclerView) {
+        adapter.setOnItemClickListener(municipi -> {
+            searchView.setQuery(municipi, true);
+            searchView.clearFocus();
+            resultsRecyclerView.setVisibility(View.GONE);
+        });
+    }
+    private void processarCerca(String query) {
+        obtenirColorSVG(query, color -> {
+            switch (tipusMapa) {
+                case "m":
+                    mostrarMunicipi(query, color, "0 0 425 400");
+                    break;
+                case "c":
+                    mostrarComarca(query, color, "0 0 425 400");
+                    break;
+                case "v":
+                    mostrarVegueria(query, color, "0 0 425 400");
+                    break;
+                case "p":
+                    mostrarProvincia(query, color, "0 0 425 400");
+                    break;
+            }
+        });
+    }
 
-        //Per a cada comarca
-        for (String vegueriaId : listaVegueries) {
-            //Retorna quants municipis estan visitats
-            viewModel.obtenerPorcentajeVisitadosVegueria(vegueriaId).observe(getViewLifecycleOwner(), porcentaje -> {
-                //Log.d("PROVINCIES", vegueriaId + " " + porcentaje);
-                //Quantitat municipis per comarca
-                int quantitat = territoryHelper.getCantidadMunicipiosPorVegueria(vegueriaId);
-                //Calcula el percentatge
-                double percentarge = quantitat == 0 ? 0 : (double) (porcentaje * 100) / quantitat;
 
-                //I assigna el color
-                int color = obtenerColorPorPorcentaje(percentarge);
-                canviarColorSVG(vegueriaId, String.format("#%06X", (0xFFFFFF & color)));  // Cambia el color de la comarca en el mapa
+
+    private void carregarMapa(int mapaSVG) {
+        String contingutSVG = obtenirSVG(mapaSVG);
+        if (contingutSVG != null) {
+            String dadesSVG = "<html><body style=\"margin: 0; padding: 0;\">" + contingutSVG + "</body></html>";
+            webView.loadDataWithBaseURL(null, dadesSVG, "text/html", "UTF-8", null);
+            if (mapaSVG == R.raw.municipis) {
+                tipusMapa = "m";
+                webView.setWebViewClient(new WebViewClient() {
+                    @Override
+                    public void onPageFinished(WebView view, String url) {
+                        super.onPageFinished(view, url);
+                        pintarMunicipisVisitats();
+                        inicialitzarMapa();
+                    }
+                });
+            }
+        }
+    }
+    private void inicialitzarMapa() {
+        webView.evaluateJavascript(
+                "document.getElementsByTagName('svg')[0].getAttribute('viewBox');",
+                value -> {
+                    originalViewBox = value;
+                    Log.d("WebViewLog", "Mapa inicializat amb viewBox: " + originalViewBox);
+                }
+        );
+    }
+    private String obtenirSVG(int resourceId) {
+        InputStream inputStream = getResources().openRawResource(resourceId);
+        try {
+            byte[] bytes = new byte[inputStream.available()];
+            inputStream.read(bytes);
+            return new String(bytes, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    private void resetZoom(String originalViewBox) {
+        Log.d("NouZOOM", "Mapa inicializado con viewBox: " + originalViewBox);
+        String jsCode = "document.getElementsByTagName('svg')[0].setAttribute('viewBox', '" + originalViewBox + "');";
+        webView.evaluateJavascript(jsCode, null);
+    }
+
+
+
+    public class WebAppInterface {
+
+        @JavascriptInterface
+        public void logMessage(final String message) {
+            Log.d("WebViewLog", message);
+        }
+
+        @JavascriptInterface
+        public void showProvince(final String comarcaId, final String originalColor, final String originalViewBox) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ultimID = comarcaId;
+                    mostrarProvincia(comarcaId, originalColor, originalViewBox);
+                }
+            });
+        }
+
+        @JavascriptInterface
+        public void showComarca(final String comarcaId, final String originalColor, final String originalViewBox) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ultimID = comarcaId;
+                    mostrarComarca(comarcaId, originalColor, originalViewBox);
+                }
+            });
+        }
+
+        @JavascriptInterface
+        public void showVegueria(final String comarcaId, final String originalColor, final String originalViewBox) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ultimID = comarcaId;
+                    mostrarVegueria(comarcaId, originalColor, originalViewBox);
+                }
+            });
+        }
+
+        @JavascriptInterface
+        public void showMunicipi(final String comarcaId, final String originalColor, final String originalViewBox) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ultimID = comarcaId;
+                    mostrarMunicipi(comarcaId, originalColor, originalViewBox);
+                }
             });
         }
     }
 
+
+
+    private void showNotasDialog(Visita visita) {
+        new AlertDialog.Builder(context)
+                .setTitle("Notes de la visita")
+                .setMessage(visita.notes)
+                .setPositiveButton("OK", null)
+                .show();
+    }
+    private void mostrarComarca(String comarcaId, String originalColor, String originalViewBox) {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
+
+        TextView comarcaInfo = bottomSheetView.findViewById(R.id.zonaNom);
+        comarcaInfo.setText(comarcaId);
+
+        canviarColorSVG(comarcaId, "white");
+
+        Button closeButton = bottomSheetView.findViewById(R.id.closeButton);
+        closeButton.setOnClickListener(v -> {
+            canviarColorSVG(comarcaId, originalColor);
+            resetZoom(originalViewBox);
+            bottomSheetDialog.dismiss();
+        });
+
+        bottomSheetDialog.setOnDismissListener(dialog -> {
+            canviarColorSVG(comarcaId, originalColor);
+            resetZoom(originalViewBox);
+        });
+
+        TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
+        NestedScrollView scroll = bottomSheetView.findViewById(R.id.scrollView);
+        Button markAsVisitedButton = bottomSheetView.findViewById(R.id.visit);
+        View viewBottom = bottomSheetView.findViewById(R.id.viewbottom);
+
+        infoMuni.setText("");
+        closeButton.setVisibility(View.GONE);
+        scroll.setVisibility(View.GONE);
+        markAsVisitedButton.setVisibility(View.GONE);
+        viewBottom.setVisibility(View.GONE);
+
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.show();
+    }
+    private void mostrarProvincia(String provinciaId, String originalColor, String originalViewBox) {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
+
+        TextView provinciaInfo = bottomSheetView.findViewById(R.id.zonaNom);
+        provinciaInfo.setText(provinciaId);
+
+        canviarColorSVG(provinciaId, "white");
+
+        Button closeButton = bottomSheetView.findViewById(R.id.closeButton);
+        closeButton.setOnClickListener(v -> {
+            canviarColorSVG(provinciaId, originalColor);
+            resetZoom(originalViewBox);
+            bottomSheetDialog.dismiss();
+        });
+
+        bottomSheetDialog.setOnDismissListener(dialog -> {
+            canviarColorSVG(provinciaId, originalColor);
+            resetZoom(originalViewBox);
+        });
+
+
+        TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
+        NestedScrollView scroll = bottomSheetView.findViewById(R.id.scrollView);
+        Button markAsVisitedButton = bottomSheetView.findViewById(R.id.visit);
+        View viewBottom = bottomSheetView.findViewById(R.id.viewbottom);
+
+        infoMuni.setText("");
+        closeButton.setVisibility(View.GONE);
+        scroll.setVisibility(View.GONE);
+        markAsVisitedButton.setVisibility(View.GONE);
+        viewBottom.setVisibility(View.GONE);
+
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.show();
+    }
+    private void mostrarVegueria(String vegueriaId, String originalColor, String originalViewBox) {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
+
+        TextView vegueriaInfo = bottomSheetView.findViewById(R.id.zonaNom);
+        vegueriaInfo.setText(vegueriaId);
+
+        canviarColorSVG(vegueriaId, "white");
+
+        Button closeButton = bottomSheetView.findViewById(R.id.closeButton);
+        closeButton.setOnClickListener(v -> {
+            canviarColorSVG(vegueriaId, originalColor);
+            resetZoom(originalViewBox);
+            bottomSheetDialog.dismiss();
+        });
+
+        bottomSheetDialog.setOnDismissListener(dialog -> {
+            canviarColorSVG(vegueriaId, originalColor);
+            resetZoom(originalViewBox);
+        });
+
+
+        TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
+        NestedScrollView scroll = bottomSheetView.findViewById(R.id.scrollView);
+        Button markAsVisitedButton = bottomSheetView.findViewById(R.id.visit);
+        View viewBottom = bottomSheetView.findViewById(R.id.viewbottom);
+
+        infoMuni.setText("");
+        closeButton.setVisibility(View.GONE);
+        scroll.setVisibility(View.GONE);
+        markAsVisitedButton.setVisibility(View.GONE);
+        viewBottom.setVisibility(View.GONE);
+
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.show();
+    }
+    private void mostrarMunicipi(String municipiId, String originalColor, String originalViewBox) {
+
+
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
+        TextView municipiInfo = bottomSheetView.findViewById(R.id.zonaNom);
+        municipiInfo.setText(municipiId);
+
+        Button markAsVisitedButton = bottomSheetView.findViewById(R.id.visit);
+        MunicipiViewModel viewModel= new ViewModelProvider(this).get(MunicipiViewModel.class);
+        Button closeButton = bottomSheetView.findViewById(R.id.closeButton);
+        View viewBottom = bottomSheetView.findViewById(R.id.viewbottom);
+
+        Log.d("Coloer " , originalColor);
+        boolean municipiVisitat = comparaColor(originalColor,"rgb(27, 58, 95)");
+        TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
+
+        NestedScrollView scroll = bottomSheetView.findViewById(R.id.scrollView);
+
+        closeButton.setVisibility(View.VISIBLE);
+        scroll.setVisibility(View.VISIBLE);
+        markAsVisitedButton.setVisibility(View.VISIBLE);
+        viewBottom.setVisibility(View.VISIBLE);
+
+        if (municipiVisitat) {
+
+            infoMuni.setText("Visites anteriors");
+            markAsVisitedButton.setText("Afegir visita");
+
+            LinearLayout visitasContainer = bottomSheetView.findViewById(R.id.visitasContainer);
+
+            viewModel.getVisitasByMunicipiId(municipiId).observe(getViewLifecycleOwner(), visitas -> {
+
+                visitasContainer.removeAllViews();
+
+                for (Visita visita : visitas) {
+                    TextView visitaTextView = new TextView(context);
+                    visitaTextView.setText(visita.dataVisita + "        " + visita.notes);
+                    visitaTextView.setPadding(16, 16, 16, 16);
+                    visitaTextView.setBackgroundResource(R.drawable.rounded_card);
+                    visitaTextView.setTextSize(16);
+                    visitaTextView.setTextColor(ContextCompat.getColor(context, R.color.blau_mapa_fosc));
+                    visitaTextView.setTypeface(null, Typeface.BOLD);
+                    visitaTextView.setLayoutParams(new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    ));
+                    ((LinearLayout.LayoutParams) visitaTextView.getLayoutParams()).setMargins(8, 8, 8, 8);
+                    visitaTextView.setOnClickListener(v -> showNotasDialog(visita));
+                    visitasContainer.addView(visitaTextView);
+                }
+            });
+
+        } else {
+            infoMuni.setText("");
+            closeButton.setVisibility(View.GONE);
+            scroll.setVisibility(View.GONE);
+            markAsVisitedButton.setText("Marcar com a visitat");
+            viewBottom.setVisibility(View.GONE);
+        }
+
+        MapesHelper.TerritoryData territoryData = mapesHelper.getTerritoryData(municipiId);
+
+        markAsVisitedButton.setOnClickListener(v -> {
+            VisitaDialogFragment bottomSheet = new VisitaDialogFragment((fecha, notas) -> {
+
+                AtomicReference<Boolean> isVisited = new AtomicReference<>(false);
+                viewModel.obtenirMunicipisVisitats().observe(getViewLifecycleOwner(), municipisVisitats -> {
+                    for (Municipi municipi : municipisVisitats) {
+                        if (municipi.id.equals(municipiId)) {
+                            isVisited.set(true);
+                            break;
+                        }
+                    }
+                    if (!isVisited.get()) {
+                        Log.d("CREA MUNI ", municipiId + " " + territoryData.comarcaId+ " " + territoryData.vegueriaId+ " " + territoryData.provinciaId);
+                        Municipi municipi = new Municipi(municipiId, municipiId, true, territoryData.comarcaId, territoryData.vegueriaId, territoryData.provinciaId);
+                        viewModel.afegirMunicipi(municipi);
+                    }
+                });
+                Visita visita = new Visita(municipiId, fecha, notas);
+
+                viewModel.afegirVisita(visita);
+
+                pintarMunicipisVisitats();
+            });
+
+            bottomSheet.show(getParentFragmentManager(), "AgregarVisitaBottomSheet");
+
+            bottomSheetDialog.dismiss();
+        });
+
+
+        closeButton.setOnClickListener(v -> {
+            canviarColorSVG(municipiId, originalColor);
+            resetZoom(originalViewBox);
+            bottomSheetDialog.dismiss();
+        });
+
+        bottomSheetDialog.setOnDismissListener(dialog -> {
+            canviarColorSVG(municipiId, originalColor);
+            resetZoom(originalViewBox);
+            bottomSheetDialog.dismiss();
+        });
+
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.show();
+    }
+
+
+
+    private void pintarVegueriesPerVisites() {
+        MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
+        List<String> llistaVegueries = obtenirLlistaDeVegueries();
+        for (String vegueriaId : llistaVegueries) {
+            viewModel.obtenirQuantitatMunicipisVisitatsVegueria(vegueriaId).observe(getViewLifecycleOwner(), nombreMunicipisVisitats -> {
+                int quantitatMunicipisVegueria = mapesHelper.obtenirQuantitatMunicipisPerVegueria(vegueriaId);
+                double percentatge = quantitatMunicipisVegueria == 0 ? 0 : (double) (nombreMunicipisVisitats * 100) / quantitatMunicipisVegueria;
+                int color = obtenirColorPerPercentatge(percentatge);
+                canviarColorSVG(vegueriaId, String.format("#%06X", (0xFFFFFF & color)));
+            });
+        }
+    }
     private void pintarProvinciesPerVisites() {
         MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
-
-        List<String> listaProvincies = obtenerListaDeProvincies();
-
-        //Per a cada comarca
-        for (String provinciaId : listaProvincies) {
-            //Retorna quants municipis estan visitats
-            viewModel.obtenerPorcentajeVisitadosProvincia(provinciaId).observe(getViewLifecycleOwner(), porcentaje -> {
-                //Quantitat municipis per comarca
-                int quantitat = territoryHelper.getCantidadMunicipiosPorProvincia(provinciaId);
-                //Calcula el percentatge
-                double percentarge = quantitat == 0 ? 0 : (double) (porcentaje * 100) / quantitat;
-
-                //I assigna el color
-                int color = obtenerColorPorPorcentaje(percentarge);
+        List<String> llistaProvincies = obtenirLlistaDeProvincies();
+        for (String provinciaId : llistaProvincies) {
+            viewModel.obtenirQuantitatMunicipisVisitatsProvincia(provinciaId).observe(getViewLifecycleOwner(), nombreMunicipisVisitats -> {
+                int quantitatMunicipisProvincia = mapesHelper.obtenirQuantitatMunicipisPerProvincia(provinciaId);
+                double percentatge = quantitatMunicipisProvincia == 0 ? 0 : (double) (nombreMunicipisVisitats * 100) / quantitatMunicipisProvincia;
+                int color = obtenirColorPerPercentatge(percentatge);
                 canviarColorSVG(provinciaId, String.format("#%06X", (0xFFFFFF & color)));
             });
         }
     }
-
-    private void colorearComarcasPorVisitas() {
+    private void pintarComarquesPerVisites() {
         MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
-
-        List<String> listaComarcas = obtenerListaDeComarcas();
-
-        //Per a cada comarca
-        for (String comarcaId : listaComarcas) {
-            //Retorna quants municipis estan visitats
-            viewModel.obtenerPorcentajeVisitadosComarca(comarcaId).observe(getViewLifecycleOwner(), porcentaje -> {
-                //Quantitat municipis per comarca
-                int quantitat = territoryHelper.getCantidadMunicipiosPorComarca(comarcaId);
-                //Calcula el percentatge
-                double percentarge = quantitat == 0 ? 0 : (double) (porcentaje * 100) / quantitat;
-                //I assigna el color
-                int color = obtenerColorPorPorcentaje(percentarge);
-                canviarColorSVG(comarcaId, String.format("#%06X", (0xFFFFFF & color)));  // Cambia el color de la comarca en el mapa
+        List<String> llistaComarques = obtenirLlistaDeComarques();
+        for (String comarcaId : llistaComarques) {
+            viewModel.obtenirQuantitatMunicipisVisitatsComarca(comarcaId).observe(getViewLifecycleOwner(), nombreMunicipisVisitats -> {
+                int quantitatMunicipisComarca = mapesHelper.obtenirQuantitatMunicipisPerComarca(comarcaId);
+                double percentatge = quantitatMunicipisComarca == 0 ? 0 : (double) (nombreMunicipisVisitats * 100) / quantitatMunicipisComarca;
+                int color = obtenirColorPerPercentatge(percentatge);
+                canviarColorSVG(comarcaId, String.format("#%06X", (0xFFFFFF & color)));
             });
         }
     }
+    private void pintarMunicipisVisitats() {
+        MunicipiViewModel viewModel = new ViewModelProvider(FragmentMapes.this).get(MunicipiViewModel.class);
+        viewModel.obtenirMunicipisVisitats().observe(getViewLifecycleOwner(), municipisVisitats -> {
+            for (Municipi municipi : municipisVisitats) {
+                canviarColorSVG(municipi.id,  String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(context, R.color.llegComplet))));
+            }
+        });
+    }
 
 
+
+    private boolean comparaColor (String color1, String color2) {
+        return color1.equalsIgnoreCase(color2);
+    }
+    public int obtenirColorPerPercentatge(double percentatge) {
+        if (percentatge == 0.0) return ContextCompat.getColor(context, R.color.blau_mapa);
+        else if (percentatge < 25.0) return ContextCompat.getColor(context, R.color.lleg25);
+        else if (percentatge < 50.0) return ContextCompat.getColor(context, R.color.lleg50);
+        else if (percentatge < 75.0) return ContextCompat.getColor(context, R.color.lleg75);
+        else return ContextCompat.getColor(context, R.color.llegComplet);
+    }
+    public interface ColorCallback {
+        void onColorReceived(String color);
+    }
+    private void obtenirColorSVG(String id, ColorCallback callback) {
+        String jsCode = "document.getElementById('" + id + "').getAttribute('style');";
+        webView.evaluateJavascript(jsCode, new ValueCallback<String>() {
+            @Override
+            public void onReceiveValue(String value) {
+                String color = "";
+                if (value != null && !value.equals("null")) {
+                    value = value.replace("\"", "");
+
+                    String[] styles = value.split(";");
+                    for (String style : styles) {
+                        if (style.trim().startsWith("fill:")) {
+                            color = style.split(":")[1].trim();
+                            break;
+                        }
+                    }
+                }
+                callback.onColorReceived(color);
+            }
+        });
+    }
+    private void canviarColorSVG(String comarcaId, String color) {
+        String escapedComarcaId = comarcaId.replace("'", "\\'");
+        String jsCode = "document.getElementById('" + escapedComarcaId + "').style.fill = '" + color + "';";
+        webView.evaluateJavascript(jsCode, null);
+    }
+
+
+
+    private List<String> obtenirLlistaSegonsTipus() {
+        switch (tipusMapa) {
+            case "c":
+                return obtenirLlistaDeComarques();
+            case "v":
+                return obtenirLlistaDeVegueries();
+            case "p":
+                return obtenirLlistaDeProvincies();
+            default:
+                return obtenirLlistaDeMunicipis();
+        }
+    }
     @NonNull
-    private List<String> obtenerListaDeMunicipis() {
+    private List<String> obtenirLlistaDeMunicipis() {
 
 
         return Arrays.asList(
@@ -370,7 +757,7 @@ public class FragmentMapes extends Fragment {
 
     }
     @NonNull
-    private List<String> obtenerListaDeComarcas() {
+    private List<String> obtenirLlistaDeComarques() {
         return Arrays.asList(
                 "Alt Empordà","Garrotxa","Pla de l'Estany","Gironès","Baix Empordà", "Ripollès","La Selva","Montsià",
                 "Baix Ebre", "Terra Alta","Ribera d'Ebre","Priorat","Baix Camp","Segrià","Garrigues","Tarragonès",
@@ -379,443 +766,15 @@ public class FragmentMapes extends Fragment {
                 "Alt Urgell","Baix Llobregat","Barcelonès","Maresme","Solsonès","Cerdanya","Lluçanès", "Berguedà",
                 "Osona","Bages","Moianès","Vallès Occidental","Vallès Oriental");
     }
-
     @NonNull
-    private List<String> obtenerListaDeVegueries() {
+    private List<String> obtenirLlistaDeVegueries() {
         return Arrays.asList(
                 "Alt Pirineu i Aran","Barcelona","Camp de Tarragona","Catalunya Central","Girona",
                 "Lleida","Penedès","Terres de l'Ebre");
     }
-
     @NonNull
-    private List<String> obtenerListaDeProvincies() {
+    private List<String> obtenirLlistaDeProvincies() {
         return Arrays.asList(
                 "Província de Barcelona","Província de Girona","Província de Lleida","Província de Tarragona");
-    }
-
-
-    private void loadMap(int mapResource) {
-        String svgContent = loadSvgFromResources(mapResource);
-        if (svgContent != null) {
-            String svgData = "<html><body style=\"margin: 0; padding: 0;\">" + svgContent + "</body></html>";
-            webView.loadDataWithBaseURL(null, svgData, "text/html", "UTF-8", null);
-
-            // Marcar municipios visitados solo si es el mapa de municipios
-            if (mapResource == R.raw.municipis) {
-                webView.setWebViewClient(new WebViewClient() {
-                    @Override
-                    public void onPageFinished(WebView view, String url) {
-                        super.onPageFinished(view, url);
-                        marcarMunicipisVisitats();  // Solo ejecutado si se carga el mapa de municipios
-                        inicializeMap();
-                    }
-                });
-            }
-        }
-    }
-
-    private void inicializeMap() {
-        webView.evaluateJavascript(
-                "document.getElementsByTagName('svg')[0].getAttribute('viewBox');",
-                value -> {
-                    originalViewBox = value; // Almacenar el viewBox original
-                    Log.d("WebViewLog", "Mapa inicializado con viewBox: " + originalViewBox); // Log de inicialización
-                }
-        );
-    }
-
-    private String loadSvgFromResources(int resourceId) {
-        InputStream inputStream = getResources().openRawResource(resourceId);
-        try {
-            byte[] bytes = new byte[inputStream.available()];
-            inputStream.read(bytes);
-            return new String(bytes, StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public class WebAppInterface {
-
-        @JavascriptInterface
-        public void logMessage(final String message) {
-            Log.d("WebViewLog", message); // Enviar el log a Android Studio
-        }
-
-        @JavascriptInterface
-        public void showProvince(final String comarcaId, final String originalColor, final String originalViewBox) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    lastComarcaId = comarcaId;
-                    showProvinciaBottomSheet(comarcaId, originalColor, originalViewBox);
-                }
-            });
-        }
-
-        @JavascriptInterface
-        public void showComarca(final String comarcaId, final String originalColor, final String originalViewBox) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    lastComarcaId = comarcaId;
-                    showComarcaBottomSheet(comarcaId, originalColor, originalViewBox);
-                }
-            });
-        }
-
-        @JavascriptInterface
-        public void showVegueria(final String comarcaId, final String originalColor, final String originalViewBox) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    lastComarcaId = comarcaId;
-                    showVegueriaBottomSheet(comarcaId, originalColor, originalViewBox);
-                }
-            });
-        }
-
-        @JavascriptInterface
-        public void showMunicipi(final String comarcaId, final String originalColor, final String originalViewBox) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    lastComarcaId = comarcaId;
-                    showMunicipiBottomSheet(comarcaId, originalColor, originalViewBox);
-                }
-            });
-        }
-    }
-
-    private void showComarcaBottomSheet(String comarcaId, String originalColor, String originalViewBox) {
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
-        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
-
-        TextView comarcaInfo = bottomSheetView.findViewById(R.id.zonaNom);
-        comarcaInfo.setText(comarcaId);
-
-        // Cambiar el color de la comarca pulsada a verde
-        canviarColorSVG(comarcaId, "white");
-
-        // Cerrar el BottomSheetDialog con el botón de cerrar
-        Button closeButton = bottomSheetView.findViewById(R.id.closeButton);
-        closeButton.setOnClickListener(v -> {
-            canviarColorSVG(comarcaId, originalColor); // Restaurar el color original
-            resetZoom(originalViewBox); // Restaurar el viewBox original
-            bottomSheetDialog.dismiss(); // Cierra el BottomSheetDialog
-        });
-
-        // Restaurar el color y el viewBox original al cerrar el BottomSheetDialog (de cualquier manera)
-        bottomSheetDialog.setOnDismissListener(dialog -> {
-            canviarColorSVG(comarcaId, originalColor); // Restaurar el color original
-            resetZoom(originalViewBox); // Restaurar el viewBox original
-        });
-
-        TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
-        NestedScrollView scroll = bottomSheetView.findViewById(R.id.scrollView);
-        Button markAsVisitedButton = bottomSheetView.findViewById(R.id.visit);
-        View viewBottom = bottomSheetView.findViewById(R.id.viewbottom);
-
-        infoMuni.setText("");
-        closeButton.setVisibility(View.GONE);
-        scroll.setVisibility(View.GONE);
-        markAsVisitedButton.setVisibility(View.GONE);
-        viewBottom.setVisibility(View.GONE);
-
-
-        bottomSheetDialog.setContentView(bottomSheetView);
-        bottomSheetDialog.show();
-    }
-
-    private void showProvinciaBottomSheet(String provinciaId, String originalColor, String originalViewBox) {
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
-        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
-
-        TextView provinciaInfo = bottomSheetView.findViewById(R.id.zonaNom);
-        provinciaInfo.setText(provinciaId);
-
-        canviarColorSVG(provinciaId, "white");
-
-        Button closeButton = bottomSheetView.findViewById(R.id.closeButton);
-        closeButton.setOnClickListener(v -> {
-            canviarColorSVG(provinciaId, originalColor);
-            resetZoom(originalViewBox);
-            bottomSheetDialog.dismiss();
-        });
-
-        bottomSheetDialog.setOnDismissListener(dialog -> {
-            canviarColorSVG(provinciaId, originalColor);
-            resetZoom(originalViewBox);
-        });
-
-
-        TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
-        NestedScrollView scroll = bottomSheetView.findViewById(R.id.scrollView);
-        Button markAsVisitedButton = bottomSheetView.findViewById(R.id.visit);
-        View viewBottom = bottomSheetView.findViewById(R.id.viewbottom);
-
-        infoMuni.setText("");
-        closeButton.setVisibility(View.GONE);
-        scroll.setVisibility(View.GONE);  // Oculta el scroll si no hay visitas
-        markAsVisitedButton.setVisibility(View.GONE);
-        viewBottom.setVisibility(View.GONE);
-
-        bottomSheetDialog.setContentView(bottomSheetView);
-        bottomSheetDialog.show();
-    }
-
-    private void showVegueriaBottomSheet(String vegueriaId, String originalColor, String originalViewBox) {
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
-        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
-
-        TextView vegueriaInfo = bottomSheetView.findViewById(R.id.zonaNom);
-        vegueriaInfo.setText(vegueriaId);
-
-        // Cambiar el color de la comarca pulsada a verde
-        canviarColorSVG(vegueriaId, "white");
-
-        // Cerrar el BottomSheetDialog con el botón de cerrar
-        Button closeButton = bottomSheetView.findViewById(R.id.closeButton);
-        closeButton.setOnClickListener(v -> {
-            canviarColorSVG(vegueriaId, originalColor); // Restaurar el color original
-            resetZoom(originalViewBox); // Restaurar el viewBox original
-            bottomSheetDialog.dismiss(); // Cierra el BottomSheetDialog
-        });
-
-        // Restaurar el color y el viewBox original al cerrar el BottomSheetDialog (de cualquier manera)
-        bottomSheetDialog.setOnDismissListener(dialog -> {
-            canviarColorSVG(vegueriaId, originalColor); // Restaurar el color original
-            resetZoom(originalViewBox); // Restaurar el viewBox original
-        });
-
-
-        TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
-        NestedScrollView scroll = bottomSheetView.findViewById(R.id.scrollView);
-        Button markAsVisitedButton = bottomSheetView.findViewById(R.id.visit);
-        View viewBottom = bottomSheetView.findViewById(R.id.viewbottom);
-
-        infoMuni.setText("");
-        closeButton.setVisibility(View.GONE);
-        scroll.setVisibility(View.GONE);  // Oculta el scroll si no hay visitas
-        markAsVisitedButton.setVisibility(View.GONE);
-        viewBottom.setVisibility(View.GONE);
-
-        bottomSheetDialog.setContentView(bottomSheetView);
-        bottomSheetDialog.show();
-    }
-
-    private void showMunicipiBottomSheet(String municipiId, String originalColor, String originalViewBox) {
-
-
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
-        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
-        TextView municipiInfo = bottomSheetView.findViewById(R.id.zonaNom);
-        municipiInfo.setText(municipiId);
-
-        Button markAsVisitedButton = bottomSheetView.findViewById(R.id.visit);
-        MunicipiViewModel viewModel= new ViewModelProvider(this).get(MunicipiViewModel.class);
-        Button closeButton = bottomSheetView.findViewById(R.id.closeButton);
-        View viewBottom = bottomSheetView.findViewById(R.id.viewbottom);
-
-        Log.d("Coloer " , originalColor);
-        boolean municipiVisitat = comparaColor(originalColor,"rgb(27, 58, 95)");
-        TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
-        // Cambia el tipo de ScrollView a NestedScrollView
-        NestedScrollView scroll = bottomSheetView.findViewById(R.id.scrollView);
-
-        closeButton.setVisibility(View.VISIBLE);
-        scroll.setVisibility(View.VISIBLE);
-        markAsVisitedButton.setVisibility(View.VISIBLE);
-        viewBottom.setVisibility(View.VISIBLE);
-
-        if (municipiVisitat) {
-
-            infoMuni.setText("Visites anteriors");
-            markAsVisitedButton.setText("Afegir visita");
-
-            LinearLayout visitasContainer = bottomSheetView.findViewById(R.id.visitasContainer);
-
-
-
-            viewModel.getVisitasByMunicipiId(municipiId).observe(getViewLifecycleOwner(), visitas -> {
-                // Limpia el contenedor antes de agregar nuevos elementos
-                visitasContainer.removeAllViews();
-
-                for (Visita visita : visitas) {
-                    TextView visitaTextView = new TextView(context);
-                    visitaTextView.setText(visita.dataVisita + "        " + visita.notes);
-                    visitaTextView.setPadding(16, 16, 16, 16);
-                    visitaTextView.setBackgroundResource(R.drawable.rounded_card);
-                    visitaTextView.setTextSize(16);
-                    visitaTextView.setTextColor(ContextCompat.getColor(context, R.color.blau_mapa_fosc));
-                    visitaTextView.setTypeface(null, Typeface.BOLD);
-                    visitaTextView.setLayoutParams(new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                    ));
-                    ((LinearLayout.LayoutParams) visitaTextView.getLayoutParams()).setMargins(8, 8, 8, 8);
-                    visitaTextView.setOnClickListener(v -> showNotasDialog(visita));
-                    visitasContainer.addView(visitaTextView);
-                }
-            });
-
-        } else {
-            infoMuni.setText("");
-            closeButton.setVisibility(View.GONE);
-            scroll.setVisibility(View.GONE);  // Oculta el scroll si no hay visitas
-            markAsVisitedButton.setText("Marcar com a visitat");
-            viewBottom.setVisibility(View.GONE);
-        }
-
-        // En tu código para marcar el municipio
-
-        MapesHelper.TerritoryData territoryData = territoryHelper.getTerritoryData(municipiId);
-
-
-        markAsVisitedButton.setOnClickListener(v -> {
-            VisitaDialogFragment bottomSheet = new VisitaDialogFragment((fecha, notas) -> {
-
-                AtomicReference<Boolean> isVisited = new AtomicReference<>(false);
-                viewModel.getMunicipisVisitats().observe(getViewLifecycleOwner(), municipisVisitats -> {
-                    for (Municipi municipi : municipisVisitats) {
-                        if (municipi.id.equals(municipiId)) {
-                            isVisited.set(true);
-                            break;
-                        }
-                    }
-                    if (!isVisited.get()) {
-                        Log.d("CREA MUNI ", municipiId + " " + territoryData.comarcaId+ " " + territoryData.vegueriaId+ " " + territoryData.provinciaId);
-                        Municipi municipi = new Municipi(municipiId, municipiId, true, territoryData.comarcaId, territoryData.vegueriaId, territoryData.provinciaId);
-                        viewModel.afegirMunicipi(municipi);
-                    }
-                });
-                Visita visita = new Visita(municipiId, fecha, notas);
-
-                viewModel.afegirVisita(visita);
-
-                marcarMunicipisVisitats();
-            });
-
-            bottomSheet.show(getParentFragmentManager(), "AgregarVisitaBottomSheet");
-
-            bottomSheetDialog.dismiss();
-        });
-
-
-        closeButton.setOnClickListener(v -> {
-            canviarColorSVG(municipiId, originalColor); // Restaurar el color original
-            resetZoom(originalViewBox); // Restaurar el viewBox original
-            bottomSheetDialog.dismiss();
-        });
-
-        bottomSheetDialog.setOnDismissListener(dialog -> {
-            canviarColorSVG(municipiId, originalColor); // Restaurar el color original
-            resetZoom(originalViewBox); // Restaurar el viewBox original
-            bottomSheetDialog.dismiss();
-        });
-
-        bottomSheetDialog.setContentView(bottomSheetView);
-        bottomSheetDialog.show();
-    }
-
-    private boolean comparaColor (String color1, String color2) {
-        if (color1.equalsIgnoreCase(color2)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private void showNotasDialog(Visita visita) {
-        // Puedes usar un AlertDialog para mostrar las notas
-        new AlertDialog.Builder(context)
-                .setTitle("Notes de la visita")
-                .setMessage(visita.notes)
-                .setPositiveButton("OK", null)
-                .show();
-    }
-
-    private void marcarMunicipisVisitats() {
-        MunicipiViewModel viewModel = new ViewModelProvider(FragmentMapes.this).get(MunicipiViewModel.class);
-        viewModel.getMunicipisVisitats().observe(getViewLifecycleOwner(), municipisVisitats -> {
-            for (Municipi municipi : municipisVisitats) {
-                canviarColorSVG(municipi.id,  String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(context, R.color.llegComplet)))); // Canvia el color de municipis visitats
-            }
-        });
-    }
-
-    private void resetZoom(String originalViewBox) {
-
-        Log.d("NouZOOM", "Mapa inicializado con viewBox: " + originalViewBox);
-
-        String jsCode = "document.getElementsByTagName('svg')[0].setAttribute('viewBox', '" + originalViewBox + "');";
-        webView.evaluateJavascript(jsCode, null);
-    }
-
-    public int obtenerColorPorPorcentaje(double porcentaje) {
-        if (porcentaje == 0.0) return ContextCompat.getColor(context, R.color.blau_mapa);
-        else if (porcentaje < 25.0) return ContextCompat.getColor(context, R.color.lleg25);
-        else if (porcentaje < 50.0) return ContextCompat.getColor(context, R.color.lleg50);
-        else if (porcentaje < 75.0) return ContextCompat.getColor(context, R.color.lleg75);
-        else return ContextCompat.getColor(context, R.color.llegComplet);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        marcarMunicipisVisitats();
-    }
-
-    public interface ColorCallback {
-        void onColorReceived(String color);
-    }
-
-
-    private String obtenirColorSVG(String id) {
-        final String[] colorResult = {null};
-        final CountDownLatch latch = new CountDownLatch(1);
-
-        String jsCode = "document.getElementById('" + id + "').getAttribute('style');";
-
-        webView.evaluateJavascript(jsCode, new ValueCallback<String>() {
-            @Override
-            public void onReceiveValue(String value) {
-                if (value != null && !value.equals("null")) {
-                    value = value.replace("\"", ""); // Limpiar comillas
-
-                    // Buscar el valor de 'fill' dentro del estilo
-                    String color = null;
-                    String[] styles = value.split(";");
-                    for (String style : styles) {
-                        if (style.trim().startsWith("fill:")) {
-                            color = style.split(":")[1].trim();
-                            break;
-                        }
-                    }
-                    colorResult[0] = (color != null) ? color : ""; // Asignar color encontrado
-                } else {
-                    colorResult[0] = ""; // Si no se encontró el color
-                }
-                latch.countDown(); // Liberar el latch una vez recibido el color
-            }
-        });
-
-        try {
-            latch.await(); // Esperar hasta que onReceiveValue llame a countDown()
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return colorResult[0];
-    }
-
-
-
-    private void canviarColorSVG(String comarcaId, String color) {
-        //Toast.makeText(context,comarcaId,Toast.LENGTH_SHORT).show();
-        String escapedComarcaId = comarcaId.replace("'", "\\'");
-        String jsCode = "document.getElementById('" + escapedComarcaId + "').style.fill = '" + color + "';";
-        webView.evaluateJavascript(jsCode, null);
     }
 }

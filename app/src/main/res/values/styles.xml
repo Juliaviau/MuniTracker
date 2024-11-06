@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Archivo res/values/styles.xml -->
+    <style name="CustomDatePickerStyle" parent="Theme.AppCompat.Light.Dialog">
+        <!-- Color del texto principal (días, años) -->
+        <item name="android:textColorPrimary">#000000</item>
+        <!-- Color del texto secundario (nombres de días y meses) -->
+        <item name="android:textColorSecondary">#3E4056</item>
+        <!-- Color del fondo principal del DatePicker -->
+        <item name="android:colorBackground">#AD6363</item>
+        <!-- Color de los botones de selección en el calendario (flechas de navegación) -->
+        <item name="android:colorControlNormal">#3F51B5</item>
+        <!-- Color del fondo de los botones cuando están activos o seleccionados -->
+        <item name="android:colorControlActivated">#657181</item>
+        <!-- Color de las líneas de división y el borde -->
+        <item name="android:colorAccent">@color/blau_mapa_fosc</item>
+        <!-- Color de la selección de fechas en el calendario (día seleccionado) -->
+        <item name="android:datePickerDialogTheme">@color/blau_mapa</item>
+        <!-- Personalización del fondo de las cajas de selección -->
+        <item name="android:colorButtonNormal">#692F81</item>
+    </style>
+
+
+
+</resources>

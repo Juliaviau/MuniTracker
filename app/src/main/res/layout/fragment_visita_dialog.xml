@@ -6,33 +6,77 @@
     android:orientation="vertical"
     android:padding="20dp">
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="top"
+android:layout_marginLeft="12dp"
+            app:lottie_rawRes="@raw/pin"
+            app:lottie_loop="true"
+            app:lottie_autoPlay="true"/>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:textAlignment="textStart"
+            android:layout_marginTop="10dp"
+            android:text="Marcar municipi com a visitat" />
+
+    </LinearLayout>
+
+
     <EditText
         android:id="@+id/notasEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Escribe tus notas"
+        android:padding="16dp"
+        android:hint="Escriure nota..."
+        android:textColorHint="#888888"
+        android:textColor="#333333"
+        android:background="@drawable/editext_background"
+        android:textSize="16sp"
+        android:gravity="start|top"
         android:inputType="textMultiLine"
-        android:padding="10dp" />
+        android:imeOptions="flagNoEnterAction"
+        android:scrollbars="vertical"
+        android:maxLines="5"
+        android:layout_margin="16dp" />
 
     <DatePicker
-        android:layout_width="wrap_content"
         android:id="@+id/fechaTextView"
-        android:layout_height="wrap_content"/>
-
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        app:lottie_rawRes="@raw/afegiranimacio"
-        app:lottie_loop="true"
-        app:lottie_autoPlay="true"/>
-    <Button
-        android:id="@+id/guardarButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:layout_margin="16dp"
+        android:padding="8dp"
+        android:calendarViewShown="true"
+        android:background="@drawable/date_picker_background"
+        android:theme="@style/CustomDatePickerStyle"/>
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/guardarButton"
+        android:layout_marginTop="20dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Guardar" />
+        android:text="Guardar"
+        android:textSize="16sp"
+        android:textColor="#FFFFFF"
+        android:padding="12dp"
+        android:background="@drawable/guardar_background" />
+
+
+
+
 </LinearLayout>

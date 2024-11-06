@@ -18,7 +18,7 @@ public class MunicipiViewModel extends AndroidViewModel {
         municipiRepository = new MunicipiRepository(application);
     }
 
-    public LiveData<List<Municipi>> getMunicipisVisitats() {
+    public LiveData<List<Municipi>> obtenirMunicipisVisitats() {
         return municipiRepository.getMunicipisVisitats();
     }
 
@@ -43,7 +43,7 @@ public class MunicipiViewModel extends AndroidViewModel {
     }
 
 
-    public LiveData<Integer> obtenerPorcentajeVisitadosComarca(String comarcaId) {
+    public LiveData<Integer> obtenirQuantitatMunicipisVisitatsComarca(String comarcaId) {
         MutableLiveData<Integer> porcentaje = new MutableLiveData<>();
         Executors.newSingleThreadExecutor().execute(() -> {
             int resultado = municipiRepository.getPorcentajeVisitadosComarca(comarcaId);
@@ -52,7 +52,7 @@ public class MunicipiViewModel extends AndroidViewModel {
         return porcentaje;
     }
 
-    public LiveData<Integer> obtenerPorcentajeVisitadosProvincia(String provinciaId) {
+    public LiveData<Integer> obtenirQuantitatMunicipisVisitatsProvincia(String provinciaId) {
         MutableLiveData<Integer> porcentaje = new MutableLiveData<>();
         Executors.newSingleThreadExecutor().execute(() -> {
             int resultado = municipiRepository.getPorcentajeVisitadosProvincia(provinciaId);
@@ -61,7 +61,7 @@ public class MunicipiViewModel extends AndroidViewModel {
         return porcentaje;
     }
 
-    public LiveData<Integer> obtenerPorcentajeVisitadosVegueria(String vegueriaId) {
+    public LiveData<Integer> obtenirQuantitatMunicipisVisitatsVegueria(String vegueriaId) {
         MutableLiveData<Integer> porcentaje = new MutableLiveData<>();
         Executors.newSingleThreadExecutor().execute(() -> {
             int resultado = municipiRepository.getPorcentajeVisitadosVegueria(vegueriaId);

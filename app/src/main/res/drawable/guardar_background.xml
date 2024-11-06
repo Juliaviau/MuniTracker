@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Archivo: res/drawable/button_background.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape>
+            <solid android:color="#F47767"/> <!-- Color de fondo al presionar -->
+            <corners android:radius="16dp"/> <!-- Bordes redondeados -->
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <solid android:color="@color/taronja"/> <!-- Color de fondo normal -->
+            <corners android:radius="16dp"/> <!-- Bordes redondeados -->
+        </shape>
+    </item>
+</selector>
