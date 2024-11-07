@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.animation.DecelerateInterpolator;
@@ -368,48 +369,26 @@ public class FragmentMapes extends Fragment {
         });
 
         TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
-
-        //Quants municipis s'han visitat
-        String visitats = "3",total = "58";
-
+        TextView indicadorpercentatge = bottomSheetView.findViewById(R.id.indicadorpercentatge);
 
         ProgressBar progressBar = bottomSheetView.findViewById(R.id.progressBar);
         progressBar.setProgress(0);
-
-
-
-
 
         MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
 
         viewModel.obtenirQuantitatMunicipisVisitatsComarca(comarcaId).observe(getViewLifecycleOwner(), nombreMunicipisVisitats -> {
             int quantitatMunicipisComarca = mapesHelper.obtenirQuantitatMunicipisPerComarca(comarcaId);
             double percentatge = quantitatMunicipisComarca == 0 ? 0 : (double) (nombreMunicipisVisitats * 100) / quantitatMunicipisComarca;
+            DecimalFormat df = new DecimalFormat("#.##");
             progressBar.setMax(quantitatMunicipisComarca);
-
+            indicadorpercentatge.setText(df.format(percentatge) + " %");
             ObjectAnimator animator = ObjectAnimator.ofInt(progressBar, "progress", nombreMunicipisVisitats);
             animator.setDuration(400); // Duración de la animación en milisegundos
             animator.setInterpolator(new DecelerateInterpolator()); // Suaviza la animación
             animator.start();
-
-
-
             infoMuni.setText("S'han visitat " + nombreMunicipisVisitats + " de " + quantitatMunicipisComarca + " municipis");
 
         });
-
-
-
-
-
-
-
-
-
-
-
-        //closeButton.setVisibility(View.GONE);
-
 
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
@@ -437,11 +416,26 @@ public class FragmentMapes extends Fragment {
 
 
         TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
+        TextView indicadorpercentatge = bottomSheetView.findViewById(R.id.indicadorpercentatge);
 
+        ProgressBar progressBar = bottomSheetView.findViewById(R.id.progressBar);
+        progressBar.setProgress(0);
 
-        infoMuni.setText("");
-        closeButton.setVisibility(View.GONE);
+        MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
 
+        viewModel.obtenirQuantitatMunicipisVisitatsProvincia(provinciaId).observe(getViewLifecycleOwner(), nombreMunicipisVisitats -> {
+            int quantitatMunicipisComarca = mapesHelper.obtenirQuantitatMunicipisPerProvincia(provinciaId);
+            double percentatge = quantitatMunicipisComarca == 0 ? 0 : (double) (nombreMunicipisVisitats * 100) / quantitatMunicipisComarca;
+            DecimalFormat df = new DecimalFormat("#.##");
+            progressBar.setMax(quantitatMunicipisComarca);
+            indicadorpercentatge.setText(df.format(percentatge) + " %");
+            ObjectAnimator animator = ObjectAnimator.ofInt(progressBar, "progress", nombreMunicipisVisitats);
+            animator.setDuration(400); // Duración de la animación en milisegundos
+            animator.setInterpolator(new DecelerateInterpolator()); // Suaviza la animación
+            animator.start();
+            infoMuni.setText("S'han visitat " + nombreMunicipisVisitats + " de " + quantitatMunicipisComarca + " municipis");
+
+        });
 
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
@@ -469,11 +463,26 @@ public class FragmentMapes extends Fragment {
 
 
         TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
+        TextView indicadorpercentatge = bottomSheetView.findViewById(R.id.indicadorpercentatge);
 
+        ProgressBar progressBar = bottomSheetView.findViewById(R.id.progressBar);
+        progressBar.setProgress(0);
 
-        infoMuni.setText("");
-        closeButton.setVisibility(View.GONE);
+        MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
 
+        viewModel.obtenirQuantitatMunicipisVisitatsVegueria(vegueriaId).observe(getViewLifecycleOwner(), nombreMunicipisVisitats -> {
+            int quantitatMunicipisComarca = mapesHelper.obtenirQuantitatMunicipisPerVegueria(vegueriaId);
+            double percentatge = quantitatMunicipisComarca == 0 ? 0 : (double) (nombreMunicipisVisitats * 100) / quantitatMunicipisComarca;
+            DecimalFormat df = new DecimalFormat("#.##");
+            progressBar.setMax(quantitatMunicipisComarca);
+            indicadorpercentatge.setText(df.format(percentatge) + " %");
+            ObjectAnimator animator = ObjectAnimator.ofInt(progressBar, "progress", nombreMunicipisVisitats);
+            animator.setDuration(400); // Duración de la animación en milisegundos
+            animator.setInterpolator(new DecelerateInterpolator()); // Suaviza la animación
+            animator.start();
+            infoMuni.setText("S'han visitat " + nombreMunicipisVisitats + " de " + quantitatMunicipisComarca + " municipis");
+
+        });
 
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
