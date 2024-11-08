@@ -23,9 +23,6 @@ public class MunicipiViewModel extends AndroidViewModel {
     }
 
 
-    /*public void marcarMunicipiComVisitant(Municipi municipi) {
-        municipiRepository.marcarMunicipiComVisitant(municipi);
-    }*/
     public void afegirMunicipi(Municipi municipi) {
         municipiRepository.afegirMunicipi(municipi);
     }
@@ -34,9 +31,6 @@ public class MunicipiViewModel extends AndroidViewModel {
         municipiRepository.afegirVisita(visita);
     }
 
-    /*public List<Visita> getVisitesPerMunicipi(String municipiId) {
-        return municipiRepository.getVisitesPerMunicipi(municipiId);
-    }*/
 
     public LiveData<List<Visita>> getVisitasByMunicipiId(String municipiId) {
         return municipiRepository.getVisitasByMunicipiId(municipiId);
@@ -70,6 +64,13 @@ public class MunicipiViewModel extends AndroidViewModel {
         return porcentaje;
     }
 
-
+    public LiveData<Integer> nombreMunicipisVisitats() {
+        MutableLiveData<Integer> porcentaje = new MutableLiveData<>();
+        Executors.newSingleThreadExecutor().execute(() -> {
+            int resultado = municipiRepository.nombreMunicipisVisitats();
+            porcentaje.postValue(resultado);
+        });
+        return porcentaje;
+    }
 
 }

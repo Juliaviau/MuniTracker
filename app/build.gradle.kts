@@ -34,6 +34,7 @@ android {
     }
 }
 
+
 dependencies {
 
     implementation(libs.appcompat)
@@ -59,6 +60,8 @@ dependencies {
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
     // kapt("androidx.room:room-compiler:2.5.0") // Utilitza kapt per Room compiler
+
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
 
 }

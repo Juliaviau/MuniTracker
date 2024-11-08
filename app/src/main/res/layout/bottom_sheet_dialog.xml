@@ -74,7 +74,7 @@
         android:text="Tornar al mapa"
         android:layout_gravity="center"
         android:background="@drawable/estilboto"
-
+        android:layout_marginBottom="10dp"
         android:backgroundTint="#D88479"
         android:textColor="@android:color/white"
         android:layout_marginTop="20dp"

@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_margin="18dp">
+            android:layout_margin="15dp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -31,13 +31,89 @@
                 android:textStyle="bold"
                 android:textSize="16dp"/>
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="?android:attr/progressBarStyleHorizontal"
+            <TextView
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:id="@+id/munvisi"
+                android:text="S'han visitat x municipis d'un total de 804."
+                android:textSize="14dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/indicadorpercentatge"
+                    android:gravity="center"
+                    android:textSize="16dp"
+                    android:text="50%"/>
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:progressDrawable="@drawable/progress_bar_progress"
+                    android:max="804"
+                    android:progress="0"
+                    android:layout_margin="16dp"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Distribució dels municipis visitats"
+                android:textStyle="bold"
+                android:layout_marginVertical="15dp"
+                android:textSize="16dp"/>
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pieChart"
+                android:layout_width="350dp"
+                android:layout_height="350dp"
+                android:layout_gravity="center"/>
 
 
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pieChartVegueria"
+                android:layout_width="350dp"
+                android:layout_height="350dp"
+                android:layout_gravity="center"/>
+
+            <com.github.mikephil.charting.charts.HorizontalBarChart
+                android:id="@+id/barChartB"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+               />
+
+            <com.github.mikephil.charting.charts.HorizontalBarChart
+                android:id="@+id/barChartG"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                />
+
+            <com.github.mikephil.charting.charts.HorizontalBarChart
+                android:id="@+id/barChartT"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                />
+
+            <com.github.mikephil.charting.charts.HorizontalBarChart
+                android:id="@+id/barChartL"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginBottom="100dp"
+                />
         </LinearLayout>
     </ScrollView>
 

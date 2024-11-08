@@ -22,7 +22,7 @@ public interface MunicipiDao {
     void updateVisitStatus(String id, boolean visitat);
 
     @Query("SELECT COUNT(*) FROM municipis WHERE visitat = 1")
-    int countMunicipisVisitats();
+    int nombreMunicipisVisitats();
 
     @Query("SELECT COUNT(*) FROM municipis WHERE comarca_id = :comarcaId")
     int getTotalMunicipisInComarca(String comarcaId);

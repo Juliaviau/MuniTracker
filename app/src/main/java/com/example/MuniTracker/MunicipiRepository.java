@@ -78,7 +78,9 @@ public class MunicipiRepository {
         return municipiDao.getVisitadosMunicipisInVegueria(vegueriaId);
     }
 
-
+    public int nombreMunicipisVisitats() {
+        return municipiDao.nombreMunicipisVisitats();
+    }
 
 
 
