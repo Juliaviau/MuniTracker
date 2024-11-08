@@ -1,0 +1,51 @@
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="4dp"
+    android:layout_marginHorizontal="2dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="8dp"
+    app:cardBackgroundColor="#FFFFFF">
+
+<LinearLayout
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="horizontal"
+android:paddingVertical="8dp"
+android:paddingHorizontal="16dp"
+android:gravity="center_vertical">
+
+<!-- Nombre de la comarca, con ancho fijo -->
+<TextView
+    android:id="@+id/comarca_name"
+    android:layout_width="110dp"
+    android:layout_height="wrap_content"
+    android:textSize="14sp"
+    android:ellipsize="end"
+    android:maxLines="1"
+    android:textColor="#444444"
+    android:gravity="start"
+    android:paddingEnd="8dp" />
+
+<!-- Barra de progreso, centrada -->
+<ProgressBar
+    android:id="@+id/progress_bar"
+    android:layout_width="0dp"
+    android:layout_height="12dp"
+    android:layout_weight="1"
+    android:progressDrawable="@drawable/progress_bar_custom"
+    style="?android:attr/progressBarStyleHorizontal" />
+
+<!-- Texto del porcentaje, con ancho fijo -->
+<TextView
+    android:id="@+id/percentage_text"
+    android:layout_width="50dp"
+    android:layout_height="wrap_content"
+    android:gravity="end"
+    android:paddingStart="4dp"
+    android:textSize="14sp"
+    android:textColor="#444444" />
+</LinearLayout>
+    </androidx.cardview.widget.CardView>

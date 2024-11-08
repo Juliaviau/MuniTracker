@@ -1,12 +1,15 @@
 package com.example.MuniTracker;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.icu.text.DecimalFormat;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
 import android.view.animation.DecelerateInterpolator;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
@@ -77,6 +80,16 @@ public class FragmentMapes extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_mapes, container, false);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Activity activity = getActivity();
+            if (activity != null) {
+                Window window = activity.getWindow();
+                window.setStatusBarColor(ContextCompat.getColor(activity, R.color.blau_mapa_fosc));
+            }
+        }
+
+
         mapesHelper = new MapesHelper(context);
         webView = view.findViewById(R.id.webView);
         WebSettings webSettings = webView.getSettings();

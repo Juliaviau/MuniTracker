@@ -3,15 +3,18 @@ package com.example.MuniTracker;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.TextView;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -50,6 +53,26 @@ public class FragmentLogin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_login);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.white));
+            window.setNavigationBarColor(ContextCompat.getColor(this, R.color.white));
+        }
+
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // Cambiar el color del texto de la barra de estado a oscuro (para fondos claros)
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
+
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(0);  // Restablece a la visibilidad predeterminada (texto oscuro)
+        }*/
+
+
 
         binding = FragmentLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
