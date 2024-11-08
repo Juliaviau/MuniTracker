@@ -1,6 +1,7 @@
 package com.example.MuniTracker;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -10,6 +11,7 @@ public class Visita {
     public int visitaId;
 
     @NonNull
+    @ColumnInfo(name = "municipiId")
     public String municipiId; // ID del municipi
     @NonNull
     public String dataVisita;
