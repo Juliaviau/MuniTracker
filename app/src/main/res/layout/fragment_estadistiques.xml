@@ -137,6 +137,12 @@
                 android:layout_marginBottom="10dp"
                 android:textSize="16dp"/>
 
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChartGa"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"/>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -145,6 +151,12 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="10dp"
                 android:textSize="16dp"/>
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChartCovi"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -155,6 +167,12 @@
                 android:layout_marginBottom="10dp"
                 android:textSize="16dp"/>
 
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChartVevi"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"/>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -164,9 +182,17 @@
                 android:layout_marginBottom="70dp"
                 android:textSize="16dp"/>
 
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChartPrvi"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                />
 
 
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="60dp"/>
 
 
 

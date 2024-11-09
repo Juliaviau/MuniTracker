@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import com.example.MuniTracker.databinding.FragmentEstadistiquesBinding;
 import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
@@ -41,6 +42,7 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
@@ -53,18 +55,20 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class FragmentEstadistiques extends Fragment {
 
- private FragmentEstadistiquesBinding binding;
+    private FragmentEstadistiquesBinding binding;
 
     private AtomicInteger visitatsProvLleida = new AtomicInteger();
     private AtomicInteger visitatsProvBarcelona = new AtomicInteger();
     private AtomicInteger visitatsProvTarragona = new AtomicInteger();
     private AtomicInteger visitatsProvGirona = new AtomicInteger();
 
+    private static final int TOTAL_MUNICIPIS = 804;
+
     private Context context;
     MapesHelper mapesHelper;
 
     private Map<String, AtomicInteger> visitatsPerVegueria = new HashMap<>();
-    private List<String> vegueries = Arrays.asList("Alt Pirineu i Aran","Barcelona","Camp de Tarragona","Catalunya Central","Girona","Lleida","Penedès","Terres de l'Ebre");
+    private List<String> vegueries = Arrays.asList("Alt Pirineu i Aran", "Barcelona", "Camp de Tarragona", "Catalunya Central", "Girona", "Lleida", "Penedès", "Terres de l'Ebre");
 
     private Map<String, AtomicInteger> visitatsPerComarcaL = new HashMap<>();
     private Map<String, AtomicInteger> visitatsPerComarcaG = new HashMap<>();
@@ -73,20 +77,19 @@ public class FragmentEstadistiques extends Fragment {
     private Map<String, AtomicInteger> visitatsPerComarca = new HashMap<>();
 
     private List<String> comarquesB = Arrays.asList(
-            "Alt Penedès", "Anoia", "Bages", "Baix Llobregat", "Barcelonès", "Garraf", "Maresme", "Osona", "Vallès Occidental", "Vallès Oriental");//10
+            "Alt Penedès", "Anoia", "Bages", "Baix Llobregat", "Barcelonès", "Garraf", "Maresme", "Osona", "Vallès Occidental", "Vallès Oriental","Lluçanès");//10
     private List<String> comarquesT = Arrays.asList(
             "Alt Camp", "Baix Camp", "Baix Ebre", "Baix Penedès", "Conca de Barberà", "Montsià", "Priorat", "Ribera d'Ebre", "Tarragonès", "Terra Alta");//10
     private List<String> comarquesG = Arrays.asList(
-            "Alt Empordà", "Baix Empordà", "Cerdanya", "Garrotxa", "Gironès", "Pla de l'Estany", "Selva","Ripollès");//8
+            "Alt Empordà", "Baix Empordà", "Cerdanya", "Garrotxa", "Gironès", "Pla de l'Estany", "Selva", "Ripollès");//8
     private List<String> comarquesL = Arrays.asList(
             "Alta Ribagorça", "Alt Urgell", "Cerdanya", "Garrigues", "Noguera", "Pallars Jussà", "Pallars Sobirà", "Pla d'Urgell", "Segarra", "Segrià", "Solsonès", "Urgell", "Val d'Aran");//13
-
 
 
     private List<String> comarques = Arrays.asList(
             "Alt Penedès", "Anoia", "Bages", "Baix Llobregat", "Barcelonès", "Garraf", "Maresme", "Osona", "Vallès Occidental", "Vallès Oriental",
             "Alt Camp", "Baix Camp", "Baix Ebre", "Baix Penedès", "Conca de Barberà", "Montsià", "Priorat", "Ribera d'Ebre", "Tarragonès", "Terra Alta",
-            "Alt Empordà", "Baix Empordà", "Cerdanya", "Garrotxa", "Gironès", "Pla de l'Estany", "Selva","Ripollès",
+            "Alt Empordà", "Baix Empordà", "Cerdanya", "Garrotxa", "Gironès", "Pla de l'Estany", "Selva", "Ripollès",
             "Alta Ribagorça", "Alt Urgell", "Cerdanya", "Garrigues", "Noguera", "Pallars Jussà", "Pallars Sobirà", "Pla d'Urgell", "Segarra", "Segrià", "Solsonès", "Urgell", "Val d'Aran");//13
 
 
@@ -106,7 +109,7 @@ public class FragmentEstadistiques extends Fragment {
     }
 
     @Override
-    public View onCreateView (LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentEstadistiquesBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         mapesHelper = new MapesHelper(context);
@@ -131,9 +134,9 @@ public class FragmentEstadistiques extends Fragment {
 
         viewModel.nombreMunicipisVisitats().observe(getViewLifecycleOwner(), nombreMunicipisVisitats -> {
 
-            double percentatge = (double) (nombreMunicipisVisitats * 100) / 804;
+            double percentatge = (double) (nombreMunicipisVisitats * 100) / TOTAL_MUNICIPIS;
             DecimalFormat df = new DecimalFormat("#.##");
-            binding.progressBar.setMax(804);
+            binding.progressBar.setMax(TOTAL_MUNICIPIS);
             binding.indicadorpercentatge.setText(df.format(percentatge) + " %");
 
             ObjectAnimator animator = ObjectAnimator.ofInt(binding.progressBar, "progress", nombreMunicipisVisitats);
@@ -184,38 +187,6 @@ public class FragmentEstadistiques extends Fragment {
 
         //*******************************************************
 
-        /*LinearLayout progressContainer = getView().findViewById(R.id.progress_container);
-
-        for (String comarca : comarques) {
-            visitatsPerComarcaL.put(comarca, new AtomicInteger());
-        }
-
-        for (String comarca : comarques) {
-            viewModel.obtenirQuantitatMunicipisVisitatsComarca(comarca).observe(getViewLifecycleOwner(), nombreMunicipisVisitats -> {
-                int quantitatMunicipisComarca = mapesHelper.obtenirQuantitatMunicipisPerComarca(comarca);
-                int porcentajeVisitado = (int) ((nombreMunicipisVisitats / (float) quantitatMunicipisComarca) * 100);
-
-                // Agregar un nuevo ProgressBar para la comarca
-                View progressItem = LayoutInflater.from(getContext()).inflate(R.layout.progress_item, progressContainer, false);
-
-                // Configura cada elemento del ProgressBar
-                TextView comarcaName = progressItem.findViewById(R.id.comarca_name);
-                ProgressBar progressBar = progressItem.findViewById(R.id.progress_bar);
-                TextView percentageText = progressItem.findViewById(R.id.percentage_text);
-
-                comarcaName.setText(comarca);
-                progressBar.setMax(100); // Máximo del ProgressBar en 100%
-                progressBar.setProgress(porcentajeVisitado); // Porcentaje de municipios visitados
-                percentageText.setText(porcentajeVisitado + "%"); // Texto del porcentaje
-
-                // Agrega el elemento a la vista contenedora
-                progressContainer.addView(progressItem);
-
-
-            });
-        }*/
-
-
         // Lista para almacenar las comarcas con su porcentaje
         List<Pair<String, Integer>> comarcaPorcentajes = new ArrayList<>();
 
@@ -248,8 +219,97 @@ public class FragmentEstadistiques extends Fragment {
 
         //************************************************
         //Top 10 municipis visitats mes vegades grafica horitzontal
+        viewModel.getTop10MostVisitedMunicipalities().observe(getViewLifecycleOwner(), topmunicipisvisitats -> {
+            //obte Municipivisitcount que te municipiid i visitcount
+            actualizarGrafico(topmunicipisvisitats);
+        });
 
+
+        viewModel.getTop5MostVisitedComarques().observe(getViewLifecycleOwner(), topmunicipisvisitats -> {
+            //obte Municipivisitcount que te municipiid i visitcount
+            actualizarGraficoComa(topmunicipisvisitats,getView().findViewById(R.id.barChartCovi));
+        });
+
+
+        viewModel.getTop3MostVisitedVegueries().observe(getViewLifecycleOwner(), topmunicipisvisitats -> {
+            //obte Municipivisitcount que te municipiid i visitcount
+            actualizarGraficoComa(topmunicipisvisitats,getView().findViewById(R.id.barChartVevi));
+        });
+
+        viewModel.getTop3MostVisitedProvincies().observe(getViewLifecycleOwner(), topmunicipisvisitats -> {
+            //obte Municipivisitcount que te municipiid i visitcount
+            actualizarGraficoComa(topmunicipisvisitats,getView().findViewById(R.id.barChartPrvi));
+        });
     }
+
+    private void actualizarGraficoComa(List<ComarcaVisitCount> topMunicipisVisitats, BarChart chart) {
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        ArrayList<String> labels = new ArrayList<>();
+
+        // Crear entradas y etiquetas, dividiendo etiquetas largas en dos líneas
+        for (int i = 0; i < topMunicipisVisitats.size(); i++) {
+            ComarcaVisitCount municipi = topMunicipisVisitats.get(i);
+            entries.add(new BarEntry(i, municipi.visitCount));
+            labels.add(municipi.comarcaID);
+        }
+
+        // Usamos BarChart para barras verticales
+
+
+        // Crear el DataSet y personalizarlo
+        BarDataSet dataSet = new BarDataSet(entries, "Visitas");
+        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        dataSet.setValueTextSize(12f); // Tamaño de texto para los valores sobre las barras
+
+        // Asignar el DataSet al BarData
+        BarData barData = new BarData(dataSet);
+        barData.setBarWidth(0.8f); // Ancho de las barras
+
+        // Configuración del eje Y para mostrar el número de visitas
+        YAxis yAxis = chart.getAxisLeft();
+        yAxis.setTextSize(14f); // Tamaño de texto de etiquetas del eje Y
+        yAxis.setDrawGridLines(false);
+        yAxis.setGranularity(1f); // Mostrar cada entrada del eje
+        yAxis.setGranularityEnabled(true);
+
+        chart.getAxisRight().setEnabled(false); // Desactiva el eje derecho para una vista más limpia
+
+        // Configuración del eje X para mostrar nombres de municipios
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
+
+
+        // Configuración adicional del eje X para asegurarse de que las etiquetas se muestren correctamente
+        xAxis.setLabelCount(labels.size(), true); // Forzar a que se muestren todas las etiquetas
+
+        // Aumentar el espacio del gráfico si es necesario
+        chart.getXAxis().setSpaceMin(0.5f); // Espacio adicional entre las barras
+        chart.getXAxis().setSpaceMax(0.5f);
+
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // Colocar etiquetas en la parte inferior
+        xAxis.setTextSize(14f); // Tamaño de las etiquetas de municipio
+        xAxis.setLabelRotationAngle(270f); // Rotar etiquetas 90 grados para mostrarlas de forma vertical
+        xAxis.setDrawGridLines(false);
+        xAxis.setGranularity(1f); // Mostrar cada entrada en el eje
+        xAxis.setGranularityEnabled(true);
+        xAxis.setLabelCount(labels.size()); // Asegura que se muestren todas las etiquetas
+
+        // Personalización del gráfico
+        chart.setData(barData);
+        chart.setFitBars(true); // Ajustar barras al espacio disponible
+        chart.setDrawValueAboveBar(true); // Mostrar valores sobre las barras
+
+        // Descripción del gráfico
+        Description description = new Description();
+        description.setText("");
+        description.setTextSize(12f);
+        chart.setDescription(description);
+
+        // Refrescar el gráfico para mostrar los datos
+        chart.invalidate(); // Actualiza el gráfico con los datos
+    }
+
+
     // Método para actualizar la interfaz de usuario con la lista de comarcas ordenadas
     private void updateUI(List<Pair<String, Integer>> comarcaPorcentajes) {
         LinearLayout progressContainer = getView().findViewById(R.id.progress_container);
@@ -280,6 +340,75 @@ public class FragmentEstadistiques extends Fragment {
             progressContainer.addView(progressItem);
         }
     }
+
+    private void actualizarGrafico(List<MunicipiVisitCount> topMunicipisVisitats) {
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        ArrayList<String> labels = new ArrayList<>();
+
+        // Crear entradas y etiquetas, dividiendo etiquetas largas en dos líneas
+        for (int i = 0; i < topMunicipisVisitats.size(); i++) {
+            MunicipiVisitCount municipi = topMunicipisVisitats.get(i);
+            entries.add(new BarEntry(i, municipi.visitCount));
+
+            labels.add(municipi.municipiId);
+        }
+
+        // Usamos BarChart para barras verticales
+        BarChart chart = getView().findViewById(R.id.barChartGa);
+
+        // Crear el DataSet y personalizarlo
+        BarDataSet dataSet = new BarDataSet(entries, "Visitas");
+        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        dataSet.setValueTextSize(12f); // Tamaño de texto para los valores sobre las barras
+
+        // Asignar el DataSet al BarData
+        BarData barData = new BarData(dataSet);
+        barData.setBarWidth(0.8f); // Ancho de las barras
+
+        // Configuración del eje Y para mostrar el número de visitas
+        YAxis yAxis = chart.getAxisLeft();
+        yAxis.setTextSize(10f); // Tamaño de texto de etiquetas del eje Y
+        yAxis.setDrawGridLines(false);
+        yAxis.setGranularity(1f); // Mostrar cada entrada del eje
+        yAxis.setGranularityEnabled(true);
+
+        chart.getAxisRight().setEnabled(false); // Desactiva el eje derecho para una vista más limpia
+
+        // Configuración del eje X para mostrar nombres de municipios
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
+
+        // Configuración adicional del eje X para asegurarse de que las etiquetas se muestren correctamente
+        xAxis.setLabelCount(labels.size(), true); // Forzar a que se muestren todas las etiquetas
+
+        // Aumentar el espacio del gráfico si es necesario
+        chart.getXAxis().setSpaceMin(0.5f); // Espacio adicional entre las barras
+        chart.getXAxis().setSpaceMax(0.5f);
+
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // Colocar etiquetas en la parte inferior
+        xAxis.setTextSize(10f); // Tamaño de las etiquetas de municipio
+        xAxis.setLabelRotationAngle(270f); // Rotar etiquetas 90 grados para mostrarlas de forma vertical
+        xAxis.setDrawGridLines(false);
+        xAxis.setGranularity(1f); // Mostrar cada entrada en el eje
+        xAxis.setGranularityEnabled(true);
+        xAxis.setLabelCount(labels.size()); // Asegura que se muestren todas las etiquetas
+
+        // Personalización del gráfico
+        chart.setData(barData);
+        chart.setFitBars(true); // Ajustar barras al espacio disponible
+        chart.setDrawValueAboveBar(true); // Mostrar valores sobre las barras
+
+        // Descripción del gráfico
+        Description description = new Description();
+        description.setText("");
+        description.setTextSize(12f);
+        chart.setDescription(description);
+
+        // Refrescar el gráfico para mostrar los datos
+        chart.invalidate(); // Actualiza el gráfico con los datos
+    }
+
+
 
 
 /*

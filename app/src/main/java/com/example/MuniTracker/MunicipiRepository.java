@@ -83,8 +83,27 @@ public class MunicipiRepository {
     }
 
 
+    public void updateMunicipi(Municipi municipi) {
+        new UpdateMunicipiAsyncTask(municipiDao).execute(municipi);
+    }
 
+    public void insertVisita(Visita visita) {
+        new InsertVisitaAsyncTask(visitaDao).execute(visita);
+    }
 
+    public LiveData<List<MunicipiVisitCount>> getTop10MostVisitedMunicipalities() {
+        return visitaDao.getTop10MostVisitedMunicipalities();
+    }
+    public LiveData<List<ComarcaVisitCount>> getTop5MostVisitedComarques() {
+        return visitaDao.getTop5MostVisitedComarques();
+    }
+    public LiveData<List<ComarcaVisitCount>> getTop3MostVisitedVegueries() {
+        return visitaDao.getTop3MostVisitedVegueries();
+    }
+
+    public LiveData<List<ComarcaVisitCount>> getTop3MostVisitedProvincies() {
+        return visitaDao.getTop3MostVisitedProvincies();
+    }
 
 
 

@@ -73,4 +73,29 @@ public class MunicipiViewModel extends AndroidViewModel {
         return porcentaje;
     }
 
+    public void updateMunicipi(Municipi municipi) {
+        municipiRepository.updateMunicipi(municipi);
+    }
+
+    public void insertVisita(Visita visita) {
+        municipiRepository.insertVisita(visita);
+    }
+
+    public LiveData<List<MunicipiVisitCount>> getTop10MostVisitedMunicipalities() {
+        return municipiRepository.getTop10MostVisitedMunicipalities();
+    }
+
+    public LiveData<List<ComarcaVisitCount>> getTop5MostVisitedComarques() {
+        return municipiRepository.getTop5MostVisitedComarques();
+    }
+
+    public LiveData<List<ComarcaVisitCount>> getTop3MostVisitedVegueries() {
+        return municipiRepository.getTop3MostVisitedVegueries();
+    }
+
+    public LiveData<List<ComarcaVisitCount>> getTop3MostVisitedProvincies() {
+        return municipiRepository.getTop3MostVisitedProvincies();
+    }
+
+
 }

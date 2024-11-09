@@ -738,7 +738,7 @@ public class FragmentMapes extends Fragment {
                 "El Pla del Penedès","El Bruc","Els Hostalets de Pierola","Els Prats de Rei","El Pont de Vilomara i Rocafort","El Papiol","El Prat de Llobregat", "Esparreguera",
                 "Esplugues de Llobregat", "El Masnou", "El Brull","Espinelves","Empuriabrava","Espolla", "Esponellà","El Pla de Santa Maria","El Pont d'Armentera","El Rourell",
                 "Els Garidells","El Milà","El Perelló","El Vendrell","El Montmell","Els Guiamets","El Molar","El Lloar","El Masroig","Els Pallaresos","El Catllar","El Morell",
-                "El Pinell de Brai","El Prat del Comte",
+                "El Pinell de Brai","El Prat del Comte","Molins de Rei","Pallejà","La Palma de Cervelló",
 
                 "Font-rubí","Fonollosa","Folgueroles","Figaró-Montmany","Fogars de Montclús","Finca de les Fonts","Fontanals de Cerdanya","Fontanilles","Fornells de la Selva",
                 "Fontcoberta","Figueres","Forallac","Figuerola del Camp","Forès","Freginals","Falset","Flix",
@@ -757,7 +757,7 @@ public class FragmentMapes extends Fragment {
                 "L'Arboç","La Masó","La Febró","L'Albiol","Les Borjes del Camp","L'Aleixar","La Selva del Camp","L'Argentera","L'Aldea","L'Ametlla de Mar","L'Ampolla","Llorenç del Penedès",
                 "La Bisbal del Penedès","Les Piles","Llorac", "L'Espluga de Francolí", "La Galera","La Sènia","La Pobla de Massaluca","La Fatarella","La Morera de Montsant","La Morera de Montsant",
                 "La Bisbal de Falset","La Torre de Fontaubella","La Palma d'Ebre","La Vilella Alta","La Vilella Baixa","La Figuera","La Torre de l'Espanyol","La Pobla de Mafumet","La Riera de Gaià",
-                "La Nou de Gaià","La Pobla de Montornès","La Secuita","Queralbs","Quart", "Querol",
+                "La Nou de Gaià","La Pobla de Montornès","La Secuita","Queralbs","Quart", "Querol","La Pobla de Lillet",
 
                 "Mediona","Montmaneu","Masquefa","Manresa","Mura","Marganell","Monistrol de Montserrat","Martorell","Mataró","Montgat","Malgrat de Mar","Muntanyola","Montesquiu", "Malla","Manlleu","Montcada i Reixac","Matadepera",
                 "Martorelles","Mollet del Vallès", "Montmeló","Montornès del Vallès","Montseny","Maçanet de Cabrenys","Meranges","Mont-ras","Maià de Montcal","Mieres","Montagut i Oix","Molló",
@@ -770,19 +770,19 @@ public class FragmentMapes extends Fragment {
 
                 "Puigdàlber","Pacs del Penedès",  "Pontons","Pujalt","Piera","Premià de Dalt","Premià de Mar", "Palafolls","Pineda de Mar","Palau-solità i Plegamans", "Polinyà","Parets del Vallès",
                 "Pau","Peralada","Palafrugell","Palamós","Pont de Molins","Parlavà",  "Portbou","Palol de Revardit", "Porqueres", "Pardines","Planoles","Puigpelat","Prades","Pratdip","Paüls","Pontils",
-                "Passanant i Belltall","Pira","Poboleda","Pradell de la Teixeta","Porrera","Perafort","Palau-saverdera","Pals","Prats i Sansor","Puigcerdà",
+                "Passanant i Belltall","Pira","Poboleda","Pradell de la Teixeta","Porrera","Perafort","Palau-saverdera","Pals","Prats i Sansor","Puigcerdà","Prats de Lluçanès",
 
                 "Rubió","Rupit i Pruit","Roda de Ter","Rellinars","Rubí","Rajadell","Ripollet","Regencós","Roses","Riudaura","Ripoll",  "Ribes de Freser","Riudarenes","Rodonyà","Riudecols",
                 "Riudecanyes","Riudoms","Reus","Roquetes","Rocafort de Queralt","Riba-roja d'Ebre","Rasquera","Roda de Berà","Renau",
 
                 "Subirats", "Santa Margarida i els Monjos", "Sant Llorenç d'Hortons", "Sant Martí Sarroca", "Santa Fe del Penedès", "Sant Cugat Sesgarrigues", "Sant Quintí de Mediona",
                 "Sant Pere de Riudebitlles","Sant Sadurní d'Anoia", "Sant Martí Sesgueioles","Sant Martí de Tous", "Santa Margarida de Montbui", "Santa Maria de Miralles",
-                "St. Pere Sallavinera","Sant Feliu Sasserra","Sallent","Sant Mateu de Bages","Suria","Santpedor","Sant Fruitós de Bages", "Sant Joan de Vilatorrada",
+                "St. Pere Sallavinera","Sant Feliu Sasserra","Sallent","Sant Mateu de Bages","Súria","Santpedor","Sant Fruitós de Bages", "Sant Joan de Vilatorrada",
                 "Sant Salvador de Guardiola","Sant Vicenç de Castellet","Sant Esteve Sesrovires","Sant Andreu de la Barca","Sant Feliu de LLobregat","Sant Vicenç dels Horts",
                 "Sant Just Desvern","Santa Coloma de Cervelló","Sant Joan Despí","Sant Climent de Llobregat","Sant Boi de Llobregat","Sant Climent de Llobregat","Santa Coloma de Gramenet",
                 "Sant Adrià del Besòs","Sitges","Sant Pere de Ribes","Santa Susanna","Sant Iscle de Vilalta","Sant Cebrià de Vallalta", "Sant Vicenç de Montalt","Sant Andreu de Llavaneres",
                 "Sant Pol de Mar","Seva","Sant Martí de Centelles","Santa Eulàlia de Riuprimer","Santa Maria de Besora", "Sora","Sant Quirze de Besora","Sant Pere de Torelló",
-                "Sant Agustí de LLuçanès","Sant Vicenç de Torelló","Sant Boi de Lluçanès","Sant Hipòlit de Voltregà","Santa Cecilia de Voltregà","Sant Bartolomeu del Grau","Sant Julià de Vilatorta",
+                "Sant Agustí de Lluçanès","Sant Vicenç de Torelló","Sant Boi de Lluçanès","Sant Hipòlit de Voltregà","Santa Cecilia de Voltregà","Sant Bartolomeu del Grau","Sant Julià de Vilatorta",
                 "Sant Sadurní d'Osmort","Santa Eugènia de Berga","Sant Cugat del Vallès","Sant Llorenç Savall","Santmenat","Sabadell","Santa Perpètua de Mogoda", "Sant Quirze del Vallès",
                 "Sant Antoni de Vilamajor","Sant Celoni","Sant Esteve de Palautordera","Sant Feliu de Codines","Sant Fost de Campsentelles","Sant Pere de Vilamajor","Santa Eulàlia de Ronçana",
                 "Santa Maria de Martorelles","Santa Maria de Palautordera","Sant Climent Sescebes","Sant Feliu de Guíxols","Sant Miquel de Fluvià","Sant Pere Pescador","Siurana","Sales de Llierca",

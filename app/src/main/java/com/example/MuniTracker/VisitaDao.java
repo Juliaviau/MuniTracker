@@ -43,5 +43,29 @@ public interface VisitaDao {
             "LIMIT 10")
     LiveData<List<MunicipiVisitCount>> getTop10MostVisitedMunicipalities();
 
+    @Query("SELECT m.comarca_id AS comarcaID, COUNT(*) AS visitCount " +
+            "FROM visites v " +
+            "INNER JOIN municipis m ON v.municipiId = m.id " +
+            "GROUP BY m.comarca_id " +
+            "ORDER BY visitCount DESC " +
+            "LIMIT 5")
+    LiveData<List<ComarcaVisitCount>> getTop5MostVisitedComarques();
+
+    @Query("SELECT m.vegueria_id AS comarcaID, COUNT(*) AS visitCount " +
+            "FROM visites v " +
+            "INNER JOIN municipis m ON v.municipiId = m.id " +
+            "GROUP BY m.vegueria_id " +
+            "ORDER BY visitCount DESC " +
+            "LIMIT 3")
+    LiveData<List<ComarcaVisitCount>> getTop3MostVisitedVegueries();
+
+    @Query("SELECT m.provincia_id AS comarcaID, COUNT(*) AS visitCount " +
+            "FROM visites v " +
+            "INNER JOIN municipis m ON v.municipiId = m.id " +
+            "GROUP BY m.provincia_id " +
+            "ORDER BY visitCount DESC " +
+            "LIMIT 3")
+    LiveData<List<ComarcaVisitCount>> getTop3MostVisitedProvincies();
+
 
 }
