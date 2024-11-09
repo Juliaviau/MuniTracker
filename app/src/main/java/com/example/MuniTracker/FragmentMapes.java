@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
@@ -354,12 +355,36 @@ public class FragmentMapes extends Fragment {
 
 
     private void showNotasDialog(Visita visita) {
-        new AlertDialog.Builder(context)
+
+        //https://youtu.be/3RTpdB-RszY?si=e54NQ47qzEQlf5Jz
+
+        ConstraintLayout constraintLayout = view.findViewById(R.id.dialogvisita);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_visita, constraintLayout, false);
+        Button button = view.findViewById(R.id.succesdone);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setView(view);
+        final AlertDialog dialog = builder.create();
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        }
+        dialog.show();
+        /*new AlertDialog.Builder(context)
                 .setTitle("Notes de la visita")
                 .setMessage(visita.notes)
                 .setPositiveButton("OK", null)
-                .show();
+                .show();*/
     }
+
+
     private void mostrarComarca(String comarcaId, String originalColor, String originalViewBox) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);

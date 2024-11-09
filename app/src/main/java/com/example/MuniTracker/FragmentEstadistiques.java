@@ -255,7 +255,6 @@ public class FragmentEstadistiques extends Fragment {
 
         // Usamos BarChart para barras verticales
 
-
         // Crear el DataSet y personalizarlo
         BarDataSet dataSet = new BarDataSet(entries, "Visitas");
         dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
@@ -277,7 +276,6 @@ public class FragmentEstadistiques extends Fragment {
         // Configuración del eje X para mostrar nombres de municipios
         XAxis xAxis = chart.getXAxis();
         xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
-
 
         // Configuración adicional del eje X para asegurarse de que las etiquetas se muestren correctamente
         xAxis.setLabelCount(labels.size(), true); // Forzar a que se muestren todas las etiquetas

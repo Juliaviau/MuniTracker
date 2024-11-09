@@ -22,7 +22,6 @@ public class MunicipiViewModel extends AndroidViewModel {
         return municipiRepository.getMunicipisVisitats();
     }
 
-
     public void afegirMunicipi(Municipi municipi) {
         municipiRepository.afegirMunicipi(municipi);
     }
@@ -31,11 +30,9 @@ public class MunicipiViewModel extends AndroidViewModel {
         municipiRepository.afegirVisita(visita);
     }
 
-
     public LiveData<List<Visita>> getVisitasByMunicipiId(String municipiId) {
         return municipiRepository.getVisitasByMunicipiId(municipiId);
     }
-
 
     public LiveData<Integer> obtenirQuantitatMunicipisVisitatsComarca(String comarcaId) {
         MutableLiveData<Integer> porcentaje = new MutableLiveData<>();
@@ -96,6 +93,5 @@ public class MunicipiViewModel extends AndroidViewModel {
     public LiveData<List<ComarcaVisitCount>> getTop3MostVisitedProvincies() {
         return municipiRepository.getTop3MostVisitedProvincies();
     }
-
 
 }
