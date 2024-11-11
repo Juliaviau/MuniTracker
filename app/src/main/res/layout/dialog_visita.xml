@@ -2,72 +2,133 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dialogvisita"
     android:layout_width="300dp"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/custom_background"
+    android:padding="16dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/layoutdialog"
-        android:background="@drawable/custom_background"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/dialogtitle"
-            android:textColor="@color/blau_mapa_fosc"
-            android:textSize="20sp"
-            android:paddingTop="28dp"
-            android:gravity="center_horizontal"
-            android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="@id/layoutdialog"/>
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/succesdesc"
-            android:text="congratulations"
-            android:gravity="center_horizontal"
-            android:textSize="18sp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="20dp"
-            app:layout_constraintBottom_toBottomOf="@id/dialogtitle"
-            app:layout_constraintBottom_toTopOf="@+id/succesdone"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/succesdone"
-            android:text="done"
-            android:textSize="14sp"
-            app:cornerRadius = "12dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
-            android:backgroundTint="@color/taronja"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/succesdesc"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+    <!-- Imagen o animación superior -->
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/succesimage"
-        android:src="@drawable/logo"
-        android:layout_marginEnd="40dp"
-        android:layout_marginStart="40dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/layoutdialog"
-        app:layout_constraintBottom_toTopOf="@id/layoutdialog"/>
+        app:lottie_rawRes="@raw/pin"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"/>
+
+    <!-- Título de la visita -->
+    <TextView
+        android:id="@+id/titolnota"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="8dp"
+        android:text="Visita a [Nombre del Municipio]"
+        android:textColor="@color/blau_mapa_fosc"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/succesimage"/>
+
+    <!-- Fecha de la visita -->
+    <TextView
+        android:id="@+id/datavisita"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="Fecha: [Fecha]"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/titolnota"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingTop="4dp"
+        android:paddingBottom="8dp"/>
+
+    <!-- Descripción de la visita (Texto de la visita) -->
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        app:layout_constraintTop_toBottomOf="@id/datavisita"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:id="@+id/scrollView">
+
+    <!-- Descripción de la visita (Texto desplazable) -->
+    <TextView
+        android:id="@+id/succesdesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_text_background"
+        android:padding="10dp"
+        android:text="Aquí se mostrará la información detallada de la visita. Texto completo y personalizado de la visita realizada."
+        android:textSize="16sp"
+        android:textColor="@color/black"/>
+</ScrollView>
 
 
+
+    <!-- Botones de acciones (Modificar, Eliminar, Volver) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/scrollView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp">
+
+        <!-- Botón Modificar -->
+        <ImageButton
+            android:id="@+id/btnModificar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/baseline_edit_24"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Modificar visita"
+            android:layout_marginEnd="16dp"
+            app:tint="#25A216" />
+
+        <!-- Botón Eliminar -->
+        <ImageButton
+            android:id="@+id/btnEliminar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/baseline_delete_outline_24"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Eliminar visita"
+            android:layout_marginEnd="16dp"
+            app:tint="#E42919" />
+
+        <!-- Botón Volver -->
+        <Button
+            android:id="@+id/succesdone"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Volver"
+            android:backgroundTint="@color/taronja"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:cornerRadius="20dp"/>
+    </LinearLayout>
+
+    <!-- Botón Cerrar Diálogo -->
+    <ImageButton
+        android:id="@+id/btntancar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Cerrar diálogo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="#F63A20" />
 </androidx.constraintlayout.widget.ConstraintLayout>

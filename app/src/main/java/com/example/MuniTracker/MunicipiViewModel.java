@@ -1,6 +1,8 @@
 package com.example.MuniTracker;
 
 import android.app.Application;
+import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -93,5 +95,38 @@ public class MunicipiViewModel extends AndroidViewModel {
     public LiveData<List<ComarcaVisitCount>> getTop3MostVisitedProvincies() {
         return municipiRepository.getTop3MostVisitedProvincies();
     }
+
+    public void deleteVisita(Visita visita) {
+        municipiRepository.deleteVisita(visita);
+        Log.i("deletevisita","visita eliminada");
+    }
+    public LiveData<Boolean> getVisitaEliminada() {
+        return municipiRepository.getVisitaEliminada();
+    }
+
+    public void eliminarMunicipi(String municipi) {
+        municipiRepository.eliminarMunicipi(municipi);
+    }
+
+    public LiveData<Integer> getNumeroVisitesByMunicipi(String municipiId) {
+        return municipiRepository.getNumeroVisitesByMunicipi(municipiId);
+    }
+
+    public void setVisitaEliminada(boolean b) {
+        municipiRepository.setVisitaEliminada(b);
+    }
+
+    /*public void deleteMunicipi(Municipi municipi) {
+        municipiRepository.deleteMunicipi(municipi);
+    }
+
+    public void deleteVisitasByMunicipiId(String municipiId) {
+        municipiRepository.deleteVisitasByMunicipiId(municipiId);
+    }
+
+    public void deleteAllVisitas() {
+        municipiRepository.deleteAllVisitas();
+    }   */
+
 
 }

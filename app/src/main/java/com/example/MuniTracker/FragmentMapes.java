@@ -9,6 +9,8 @@ import android.icu.text.DecimalFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.animation.DecelerateInterpolator;
 import android.webkit.JavascriptInterface;
@@ -17,15 +19,17 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.SearchView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
@@ -44,6 +48,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.MuniTracker.databinding.FragmentMapesBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -57,6 +62,8 @@ public class FragmentMapes extends Fragment {
     private String originalViewBox;
     MapesHelper mapesHelper;
     String tipusMapa = "m";
+    BottomSheetDialog bottomSheetDialog;
+    String colorVisitat = "rgb(27, 58, 95)";
 
     @Override
     public void onAttach(Context context) {
@@ -190,6 +197,8 @@ public class FragmentMapes extends Fragment {
             llistaResultatsBuscador.setAdapter(adaptadorActual[0]);
             carregarMapa(R.raw.municipis);
         });
+
+
 
         buscador.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -352,37 +361,179 @@ public class FragmentMapes extends Fragment {
         }
     }
 
+    /*private void showNotasDialog(Visita visita, BottomSheetDialog bottomSheetDialog) {
 
+        View view = getLayoutInflater().inflate(R.layout.dialog_visita, null);
 
-    private void showNotasDialog(Visita visita) {
+        TextView titolNotaTextView = view.findViewById(R.id.titolnota);
+        titolNotaTextView.setText("Visita a " + visita.municipiId);
 
-        //https://youtu.be/3RTpdB-RszY?si=e54NQ47qzEQlf5Jz
+        TextView dataVisitaTextView = view.findViewById(R.id.datavisita);
+        dataVisitaTextView.setText(visita.dataVisita);
 
-        ConstraintLayout constraintLayout = view.findViewById(R.id.dialogvisita);
-        View view = LayoutInflater.from(context).inflate(R.layout.dialog_visita, constraintLayout, false);
-        Button button = view.findViewById(R.id.succesdone);
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setView(view);
-        final AlertDialog dialog = builder.create();
+        TextView notesTextView = view.findViewById(R.id.succesdesc);
+        notesTextView.setText(visita.notes);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        ScrollView scrollView = view.findViewById(R.id.scrollView);
+
+        // Ajuste de altura máxima en píxeles, por ejemplo 400dp convertido a px
+        final int maxHeight = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics());
+
+        // Listener para ajustar la altura del ScrollView en función del contenido
+        notesTextView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+            public void onGlobalLayout() {
+                notesTextView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                // Si la altura del texto es mayor que el máximo permitido
+                if (notesTextView.getHeight() > maxHeight) {
+                    scrollView.getLayoutParams().height = maxHeight;
+                } else if (visita.notes.equals("")) {
+                    notesTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    scrollView.getLayoutParams().height = notesTextView.getHeight()+100;
+                    notesTextView.setText("No hi ha notes guardades");
+                } else {
+                    // Si el texto es corto, ajusta la altura del ScrollView al tamaño del texto
+                    scrollView.getLayoutParams().height = notesTextView.getHeight();
+                }
+                // Actualiza el layout
+                scrollView.requestLayout();
             }
         });
 
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        ImageButton elimboto = view.findViewById(R.id.btnEliminar);
+        MunicipiViewModel viewModel= new ViewModelProvider(this).get(MunicipiViewModel.class);
 
-        }
+
+
+        AppCompatImageButton tancarButton = view.findViewById(R.id.btntancar);
+
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setView(view)
+                .create();
+
+        elimboto.setOnClickListener(v -> {
+
+            viewModel.deleteVisita(visita);
+
+            MunicipiRepository municipiRepository = new MunicipiRepository(getActivity().getApplication());
+            municipiRepository.getVisitaEliminada().observe(getViewLifecycleOwner(), eliminada -> {
+
+                Toast.makeText(context, "Visita d " +eliminada, Toast.LENGTH_SHORT).show();
+                if (eliminada) {
+                    // Si la visita ha sido eliminada, actualizar el mapa y el BottomSheet
+                   // pintarMunicipisVisitats();  // Actualizar el mapa
+                    //actualizarBottomSheet();    // Actualizar el BottomSheet con los datos más recientes
+                    Toast.makeText(context, "Visita eliminadasssssss", Toast.LENGTH_SHORT).show();
+
+                    // Resetear el valor de la visita eliminada
+                    municipiRepository.setVisitaEliminada(false);  // Es importante resetearlo
+                    canviarColorSVG(visita.municipiId, colorVisitat);
+                    pintarMunicipisVisitats();
+
+                    dialog.dismiss();
+                }
+            });
+
+
+
+            //bottomSheetDialog.dismiss();
+
+            Toast.makeText(context, "Visita eliminada correctament", Toast.LENGTH_SHORT).show();
+
+            //carregarMapa(R.raw.municipis);
+           // mostrarMunicipi(visita.municipiId, originalColor, originalViewBox);
+        });
+
+        tancarButton.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.show();
-        /*new AlertDialog.Builder(context)
-                .setTitle("Notes de la visita")
-                .setMessage(visita.notes)
-                .setPositiveButton("OK", null)
-                .show();*/
+    }*/
+
+
+    private void showNotasDialog(Visita visita, BottomSheetDialog bottomSheetDialog) {
+
+        View view = getLayoutInflater().inflate(R.layout.dialog_visita, null);
+
+        TextView titolNotaTextView = view.findViewById(R.id.titolnota);
+        titolNotaTextView.setText("Visita a " + visita.municipiId);
+
+        TextView dataVisitaTextView = view.findViewById(R.id.datavisita);
+        dataVisitaTextView.setText(visita.dataVisita);
+
+        TextView notesTextView = view.findViewById(R.id.succesdesc);
+        notesTextView.setText(visita.notes);
+
+        ScrollView scrollView = view.findViewById(R.id.scrollView);
+
+        final int maxHeight = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics());
+
+        notesTextView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                notesTextView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                if (notesTextView.getHeight() > maxHeight) {
+                    scrollView.getLayoutParams().height = maxHeight;
+                } else if (visita.notes.equals("")) {
+                    notesTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    scrollView.getLayoutParams().height = notesTextView.getHeight() + 100;
+                    notesTextView.setText("No hi ha notes guardades");
+                } else {
+                    scrollView.getLayoutParams().height = notesTextView.getHeight();
+                }
+                scrollView.requestLayout();
+            }
+        });
+
+        ImageButton elimboto = view.findViewById(R.id.btnEliminar);
+        MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
+
+        AppCompatImageButton tancarButton = view.findViewById(R.id.btntancar);
+
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setView(view)
+                .create();
+
+        elimboto.setOnClickListener(v -> {
+            // Llamar a deleteVisita para eliminar la visita
+            viewModel.deleteVisita(visita);
+
+            // Observar el cambio en la eliminación de la visita
+            viewModel.getVisitaEliminada().observe(getViewLifecycleOwner(), eliminada -> {
+                if (eliminada) {
+                    // Si la visita ha sido eliminada, actualizar la UI
+                    Toast.makeText(context, "Visita eliminada correctamente", Toast.LENGTH_SHORT).show();
+
+                    // Actualizar mapa y BottomSheet
+                    pintarMunicipisVisitats();  // Actualizar el mapa
+                    //actualizarBottomSheet();    // Actualizar el BottomSheet
+
+                    // Cambiar color del municipio si es necesario
+                    canviarColorSVG(visita.municipiId, colorVisitat);
+
+                    // Resetear el estado de la eliminación
+                    viewModel.setVisitaEliminada(false);
+
+                    // Cerrar el diálogo
+                    dialog.dismiss();
+                }
+            });
+
+            // Aquí podrías cerrar el BottomSheet si ya no lo necesitas
+            // bottomSheetDialog.dismiss();
+        });
+
+        tancarButton.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.show();
     }
+
+
 
 
     private void mostrarComarca(String comarcaId, String originalColor, String originalViewBox) {
@@ -527,8 +678,9 @@ public class FragmentMapes extends Fragment {
     }
     private void mostrarMunicipi(String municipiId, String originalColor, String originalViewBox) {
 
+        Log.i("mostrarMunicipiIIIIIIIIIIIII", municipiId + " " + originalColor + " " + originalViewBox);
 
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+        bottomSheetDialog = new BottomSheetDialog(context);
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog_municipis, null);
         TextView municipiInfo = bottomSheetView.findViewById(R.id.zonaNom);
         municipiInfo.setText(municipiId);
@@ -537,6 +689,9 @@ public class FragmentMapes extends Fragment {
         MunicipiViewModel viewModel= new ViewModelProvider(this).get(MunicipiViewModel.class);
         Button closeButton = bottomSheetView.findViewById(R.id.closeButton);
         View viewBottom = bottomSheetView.findViewById(R.id.viewbottom);
+
+
+
 
         Log.d("Coloer " , originalColor);
         boolean municipiVisitat = comparaColor(originalColor,"rgb(27, 58, 95)");
@@ -573,7 +728,11 @@ public class FragmentMapes extends Fragment {
                             LinearLayout.LayoutParams.WRAP_CONTENT
                     ));
                     ((LinearLayout.LayoutParams) visitaTextView.getLayoutParams()).setMargins(8, 8, 8, 8);
-                    visitaTextView.setOnClickListener(v -> showNotasDialog(visita));
+                    visitaTextView.setOnClickListener(v ->  {
+                        showNotasDialog(visita,bottomSheetDialog);
+                        //mostrarMunicipi(municipiId, originalColor, originalViewBox);
+
+                    });
                     visitasContainer.addView(visitaTextView);
                 }
             });
@@ -635,7 +794,6 @@ public class FragmentMapes extends Fragment {
     }
 
 
-
     private void pintarVegueriesPerVisites() {
         MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
         List<String> llistaVegueries = obtenirLlistaDeVegueries();
@@ -675,6 +833,8 @@ public class FragmentMapes extends Fragment {
     private void pintarMunicipisVisitats() {
         MunicipiViewModel viewModel = new ViewModelProvider(FragmentMapes.this).get(MunicipiViewModel.class);
         viewModel.obtenirMunicipisVisitats().observe(getViewLifecycleOwner(), municipisVisitats -> {
+            Log.d("pintarMunicipisVisitats", "Updating visited municipalities");
+
             for (Municipi municipi : municipisVisitats) {
                 canviarColorSVG(municipi.id,  String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(context, R.color.llegComplet))));
             }
@@ -719,6 +879,7 @@ public class FragmentMapes extends Fragment {
     }
     private void canviarColorSVG(String comarcaId, String color) {
         String escapedComarcaId = comarcaId.replace("'", "\\'");
+        //Log.i("color canviat", color);
         String jsCode = "document.getElementById('" + escapedComarcaId + "').style.fill = '" + color + "';";
         webView.evaluateJavascript(jsCode, null);
     }

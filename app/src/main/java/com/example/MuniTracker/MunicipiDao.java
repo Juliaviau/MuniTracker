@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -36,6 +37,8 @@ public interface MunicipiDao {
     @Query("SELECT COUNT(*) FROM municipis WHERE vegueria_id = :vegueriaId AND visitat = 1")
     int getVisitadosMunicipisInVegueria(String vegueriaId);
 
+    @Query("DELETE FROM municipis WHERE id = :municipi")
+    void eliminarMunicipi(String municipi);
 
     /*default int getPorcentajeVisitadosInComarca(String comarcaId) {
 
