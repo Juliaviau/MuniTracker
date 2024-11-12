@@ -2,6 +2,7 @@ package com.example.MuniTracker;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -134,7 +135,6 @@ public class FragmentMapes extends Fragment {
         List<String> llistaVegueries = obtenirLlistaDeVegueries();
         List<String> llistaProvincies = obtenirLlistaDeProvincies();
 
-
         SearchAdapter adapterMunicipis = new SearchAdapter(llistaMunicipis);
         SearchAdapter adapterComarques = new SearchAdapter(llistaComarques);
         SearchAdapter adapterVegueries = new SearchAdapter(llistaVegueries);
@@ -198,8 +198,6 @@ public class FragmentMapes extends Fragment {
             carregarMapa(R.raw.municipis);
         });
 
-
-
         buscador.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -233,8 +231,6 @@ public class FragmentMapes extends Fragment {
         return view;
     }
 
-
-
     private void setAdapterListeners(SearchAdapter adapter, SearchView searchView, RecyclerView resultsRecyclerView) {
         adapter.setOnItemClickListener(municipi -> {
             searchView.setQuery(municipi, true);
@@ -260,8 +256,6 @@ public class FragmentMapes extends Fragment {
             }
         });
     }
-
-
 
     private void carregarMapa(int mapaSVG) {
         String contingutSVG = obtenirSVG(mapaSVG);
@@ -306,8 +300,6 @@ public class FragmentMapes extends Fragment {
         String jsCode = "document.getElementsByTagName('svg')[0].setAttribute('viewBox', '" + originalViewBox + "');";
         webView.evaluateJavascript(jsCode, null);
     }
-
-
 
     public class WebAppInterface {
 
@@ -452,7 +444,6 @@ public class FragmentMapes extends Fragment {
         dialog.show();
     }*/
 
-
     private void showNotasDialog(Visita visita, BottomSheetDialog bottomSheetDialog) {
 
         View view = getLayoutInflater().inflate(R.layout.dialog_visita, null);
@@ -494,38 +485,57 @@ public class FragmentMapes extends Fragment {
 
         AppCompatImageButton tancarButton = view.findViewById(R.id.btntancar);
 
+
+
+        // Crear el ProgressDialog en algún lugar visible (fuera del click listener)
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Eliminando...");
+        progressDialog.setCancelable(false); // Evitar que el usuario lo cierre manualmente
+
         AlertDialog dialog = new AlertDialog.Builder(context)
                 .setView(view)
                 .create();
 
         elimboto.setOnClickListener(v -> {
+            // Mostrar el ProgressDialog antes de iniciar la eliminación
+            progressDialog.show();
+
             // Llamar a deleteVisita para eliminar la visita
             viewModel.deleteVisita(visita);
 
             // Observar el cambio en la eliminación de la visita
             viewModel.getVisitaEliminada().observe(getViewLifecycleOwner(), eliminada -> {
+                // Ocultar el ProgressDialog ya que la operación ha finalizado
+
+
                 if (eliminada) {
+
+                    progressDialog.dismiss();
                     // Si la visita ha sido eliminada, actualizar la UI
                     Toast.makeText(context, "Visita eliminada correctamente", Toast.LENGTH_SHORT).show();
 
                     // Actualizar mapa y BottomSheet
                     pintarMunicipisVisitats();  // Actualizar el mapa
-                    //actualizarBottomSheet();    // Actualizar el BottomSheet
+                    // actualizarBottomSheet();    // Actualizar el BottomSheet
 
                     // Cambiar color del municipio si es necesario
                     canviarColorSVG(visita.municipiId, colorVisitat);
+                    carregarMapa(R.raw.municipis);
 
                     // Resetear el estado de la eliminación
                     viewModel.setVisitaEliminada(false);
 
                     // Cerrar el diálogo
                     dialog.dismiss();
+                } else {
+                    Toast.makeText(context, "No se pudo eliminar la visita", Toast.LENGTH_SHORT).show();
                 }
             });
 
             // Aquí podrías cerrar el BottomSheet si ya no lo necesitas
             // bottomSheetDialog.dismiss();
         });
+
 
         tancarButton.setOnClickListener(v -> dialog.dismiss());
 

@@ -6,7 +6,7 @@
     <!-- Imagen centrada con dimensiones específicas -->
     <item>
         <bitmap
-            android:src="@drawable/munitracker"
+            android:src="@drawable/muni"
             android:gravity="center"
             android:width="10dp"
             android:height="10dp"
