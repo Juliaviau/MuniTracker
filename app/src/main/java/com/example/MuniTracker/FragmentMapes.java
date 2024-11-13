@@ -459,7 +459,7 @@ public class FragmentMapes extends Fragment {
 
         ScrollView scrollView = view.findViewById(R.id.scrollView);
 
-        final int maxHeight = (int) TypedValue.applyDimension(
+        final int midaMaxima = (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics());
 
         notesTextView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -467,8 +467,8 @@ public class FragmentMapes extends Fragment {
             public void onGlobalLayout() {
                 notesTextView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
-                if (notesTextView.getHeight() > maxHeight) {
-                    scrollView.getLayoutParams().height = maxHeight;
+                if (notesTextView.getHeight() > midaMaxima) {
+                    scrollView.getLayoutParams().height = midaMaxima;
                 } else if (visita.notes.equals("")) {
                     notesTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                     scrollView.getLayoutParams().height = notesTextView.getHeight() + 100;
@@ -485,9 +485,7 @@ public class FragmentMapes extends Fragment {
 
         AppCompatImageButton tancarButton = view.findViewById(R.id.btntancar);
 
-
-
-        // Crear el ProgressDialog en algún lugar visible (fuera del click listener)
+        // Crear el ProgressDialog
         ProgressDialog progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Eliminando...");
         progressDialog.setCancelable(false); // Evitar que el usuario lo cierre manualmente
@@ -497,53 +495,35 @@ public class FragmentMapes extends Fragment {
                 .create();
 
         elimboto.setOnClickListener(v -> {
-            // Mostrar el ProgressDialog antes de iniciar la eliminación
             progressDialog.show();
-
-            // Llamar a deleteVisita para eliminar la visita
             viewModel.deleteVisita(visita);
-
-            // Observar el cambio en la eliminación de la visita
             viewModel.getVisitaEliminada().observe(getViewLifecycleOwner(), eliminada -> {
-                // Ocultar el ProgressDialog ya que la operación ha finalizado
-
 
                 if (eliminada) {
 
                     progressDialog.dismiss();
-                    // Si la visita ha sido eliminada, actualizar la UI
-                    Toast.makeText(context, "Visita eliminada correctamente", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Visita eliminada correctament", Toast.LENGTH_SHORT).show();
 
-                    // Actualizar mapa y BottomSheet
                     pintarMunicipisVisitats();  // Actualizar el mapa
                     // actualizarBottomSheet();    // Actualizar el BottomSheet
 
-                    // Cambiar color del municipio si es necesario
                     canviarColorSVG(visita.municipiId, colorVisitat);
                     carregarMapa(R.raw.municipis);
 
-                    // Resetear el estado de la eliminación
                     viewModel.setVisitaEliminada(false);
 
-                    // Cerrar el diálogo
                     dialog.dismiss();
                 } else {
-                    Toast.makeText(context, "No se pudo eliminar la visita", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "No s'ha pogut eliminar la visita", Toast.LENGTH_SHORT).show();
                 }
             });
-
-            // Aquí podrías cerrar el BottomSheet si ya no lo necesitas
             // bottomSheetDialog.dismiss();
         });
-
-
         tancarButton.setOnClickListener(v -> dialog.dismiss());
 
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.show();
     }
-
-
 
 
     private void mostrarComarca(String comarcaId, String originalColor, String originalViewBox) {
@@ -700,9 +680,6 @@ public class FragmentMapes extends Fragment {
         Button closeButton = bottomSheetView.findViewById(R.id.closeButton);
         View viewBottom = bottomSheetView.findViewById(R.id.viewbottom);
 
-
-
-
         Log.d("Coloer " , originalColor);
         boolean municipiVisitat = comparaColor(originalColor,"rgb(27, 58, 95)");
         TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
@@ -721,11 +698,11 @@ public class FragmentMapes extends Fragment {
 
             LinearLayout visitasContainer = bottomSheetView.findViewById(R.id.visitasContainer);
 
-            viewModel.getVisitasByMunicipiId(municipiId).observe(getViewLifecycleOwner(), visitas -> {
+            viewModel.getVisitasByMunicipiId(municipiId).observe(getViewLifecycleOwner(), visites -> {
 
                 visitasContainer.removeAllViews();
 
-                for (Visita visita : visitas) {
+                for (Visita visita : visites) {
                     TextView visitaTextView = new TextView(context);
                     visitaTextView.setText(visita.dataVisita + "        " + visita.notes);
                     visitaTextView.setPadding(16, 16, 16, 16);
@@ -758,23 +735,23 @@ public class FragmentMapes extends Fragment {
         MapesHelper.TerritoryData territoryData = mapesHelper.getTerritoryData(municipiId);
 
         markAsVisitedButton.setOnClickListener(v -> {
-            VisitaDialogFragment bottomSheet = new VisitaDialogFragment((fecha, notas) -> {
+            VisitaDialogFragment bottomSheet = new VisitaDialogFragment((data, notes) -> {
 
-                AtomicReference<Boolean> isVisited = new AtomicReference<>(false);
+                AtomicReference<Boolean> estaVisitat = new AtomicReference<>(false);
                 viewModel.obtenirMunicipisVisitats().observe(getViewLifecycleOwner(), municipisVisitats -> {
                     for (Municipi municipi : municipisVisitats) {
                         if (municipi.id.equals(municipiId)) {
-                            isVisited.set(true);
+                            estaVisitat.set(true);
                             break;
                         }
                     }
-                    if (!isVisited.get()) {
+                    if (!estaVisitat.get()) {
                         Log.d("CREA MUNI ", municipiId + " " + territoryData.comarcaId+ " " + territoryData.vegueriaId+ " " + territoryData.provinciaId);
                         Municipi municipi = new Municipi(municipiId, municipiId, true, territoryData.comarcaId, territoryData.vegueriaId, territoryData.provinciaId);
                         viewModel.afegirMunicipi(municipi);
                     }
                 });
-                Visita visita = new Visita(municipiId, fecha, notas);
+                Visita visita = new Visita(municipiId, data, notes);
 
                 viewModel.afegirVisita(visita);
 
@@ -852,7 +829,6 @@ public class FragmentMapes extends Fragment {
     }
 
 
-
     private boolean comparaColor (String color1, String color2) {
         return color1.equalsIgnoreCase(color2);
     }
@@ -893,7 +869,6 @@ public class FragmentMapes extends Fragment {
         String jsCode = "document.getElementById('" + escapedComarcaId + "').style.fill = '" + color + "';";
         webView.evaluateJavascript(jsCode, null);
     }
-
 
 
     private List<String> obtenirLlistaSegonsTipus() {
