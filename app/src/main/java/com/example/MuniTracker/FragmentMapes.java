@@ -831,7 +831,7 @@ public class FragmentMapes extends Fragment {
                 "El Pinell de Brai","El Prat del Comte","Molins de Rei","Pallejà","La Palma de Cervelló",
 
                 "Font-rubí","Fonollosa","Folgueroles","Figaró-Montmany","Fogars de Montclús","Finca de les Fonts","Fontanals de Cerdanya","Fontanilles","Fornells de la Selva",
-                "Fontcoberta","Figueres","Forallac","Figuerola del Camp","Forès","Freginals","Falset","Flix",
+                "Fontcoberta","Figueres","Forallac","Figuerola del Camp","Forès","Freginals","Falset","Flix","Fortià",
 
                 "Gelida","Gaià","Gavà","Gurb","Galifa","Gualba","Granollers","Gualta","Guils de Cerdanya","Garriguella","Girona", "Gombrèn","Godall","Gratallops","Garcia","Ginestar","Gandesa",
 
@@ -863,7 +863,7 @@ public class FragmentMapes extends Fragment {
                 "Passanant i Belltall","Pira","Poboleda","Pradell de la Teixeta","Porrera","Perafort","Palau-saverdera","Pals","Prats i Sansor","Puigcerdà","Prats de Lluçanès",
 
                 "Rubió","Rupit i Pruit","Roda de Ter","Rellinars","Rubí","Rajadell","Ripollet","Regencós","Roses","Riudaura","Ripoll",  "Ribes de Freser","Riudarenes","Rodonyà","Riudecols",
-                "Riudecanyes","Riudoms","Reus","Roquetes","Rocafort de Queralt","Riba-roja d'Ebre","Rasquera","Roda de Berà","Renau",
+                "Riudecanyes","Riudoms","Reus","Roquetes","Rocafort de Queralt","Riba-roja d'Ebre","Rasquera","Roda de Berà","Renau","Riumors",
 
                 "Subirats", "Santa Margarida i els Monjos", "Sant Llorenç d'Hortons", "Sant Martí Sarroca", "Santa Fe del Penedès", "Sant Cugat Sesgarrigues", "Sant Quintí de Mediona",
                 "Sant Pere de Riudebitlles","Sant Sadurní d'Anoia", "Sant Martí Sesgueioles","Sant Martí de Tous", "Santa Margarida de Montbui", "Santa Maria de Miralles",

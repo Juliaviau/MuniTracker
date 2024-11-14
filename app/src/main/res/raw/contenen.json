@@ -11,7 +11,7 @@
       "Lladó","Vilafant","Fortià","Santa Llogaia d'Alguema","Riumors","Navata","Sta. Llogaia d'Alguema",
       "Vilamalla","Borrassà","Ordis","Siurana","Sant Pere Pescador","Torroella de Fluvià","Garrigàs",
       "Vilamacolum","Pontós","Sant Miquel de Fluvià","L'Arementera","Ventalló","Sant Mori","Bàscara",
-      "Vilaür","Viladamat","L'Escala"],
+      "Vilaür","Viladamat","L'Escala","Vila-sacra"],
 
     "Garrotxa": [
       "Hostalnou de Bianya","Castellfollit de la Roca","Ridaura","Montagut i Oix","Sant Esteve d'en Bas",
@@ -313,10 +313,11 @@
       "Agullana", "Albanyà","L'Escala","La Jonquera", "Llançà", "Castelló d'Empúries", "Figueres",
       "Roses",  "Vilafant","Cadaqués", "Peralada", "Sant Pere Pescador",
       "Palau-saverdera", "Empuriabrava","Portbou","Colera","Sant Climent Sescebes",
-      "Vilajuïga","Cistella","Biure", "Maçanet de Cabrenys", "Espolla",
+      "Vilajuïga","Cistella","Biure", "Maçanet de Cabrenys", "Espolla","Riumors",
       "Llers", "Pont de Molins", "Capmany","Torroella de Fluvià", "Garriguella",
       "Borrassà","Darnius", "Ordis","Avinyonet de Puigventós", "Vila-sacra", "Siurana",
       "Vilabertran","Pau", "Vilamacolum",  "Sant Miquel de Fluvià","Vilanova de la Muga",
+      "Vila-sacra","Fortià",
 
       "Palafrugell","Palamós","Castell-Platja d'Aro","Sant Feliu de Guíxols",
       "Torroella de Montgrí", "La Bisbal d'Empordà","Begur","Pals", "Calonge i Sant Antoni",
@@ -532,7 +533,7 @@
       "Lladó","Vilafant","Fortià","Santa Llogaia d'Alguema","Riumors","Navata","Sta. Llogaia d'Alguema",
       "Vilamalla","Borrassà","Ordis","Siurana","Sant Pere Pescador","Torroella de Fluvià","Garrigàs",
       "Vilamacolum","Pontós","Sant Miquel de Fluvià","L'Arementera","Ventalló","Sant Mori","Bàscara",
-      "Vilaür","Viladamat","L'Escala",
+      "Vilaür","Viladamat","L'Escala","Vila-sacra",
 
       "Vilopriu","Forallac","Cruïlles, Monells i Sant Sadurní de l'Heura","Castell-Platja d'Aro",
       "Garrigoles","Albons","La Tallada d'Empordà","Torroella de Montgrí","Bellcaire d'Empordà",
