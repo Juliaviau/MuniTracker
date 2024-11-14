@@ -16,6 +16,9 @@ public interface MunicipiDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Municipi municipi);
 
+    @Query("DELETE FROM municipis")
+    void eliminarTotsMunicipis();
+
     @Query("SELECT * FROM municipis WHERE visitat = 1")
     LiveData<List<Municipi>> getMunicipisVisitats();
 

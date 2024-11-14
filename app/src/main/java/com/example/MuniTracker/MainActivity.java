@@ -3,14 +3,9 @@ package com.example.MuniTracker;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import com.example.MuniTracker.R;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -41,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
                 if (itemId == R.id.mapaId) {
                     fragment = new FragmentMapes();
                 } else if (itemId == R.id.altreId) {
-                    fragment = new FragmentAfegir();
+                    fragment = new FragmentPerfil();
                 } else if (itemId == R.id.estadistiquesId) {
                     fragment = new FragmentEstadistiques();
                 } else if (itemId == R.id.configuracioId) {

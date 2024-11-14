@@ -21,16 +21,23 @@ public interface VisitaDao {
     @Query("SELECT * FROM visites WHERE municipiId = :municipiId ORDER BY dataVisita DESC")
     LiveData<List<Visita>> getVisitesByMunicipi(String municipiId);
 
+    @Query("SELECT * FROM visites ORDER BY dataVisita DESC")
+    LiveData<List<Visita>> getAllVisitsOrderByData();
 
 
     @Query("SELECT COUNT(*) FROM visites WHERE municipiId = :municipiId")
     LiveData<Integer> getNumeroVisitesByMunicipi(String municipiId);
+
     @Query("SELECT COUNT(*) FROM visites WHERE municipiId = :municipiId")
     int getNumeroVisitesByMunicipiSync(String municipiId);
 
 
+
     @Query("SELECT COUNT(*) FROM visites")
     LiveData<Integer> getNumeroTotalVisites();
+
+    @Query("DELETE FROM visites")
+    void eliminarTotesVisites();
 
     @Delete
     void delete(Visita visita);
@@ -39,7 +46,7 @@ public interface VisitaDao {
     void update(Visita visita);
 
     @Query("SELECT municipiId, COUNT(*) AS visitCount " +
-            "FROM visites " + // Make sure this matches the tableName in Visita entity
+            "FROM visites " +
             "GROUP BY municipiId " +
             "ORDER BY visitCount DESC " +
             "LIMIT 10")

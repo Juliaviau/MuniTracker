@@ -13,11 +13,10 @@ public class Visita {
     @NonNull
     @ColumnInfo(name = "municipiId")
     public String municipiId; // ID del municipi
-    @NonNull
-    public String dataVisita;
+    public long dataVisita;
     public String notes;
 
-    public Visita(@NonNull String municipiId, String dataVisita, String notes) {
+    public Visita(@NonNull String municipiId, long dataVisita, String notes) {
         this.municipiId = municipiId;
         this.dataVisita = dataVisita;
         this.notes = notes;

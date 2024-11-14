@@ -19,7 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import java.util.Calendar;
 public class VisitaDialogFragment extends BottomSheetDialogFragment {
     public interface VisitaCallback {
-        void onVisitaAdded(String fecha, String notas);
+        void onVisitaAdded(long data, String notes);
     }
 
     private VisitaCallback callback;
@@ -39,13 +39,19 @@ public class VisitaDialogFragment extends BottomSheetDialogFragment {
 
         // Configurar el botón de agregar visita
         agregarButton.setOnClickListener(v -> {
-            String notas = notasEditText.getText().toString();
+            String notes = notasEditText.getText().toString();
 
             // Formato de fecha como "dd/MM/yyyy"
-            String fecha = datePicker.getDayOfMonth() + "/" + (datePicker.getMonth() + 1) + "/" + datePicker.getYear();
+            //String fecha = datePicker.getDayOfMonth() + "/" + (datePicker.getMonth() + 1) + "/" + datePicker.getYear();
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
+            long dataTimestamp = calendar.getTimeInMillis();
+
+
+
 
             if (callback != null) {
-                callback.onVisitaAdded(fecha, notas);
+                callback.onVisitaAdded(dataTimestamp, notes);
             }
             dismiss(); // Cerrar el BottomSheetDialogFragment después de agregar
         });

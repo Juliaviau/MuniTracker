@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Fondo blanco -->
-    <item android:drawable="@color/white"/>
+    <item android:drawable="@color/black"/>
 
     <!-- Imagen centrada con dimensiones específicas -->
     <item>
         <bitmap
-            android:src="@drawable/muni"
+            android:src="@drawable/munitracker_logo"
             android:gravity="center"
             android:width="10dp"
             android:height="10dp"

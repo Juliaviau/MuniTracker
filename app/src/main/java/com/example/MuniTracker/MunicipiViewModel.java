@@ -35,6 +35,13 @@ public class MunicipiViewModel extends AndroidViewModel {
     public LiveData<List<Visita>> getVisitasByMunicipiId(String municipiId) {
         return municipiRepository.getVisitasByMunicipiId(municipiId);
     }
+    public LiveData<List<Visita>> getAllVisitsOrderByData() {
+        return municipiRepository.getAllVisitsOrderByData();
+    }
+
+    public void eliminarTotMunicipiVisites() {
+        municipiRepository.eliminarTotMunicipiVisites();
+    }
 
     public LiveData<Integer> obtenirQuantitatMunicipisVisitatsComarca(String comarcaId) {
         MutableLiveData<Integer> porcentaje = new MutableLiveData<>();

@@ -41,9 +41,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 
 import android.view.LayoutInflater;
@@ -353,96 +356,6 @@ public class FragmentMapes extends Fragment {
         }
     }
 
-    /*private void showNotasDialog(Visita visita, BottomSheetDialog bottomSheetDialog) {
-
-        View view = getLayoutInflater().inflate(R.layout.dialog_visita, null);
-
-        TextView titolNotaTextView = view.findViewById(R.id.titolnota);
-        titolNotaTextView.setText("Visita a " + visita.municipiId);
-
-        TextView dataVisitaTextView = view.findViewById(R.id.datavisita);
-        dataVisitaTextView.setText(visita.dataVisita);
-
-        TextView notesTextView = view.findViewById(R.id.succesdesc);
-        notesTextView.setText(visita.notes);
-
-        ScrollView scrollView = view.findViewById(R.id.scrollView);
-
-        // Ajuste de altura máxima en píxeles, por ejemplo 400dp convertido a px
-        final int maxHeight = (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics());
-
-        // Listener para ajustar la altura del ScrollView en función del contenido
-        notesTextView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                notesTextView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-                // Si la altura del texto es mayor que el máximo permitido
-                if (notesTextView.getHeight() > maxHeight) {
-                    scrollView.getLayoutParams().height = maxHeight;
-                } else if (visita.notes.equals("")) {
-                    notesTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                    scrollView.getLayoutParams().height = notesTextView.getHeight()+100;
-                    notesTextView.setText("No hi ha notes guardades");
-                } else {
-                    // Si el texto es corto, ajusta la altura del ScrollView al tamaño del texto
-                    scrollView.getLayoutParams().height = notesTextView.getHeight();
-                }
-                // Actualiza el layout
-                scrollView.requestLayout();
-            }
-        });
-
-        ImageButton elimboto = view.findViewById(R.id.btnEliminar);
-        MunicipiViewModel viewModel= new ViewModelProvider(this).get(MunicipiViewModel.class);
-
-
-
-        AppCompatImageButton tancarButton = view.findViewById(R.id.btntancar);
-
-        AlertDialog dialog = new AlertDialog.Builder(context)
-                .setView(view)
-                .create();
-
-        elimboto.setOnClickListener(v -> {
-
-            viewModel.deleteVisita(visita);
-
-            MunicipiRepository municipiRepository = new MunicipiRepository(getActivity().getApplication());
-            municipiRepository.getVisitaEliminada().observe(getViewLifecycleOwner(), eliminada -> {
-
-                Toast.makeText(context, "Visita d " +eliminada, Toast.LENGTH_SHORT).show();
-                if (eliminada) {
-                    // Si la visita ha sido eliminada, actualizar el mapa y el BottomSheet
-                   // pintarMunicipisVisitats();  // Actualizar el mapa
-                    //actualizarBottomSheet();    // Actualizar el BottomSheet con los datos más recientes
-                    Toast.makeText(context, "Visita eliminadasssssss", Toast.LENGTH_SHORT).show();
-
-                    // Resetear el valor de la visita eliminada
-                    municipiRepository.setVisitaEliminada(false);  // Es importante resetearlo
-                    canviarColorSVG(visita.municipiId, colorVisitat);
-                    pintarMunicipisVisitats();
-
-                    dialog.dismiss();
-                }
-            });
-
-
-
-            //bottomSheetDialog.dismiss();
-
-            Toast.makeText(context, "Visita eliminada correctament", Toast.LENGTH_SHORT).show();
-
-            //carregarMapa(R.raw.municipis);
-           // mostrarMunicipi(visita.municipiId, originalColor, originalViewBox);
-        });
-
-        tancarButton.setOnClickListener(v -> dialog.dismiss());
-
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        dialog.show();
-    }*/
 
     private void showNotasDialog(Visita visita, BottomSheetDialog bottomSheetDialog) {
 
@@ -452,7 +365,10 @@ public class FragmentMapes extends Fragment {
         titolNotaTextView.setText("Visita a " + visita.municipiId);
 
         TextView dataVisitaTextView = view.findViewById(R.id.datavisita);
-        dataVisitaTextView.setText(visita.dataVisita);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        String formattedDate = sdf.format(new Date(visita.dataVisita));
+        dataVisitaTextView.setText(formattedDate);
 
         TextView notesTextView = view.findViewById(R.id.succesdesc);
         notesTextView.setText(visita.notes);
@@ -487,7 +403,7 @@ public class FragmentMapes extends Fragment {
 
         // Crear el ProgressDialog
         ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage("Eliminando...");
+        progressDialog.setMessage("Eliminant...");
         progressDialog.setCancelable(false); // Evitar que el usuario lo cierre manualmente
 
         AlertDialog dialog = new AlertDialog.Builder(context)
@@ -704,7 +620,10 @@ public class FragmentMapes extends Fragment {
 
                 for (Visita visita : visites) {
                     TextView visitaTextView = new TextView(context);
-                    visitaTextView.setText(visita.dataVisita + "        " + visita.notes);
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                    String formattedDate = sdf.format(new Date(visita.dataVisita));
+                    visitaTextView.setText(formattedDate + "        " + visita.notes);
                     visitaTextView.setPadding(16, 16, 16, 16);
                     visitaTextView.setBackgroundResource(R.drawable.rounded_card);
                     visitaTextView.setTextSize(16);

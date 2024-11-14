@@ -23,6 +23,12 @@ public class MunicipiRepository implements Observer<Integer> {
         visitaDao = db.visitaDao();
     }
 
+    public void eliminarTotMunicipiVisites() {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            visitaDao.eliminarTotesVisites();
+            municipiDao.eliminarTotsMunicipis();
+        });
+    }
 
 
     public LiveData<List<Municipi>> getMunicipisVisitats() {
@@ -31,6 +37,10 @@ public class MunicipiRepository implements Observer<Integer> {
 
     public LiveData<List<Visita>> getVisitasByMunicipiId(String municipiId) {
         return visitaDao.getVisitesByMunicipi(municipiId);
+    }
+
+    public LiveData<List<Visita>> getAllVisitsOrderByData() {
+        return visitaDao.getAllVisitsOrderByData();
     }
 
 
@@ -110,12 +120,15 @@ public class MunicipiRepository implements Observer<Integer> {
     }
 
     private final MutableLiveData<Boolean> visitaEliminada = new MutableLiveData<>(false);
+
     public LiveData<Boolean> getVisitaEliminada() {
         return visitaEliminada;
     }
+
     public void setVisitaEliminada(Boolean value) {
         visitaEliminada.setValue(value);
     }
+
     public void deleteVisita(Visita visita) {
         new Thread(() -> {
             //visitaDao.delete(visita);
@@ -158,7 +171,6 @@ public class MunicipiRepository implements Observer<Integer> {
     public LiveData<List<ComarcaVisitCount>> getTop3MostVisitedVegueries() {
         return visitaDao.getTop3MostVisitedVegueries();
     }
-
     public LiveData<List<ComarcaVisitCount>> getTop3MostVisitedProvincies() {
         return visitaDao.getTop3MostVisitedProvincies();
     }
