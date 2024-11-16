@@ -85,17 +85,13 @@ public class FragmentEstadistiques extends Fragment {
     private List<String> comarquesL = Arrays.asList(
             "Alta Ribagorça", "Alt Urgell", "Cerdanya", "Garrigues", "Noguera", "Pallars Jussà", "Pallars Sobirà", "Pla d'Urgell", "Segarra", "Segrià", "Solsonès", "Urgell", "Val d'Aran");//13
 
-
     private List<String> comarques = Arrays.asList(
             "Alt Penedès", "Anoia", "Bages", "Baix Llobregat", "Barcelonès", "Garraf", "Maresme", "Osona", "Vallès Occidental", "Vallès Oriental",
             "Alt Camp", "Baix Camp", "Baix Ebre", "Baix Penedès", "Conca de Barberà", "Montsià", "Priorat", "Ribera d'Ebre", "Tarragonès", "Terra Alta",
             "Alt Empordà", "Baix Empordà", "Cerdanya", "Garrotxa", "Gironès", "Pla de l'Estany", "La Selva", "Ripollès",
             "Alta Ribagorça", "Alt Urgell", "Cerdanya", "Garrigues", "Noguera", "Pallars Jussà", "Pallars Sobirà", "Pla d'Urgell", "Segarra", "Segrià", "Solsonès", "Urgell", "Val d'Aran");//13
 
-
-    public FragmentEstadistiques() {
-        // Required empty public constructor
-    }
+    public FragmentEstadistiques() {}
 
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -105,7 +101,6 @@ public class FragmentEstadistiques extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -186,32 +181,23 @@ public class FragmentEstadistiques extends Fragment {
 
         //*******************************************************
 
-        // Lista para almacenar las comarcas con su porcentaje
-        List<Pair<String, Integer>> comarcaPorcentajes = new ArrayList<>();
+        List<Pair<String, Integer>> comarcaPercentatges = new ArrayList<>();
 
-        AtomicInteger remainingComarques = new AtomicInteger(comarques.size()); // Para saber cuántas comarcas aún nos quedan por procesar
+        AtomicInteger remainingComarques = new AtomicInteger(comarques.size());
 
-// Cargar los datos de una vez y actualizar la UI después de recibir todos los resultados
         for (String comarca : comarques) {
-            // Inicializar los valores en el mapa (si lo necesitas)
             visitatsPerComarcaL.put(comarca, new AtomicInteger());
 
-            // Obtenemos el dato de la cantidad de municipios visitados de forma asíncrona
             viewModel.obtenirQuantitatMunicipisVisitatsComarca(comarca).observe(getViewLifecycleOwner(), nombreMunicipisVisitats -> {
-                // Obtener la cantidad total de municipios para la comarca
                 int quantitatMunicipisComarca = mapesHelper.obtenirQuantitatMunicipisPerComarca(comarca);
                 int porcentajeVisitado = (int) ((nombreMunicipisVisitats / (float) quantitatMunicipisComarca) * 100);
 
-                // Guardar el porcentaje junto con el nombre de la comarca
-                comarcaPorcentajes.add(new Pair<>(comarca, porcentajeVisitado));
+                comarcaPercentatges.add(new Pair<>(comarca, porcentajeVisitado));
 
-                // Reducir el contador de comarcas restantes
                 if (remainingComarques.decrementAndGet() == 0) {
-                    // Una vez que hemos recibido todos los datos, ordenamos la lista
-                    Collections.sort(comarcaPorcentajes, (o1, o2) -> Integer.compare(o2.second, o1.second));
+                    Collections.sort(comarcaPercentatges, (o1, o2) -> Integer.compare(o2.second, o1.second));
 
-                    // Actualizar la UI de forma eficiente
-                    updateUI(comarcaPorcentajes);
+                    updateUI(comarcaPercentatges);
                 }
             });
         }
@@ -223,12 +209,10 @@ public class FragmentEstadistiques extends Fragment {
             actualizarGrafico(topmunicipisvisitats);
         });
 
-
         viewModel.getTop5MostVisitedComarques().observe(getViewLifecycleOwner(), topmunicipisvisitats -> {
             //obte Municipivisitcount que te municipiid i visitcount
             actualizarGraficoComa(topmunicipisvisitats,getView().findViewById(R.id.barChartCovi));
         });
-
 
         viewModel.getTop3MostVisitedVegueries().observe(getViewLifecycleOwner(), topmunicipisvisitats -> {
             //obte Municipivisitcount que te municipiid i visitcount
@@ -245,95 +229,75 @@ public class FragmentEstadistiques extends Fragment {
         ArrayList<BarEntry> entries = new ArrayList<>();
         ArrayList<String> labels = new ArrayList<>();
 
-        // Crear entradas y etiquetas, dividiendo etiquetas largas en dos líneas
         for (int i = 0; i < topMunicipisVisitats.size(); i++) {
             ComarcaVisitCount municipi = topMunicipisVisitats.get(i);
             entries.add(new BarEntry(i, municipi.visitCount));
             labels.add(municipi.comarcaID);
         }
 
-        // Usamos BarChart para barras verticales
-
-        // Crear el DataSet y personalizarlo
         BarDataSet dataSet = new BarDataSet(entries, "Visitas");
         dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-        dataSet.setValueTextSize(12f); // Tamaño de texto para los valores sobre las barras
+        dataSet.setValueTextSize(12f);
 
-        // Asignar el DataSet al BarData
         BarData barData = new BarData(dataSet);
-        barData.setBarWidth(0.8f); // Ancho de las barras
+        barData.setBarWidth(0.8f);
 
-        // Configuración del eje Y para mostrar el número de visitas
         YAxis yAxis = chart.getAxisLeft();
-        yAxis.setTextSize(14f); // Tamaño de texto de etiquetas del eje Y
+        yAxis.setTextSize(14f);
         yAxis.setDrawGridLines(false);
-        yAxis.setGranularity(1f); // Mostrar cada entrada del eje
+        yAxis.setGranularity(1f);
         yAxis.setGranularityEnabled(true);
 
-        chart.getAxisRight().setEnabled(false); // Desactiva el eje derecho para una vista más limpia
+        chart.getAxisRight().setEnabled(false);
 
-        // Configuración del eje X para mostrar nombres de municipios
         XAxis xAxis = chart.getXAxis();
         xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
 
-        // Configuración adicional del eje X para asegurarse de que las etiquetas se muestren correctamente
-        xAxis.setLabelCount(labels.size(), true); // Forzar a que se muestren todas las etiquetas
+        xAxis.setLabelCount(labels.size(), true);
 
-        // Aumentar el espacio del gráfico si es necesario
-        chart.getXAxis().setSpaceMin(0.5f); // Espacio adicional entre las barras
+        chart.getXAxis().setSpaceMin(0.5f);
         chart.getXAxis().setSpaceMax(0.5f);
 
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // Colocar etiquetas en la parte inferior
-        xAxis.setTextSize(14f); // Tamaño de las etiquetas de municipio
-        xAxis.setLabelRotationAngle(270f); // Rotar etiquetas 90 grados para mostrarlas de forma vertical
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setTextSize(14f);
+        xAxis.setLabelRotationAngle(270f);
         xAxis.setDrawGridLines(false);
-        xAxis.setGranularity(1f); // Mostrar cada entrada en el eje
+        xAxis.setGranularity(1f);
         xAxis.setGranularityEnabled(true);
-        xAxis.setLabelCount(labels.size()); // Asegura que se muestren todas las etiquetas
+        xAxis.setLabelCount(labels.size());
 
-        // Personalización del gráfico
         chart.setData(barData);
-        chart.setFitBars(true); // Ajustar barras al espacio disponible
-        chart.setDrawValueAboveBar(true); // Mostrar valores sobre las barras
+        chart.setFitBars(true);
+        chart.setDrawValueAboveBar(true);
 
-        // Descripción del gráfico
         Description description = new Description();
         description.setText("");
         description.setTextSize(12f);
         chart.setDescription(description);
 
-        // Refrescar el gráfico para mostrar los datos
-        chart.invalidate(); // Actualiza el gráfico con los datos
+        chart.invalidate();
     }
 
-
-    // Método para actualizar la interfaz de usuario con la lista de comarcas ordenadas
     private void updateUI(List<Pair<String, Integer>> comarcaPorcentajes) {
         LinearLayout progressContainer = getView().findViewById(R.id.progress_container);
 
-
-        // Limpiar el contenedor antes de actualizarlo
         progressContainer.removeAllViews();
 
-        // Inflar los ProgressBar ordenados
         for (Pair<String, Integer> item : comarcaPorcentajes) {
             String comarcaNombre = item.first;
             int porcentaje = item.second;
 
-            // Inflar el ProgressBar
             View progressItem = LayoutInflater.from(getContext()).inflate(R.layout.progress_item, progressContainer, false);
 
-            // Configurar el ProgressBar
             TextView comarcaName = progressItem.findViewById(R.id.comarca_name);
             ProgressBar progressBar = progressItem.findViewById(R.id.progress_bar);
             TextView percentageText = progressItem.findViewById(R.id.percentage_text);
 
             comarcaName.setText(comarcaNombre);
-            progressBar.setMax(100); // Máximo del ProgressBar
-            progressBar.setProgress(porcentaje); // Establecer el progreso
-            percentageText.setText(porcentaje + "%"); // Establecer el porcentaje en el texto
+            progressBar.setMax(100);
+            progressBar.setProgress(porcentaje);
+            percentageText.setText(porcentaje + "%");
 
-            // Agregar el ProgressBar al contenedor
             progressContainer.addView(progressItem);
         }
     }
@@ -342,7 +306,6 @@ public class FragmentEstadistiques extends Fragment {
         ArrayList<BarEntry> entries = new ArrayList<>();
         ArrayList<String> labels = new ArrayList<>();
 
-        // Crear entradas y etiquetas, dividiendo etiquetas largas en dos líneas
         for (int i = 0; i < topMunicipisVisitats.size(); i++) {
             MunicipiVisitCount municipi = topMunicipisVisitats.get(i);
             entries.add(new BarEntry(i, municipi.visitCount));
@@ -350,178 +313,50 @@ public class FragmentEstadistiques extends Fragment {
             labels.add(municipi.municipiId);
         }
 
-        // Usamos BarChart para barras verticales
         BarChart chart = getView().findViewById(R.id.barChartGa);
 
-        // Crear el DataSet y personalizarlo
         BarDataSet dataSet = new BarDataSet(entries, "Visitas");
         dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-        dataSet.setValueTextSize(12f); // Tamaño de texto para los valores sobre las barras
+        dataSet.setValueTextSize(12f);
 
-        // Asignar el DataSet al BarData
         BarData barData = new BarData(dataSet);
-        barData.setBarWidth(0.8f); // Ancho de las barras
+        barData.setBarWidth(0.8f);
 
-        // Configuración del eje Y para mostrar el número de visitas
         YAxis yAxis = chart.getAxisLeft();
-        yAxis.setTextSize(10f); // Tamaño de texto de etiquetas del eje Y
+        yAxis.setTextSize(10f);
         yAxis.setDrawGridLines(false);
-        yAxis.setGranularity(1f); // Mostrar cada entrada del eje
+        yAxis.setGranularity(1f);
         yAxis.setGranularityEnabled(true);
 
-        chart.getAxisRight().setEnabled(false); // Desactiva el eje derecho para una vista más limpia
+        chart.getAxisRight().setEnabled(false);
 
-        // Configuración del eje X para mostrar nombres de municipios
         XAxis xAxis = chart.getXAxis();
         xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
 
-        // Configuración adicional del eje X para asegurarse de que las etiquetas se muestren correctamente
-        xAxis.setLabelCount(labels.size(), true); // Forzar a que se muestren todas las etiquetas
+        xAxis.setLabelCount(labels.size(), true);
 
-        // Aumentar el espacio del gráfico si es necesario
-        chart.getXAxis().setSpaceMin(0.5f); // Espacio adicional entre las barras
+        chart.getXAxis().setSpaceMin(0.5f);
         chart.getXAxis().setSpaceMax(0.5f);
 
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); // Colocar etiquetas en la parte inferior
-        xAxis.setTextSize(10f); // Tamaño de las etiquetas de municipio
-        xAxis.setLabelRotationAngle(270f); // Rotar etiquetas 90 grados para mostrarlas de forma vertical
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setTextSize(10f);
+        xAxis.setLabelRotationAngle(270f);
         xAxis.setDrawGridLines(false);
-        xAxis.setGranularity(1f); // Mostrar cada entrada en el eje
+        xAxis.setGranularity(1f);
         xAxis.setGranularityEnabled(true);
-        xAxis.setLabelCount(labels.size()); // Asegura que se muestren todas las etiquetas
+        xAxis.setLabelCount(labels.size());
 
-        // Personalización del gráfico
         chart.setData(barData);
-        chart.setFitBars(true); // Ajustar barras al espacio disponible
-        chart.setDrawValueAboveBar(true); // Mostrar valores sobre las barras
+        chart.setFitBars(true);
+        chart.setDrawValueAboveBar(true);
 
-        // Descripción del gráfico
         Description description = new Description();
         description.setText("");
         description.setTextSize(12f);
         chart.setDescription(description);
 
-        // Refrescar el gráfico para mostrar los datos
-        chart.invalidate(); // Actualiza el gráfico con los datos
+        chart.invalidate();
     }
-
-
-
-
-/*
-    public void grafichorizG() {
-        ArrayList<BarEntry> barEntries = new ArrayList<>();
-        ArrayList<String> labels = new ArrayList<>();
-        int i = 0;
-
-        // Añade los datos al BarChart
-        for (Map.Entry<String, AtomicInteger> entry : visitatsPerComarcaG.entrySet()) {
-            barEntries.add(new BarEntry(i, entry.getValue().get()));
-            labels.add(entry.getKey());
-            i++;
-        }
-
-        HorizontalBarChart barChart = getView().findViewById(R.id.barChartG);
-
-        BarDataSet barSet = new BarDataSet(barEntries, "");
-        barSet.setColors(Color.rgb(135, 206, 250));
-
-        BarData barData = new BarData(barSet);
-        barData.setBarWidth(0.8f); // Ajuste uniforme del ancho de las barras
-
-        barChart.setData(barData);
-        barChart.setFitBars(true);
-        barChart.animateY(2000);
-
-        // Configuración del eje X
-        XAxis xAxis = barChart.getXAxis();
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setLabelCount(10);  // Etiquetas visibles uniformes
-        xAxis.setGranularity(1f);
-        xAxis.setTextSize(14f);
-        xAxis.setDrawGridLines(false);
-
-        // Configuración del eje Y
-        YAxis leftAxis = barChart.getAxisLeft();
-        leftAxis.setAxisMinimum(0f);  // Elimina el espacio antes del valor 0
-        leftAxis.setGranularity(1f);
-        leftAxis.setDrawLabels(true);
-        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
-        leftAxis.setLabelCount(labels.size(), true); // Asegura que todas las etiquetas se muestren
-
-        // Establece un margen izquierdo para que todas las etiquetas empiecen desde el mismo punto
-        leftAxis.setXOffset(20f); // Ajuste del margen izquierdo de las etiquetas
-        leftAxis.setTextSize(10f); // Ajusta el tamaño de la fuente para evitar recortes
-        barChart.getAxisRight().setEnabled(false); // Desactiva el eje derecho
-
-        // Ajusta márgenes izquierdo y derecho para uniformidad en el área de barras
-        barChart.setExtraLeftOffset(50f); // Ajuste uniforme del margen izquierdo para todas las gráficas
-        barChart.setExtraRightOffset(10f); // Ajuste del margen derecho para uniformidad
-
-        // Elimina la leyenda para quitar el recuadro de color
-        Legend legend = barChart.getLegend();
-        legend.setEnabled(false);  // Deshabilita la leyenda
-
-        // Ajuste de espaciado inferior
-        barChart.setExtraBottomOffset(30f);
-
-        barChart.invalidate(); // Redibuja el gráfico con la nueva configuración
-    }
-    public void grafichorizL() {
-        ArrayList<BarEntry> barEntries = new ArrayList<>();
-        ArrayList<String> labels = new ArrayList<>();
-        int i = 0;
-
-        // Añade los datos al BarChart
-        for (Map.Entry<String, AtomicInteger> entry : visitatsPerComarcaL.entrySet()) {
-            barEntries.add(new BarEntry(i, entry.getValue().get()));
-            labels.add(entry.getKey());
-            i++;
-        }
-
-        HorizontalBarChart barChart = getView().findViewById(R.id.barChartL);
-
-        BarDataSet barSet = new BarDataSet(barEntries, "");
-        barSet.setColors(Color.rgb(135, 206, 250));
-
-        BarData barData = new BarData(barSet);
-        barData.setBarWidth(0.8f); // Ajuste uniforme del ancho de las barras
-
-        barChart.setData(barData);
-        barChart.setFitBars(true);
-        barChart.animateY(2000);
-
-        // Configuración del eje X
-        XAxis xAxis = barChart.getXAxis();
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setLabelCount(10);  // Etiquetas visibles uniformes
-        xAxis.setGranularity(1f);
-        xAxis.setTextSize(14f);
-        xAxis.setDrawGridLines(false);
-
-        // Configuración del eje Y
-        YAxis leftAxis = barChart.getAxisLeft();
-        leftAxis.setAxisMinimum(0f);  // Elimina el espacio antes del valor 0
-        leftAxis.setGranularity(1f);
-        leftAxis.setDrawLabels(true);
-        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
-        barChart.getAxisRight().setEnabled(false); // Desactiva el eje derecho
-
-        // Ajusta los márgenes a la izquierda y derecha para una alineación uniforme
-        barChart.setExtraLeftOffset(10f); // Ajuste del margen izquierdo
-        barChart.setExtraRightOffset(10f); // Ajuste del margen derecho
-
-        // Elimina la leyenda para quitar el recuadro de color
-        Legend legend = barChart.getLegend();
-        legend.setEnabled(false);  // Deshabilita la leyenda
-
-        // Ajuste de espaciado inferior
-        barChart.setExtraBottomOffset(30f);
-
-        barChart.invalidate(); // Redibuja el gráfico con la nueva configuración
-    }*/
 
 
     private void actualitzarGraficVegueria() {
@@ -593,8 +428,6 @@ public class FragmentEstadistiques extends Fragment {
         binding.pieChartVegueria.animateY(1000, Easing.EaseInOutQuad);
         binding.pieChartVegueria.invalidate(); // Refresca el gráfico con los nuevos datos
     }
-
-
 
 
     // Mètode per actualitzar el gràfic amb estils i informació més atractius

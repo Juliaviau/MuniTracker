@@ -41,6 +41,7 @@ public class FragmentPerfil extends Fragment {
 
     // Veure totes les visites ordenades segons data
     // Eliminar totes les dades
+    // ??
 
     FragmentPerfilBinding binding;
     private Context context;
@@ -50,9 +51,7 @@ public class FragmentPerfil extends Fragment {
         this.context = context;
     }
 
-    public FragmentPerfil() {
-        // Required empty public constructor
-    }
+    public FragmentPerfil() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,14 +74,13 @@ public class FragmentPerfil extends Fragment {
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
 
         MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
-        LinearLayout visitasContainer = view.findViewById(R.id.visitasContainer);
+        LinearLayout visitesContainer = view.findViewById(R.id.visitasContainer);
 
         viewModel.getAllVisitsOrderByData().observe(getViewLifecycleOwner(), visites -> {
 
-            visitasContainer.removeAllViews(); // Limpiar el contenedor antes de agregar nuevas visitas
+            visitesContainer.removeAllViews();
 
             if (visites.isEmpty()) {
-
 
                 TextView visitaTextView = new TextView(context);
                 visitaTextView.setText("No hi ha cap visita per mostrar");
@@ -100,16 +98,13 @@ public class FragmentPerfil extends Fragment {
                 layoutParams.setMargins(8, 8, 8, 8);
                 visitaTextView.setLayoutParams(layoutParams);
 
-
-                visitasContainer.addView(visitaTextView);
+                visitesContainer.addView(visitaTextView);
 
             } else {
 
                 for (Visita visita : visites) {
-                    // Inflar la vista desde item_visita.xml
-                    View visitaView = LayoutInflater.from(context).inflate(R.layout.item_visita_perfil, visitasContainer, false);
+                    View visitaView = LayoutInflater.from(context).inflate(R.layout.item_visita_perfil, visitesContainer, false);
 
-                    // Obtener referencias a los TextViews de la vista inflada
                     TextView dataTextView = visitaView.findViewById(R.id.datavis);
                     TextView municipiTextView = visitaView.findViewById(R.id.municipivis);
                     ImageView contenotes = visitaView.findViewById(R.id.contenotes);
@@ -120,47 +115,34 @@ public class FragmentPerfil extends Fragment {
                         contenotes.setVisibility(View.VISIBLE);
                     }
 
-                    // Configurar los textos para la fecha y el municipio
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
                     String formattedDate = sdf.format(new Date(visita.dataVisita));
-
 
                     dataTextView.setText(formattedDate);
                     municipiTextView.setText(visita.municipiId);
 
-                    // Configurar el click listener para mostrar el diálogo de notas
                     visitaView.setOnClickListener(v -> {
                         showNotasDialog(visita);
-                        // Puedes agregar aquí cualquier otra lógica necesaria al hacer clic en la visita
                     });
-
-                    // Agregar la vista de la visita al contenedor principal
-                    visitasContainer.addView(visitaView);
+                    visitesContainer.addView(visitaView);
                 }
             }
         });
 
         Button eliminarTot = view.findViewById(R.id.eliminarTot);
         eliminarTot.setOnClickListener(v -> {
-            // Crear el cuadro de diálogo de confirmación
             new AlertDialog.Builder(context)
                     .setTitle("Confirmació per eliminar totes les dades")
                     .setMessage("Estàs segur que vols eliminar totes les dades? Aquesta acció no es pot desfer i les dades no es podran recuperar.")
                     .setPositiveButton("Eliminar", (dialog, which) -> {
-                        // Llamar a la función de eliminación si se confirma
                         viewModel.eliminarTotMunicipiVisites();
                         Toast.makeText(context, "Dades eliminades correctament", Toast.LENGTH_SHORT).show();
                     })
                     .setNegativeButton("Cancel·lar", (dialog, which) -> {
-                        // Cerrar el diálogo si se cancela
                         dialog.dismiss();
                     })
                     .show();
         });
-
-
-
-
         return view;
     }
 
@@ -208,10 +190,10 @@ public class FragmentPerfil extends Fragment {
 
         AppCompatImageButton tancarButton = view.findViewById(R.id.btntancar);
 
-        // Crear el ProgressDialog
+        //On es mostra?
         ProgressDialog progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Eliminant...");
-        progressDialog.setCancelable(false); // Evitar que el usuario lo cierre manualmente
+        progressDialog.setCancelable(false);
 
         AlertDialog dialog = new AlertDialog.Builder(context)
                 .setView(view)
@@ -239,6 +221,4 @@ public class FragmentPerfil extends Fragment {
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.show();
     }
-
-
 }

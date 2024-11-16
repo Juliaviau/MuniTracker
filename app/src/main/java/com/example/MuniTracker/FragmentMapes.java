@@ -101,7 +101,6 @@ public class FragmentMapes extends Fragment {
             }
         }
 
-
         mapesHelper = new MapesHelper(context);
         webView = view.findViewById(R.id.webView);
         WebSettings webSettings = webView.getSettings();
@@ -299,7 +298,7 @@ public class FragmentMapes extends Fragment {
         }
     }
     private void resetZoom(String originalViewBox) {
-        Log.d("NouZOOM", "Mapa inicializado con viewBox: " + originalViewBox);
+        Log.d("NouZOOM", "Mapa inicialitzat amb viewBox: " + originalViewBox);
         String jsCode = "document.getElementsByTagName('svg')[0].setAttribute('viewBox', '" + originalViewBox + "');";
         webView.evaluateJavascript(jsCode, null);
     }
@@ -307,8 +306,8 @@ public class FragmentMapes extends Fragment {
     public class WebAppInterface {
 
         @JavascriptInterface
-        public void logMessage(final String message) {
-            Log.d("WebViewLog", message);
+        public void logMessage(final String missatge) {
+            Log.d("WebViewLog", missatge);
         }
 
         @JavascriptInterface
@@ -401,10 +400,9 @@ public class FragmentMapes extends Fragment {
 
         AppCompatImageButton tancarButton = view.findViewById(R.id.btntancar);
 
-        // Crear el ProgressDialog
         ProgressDialog progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Eliminant...");
-        progressDialog.setCancelable(false); // Evitar que el usuario lo cierre manualmente
+        progressDialog.setCancelable(false);
 
         AlertDialog dialog = new AlertDialog.Builder(context)
                 .setView(view)
@@ -420,8 +418,8 @@ public class FragmentMapes extends Fragment {
                     progressDialog.dismiss();
                     Toast.makeText(context, "Visita eliminada correctament", Toast.LENGTH_SHORT).show();
 
-                    pintarMunicipisVisitats();  // Actualizar el mapa
-                    // actualizarBottomSheet();    // Actualizar el BottomSheet
+                    pintarMunicipisVisitats();
+                    // actualizarBottomSheet();
 
                     canviarColorSVG(visita.municipiId, colorVisitat);
                     carregarMapa(R.raw.municipis);
@@ -478,11 +476,10 @@ public class FragmentMapes extends Fragment {
             progressBar.setMax(quantitatMunicipisComarca);
             indicadorpercentatge.setText(df.format(percentatge) + " %");
             ObjectAnimator animator = ObjectAnimator.ofInt(progressBar, "progress", nombreMunicipisVisitats);
-            animator.setDuration(400); // Duración de la animación en milisegundos
-            animator.setInterpolator(new DecelerateInterpolator()); // Suaviza la animación
+            animator.setDuration(400);
+            animator.setInterpolator(new DecelerateInterpolator());
             animator.start();
             infoMuni.setText("S'han visitat " + nombreMunicipisVisitats + " de " + quantitatMunicipisComarca + " municipis");
-
         });
 
         bottomSheetDialog.setContentView(bottomSheetView);
@@ -509,7 +506,6 @@ public class FragmentMapes extends Fragment {
             resetZoom(originalViewBox);
         });
 
-
         TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
         TextView indicadorpercentatge = bottomSheetView.findViewById(R.id.indicadorpercentatge);
 
@@ -525,8 +521,8 @@ public class FragmentMapes extends Fragment {
             progressBar.setMax(quantitatMunicipisComarca);
             indicadorpercentatge.setText(df.format(percentatge) + " %");
             ObjectAnimator animator = ObjectAnimator.ofInt(progressBar, "progress", nombreMunicipisVisitats);
-            animator.setDuration(400); // Duración de la animación en milisegundos
-            animator.setInterpolator(new DecelerateInterpolator()); // Suaviza la animación
+            animator.setDuration(400);
+            animator.setInterpolator(new DecelerateInterpolator());
             animator.start();
             infoMuni.setText("S'han visitat " + nombreMunicipisVisitats + " de " + quantitatMunicipisComarca + " municipis");
 
@@ -556,7 +552,6 @@ public class FragmentMapes extends Fragment {
             resetZoom(originalViewBox);
         });
 
-
         TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
         TextView indicadorpercentatge = bottomSheetView.findViewById(R.id.indicadorpercentatge);
 
@@ -572,8 +567,8 @@ public class FragmentMapes extends Fragment {
             progressBar.setMax(quantitatMunicipisComarca);
             indicadorpercentatge.setText(df.format(percentatge) + " %");
             ObjectAnimator animator = ObjectAnimator.ofInt(progressBar, "progress", nombreMunicipisVisitats);
-            animator.setDuration(400); // Duración de la animación en milisegundos
-            animator.setInterpolator(new DecelerateInterpolator()); // Suaviza la animación
+            animator.setDuration(400);
+            animator.setInterpolator(new DecelerateInterpolator());
             animator.start();
             infoMuni.setText("S'han visitat " + nombreMunicipisVisitats + " de " + quantitatMunicipisComarca + " municipis");
 
@@ -584,7 +579,7 @@ public class FragmentMapes extends Fragment {
     }
     private void mostrarMunicipi(String municipiId, String originalColor, String originalViewBox) {
 
-        Log.i("mostrarMunicipiIIIIIIIIIIIII", municipiId + " " + originalColor + " " + originalViewBox);
+        Log.i("mostrarMunicipiIIIIIIIIIII", municipiId + " " + originalColor + " " + originalViewBox);
 
         bottomSheetDialog = new BottomSheetDialog(context);
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog_municipis, null);
@@ -596,7 +591,7 @@ public class FragmentMapes extends Fragment {
         Button closeButton = bottomSheetView.findViewById(R.id.closeButton);
         View viewBottom = bottomSheetView.findViewById(R.id.viewbottom);
 
-        Log.d("Coloer " , originalColor);
+        Log.d("Color " , originalColor);
         boolean municipiVisitat = comparaColor(originalColor,"rgb(27, 58, 95)");
         TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
 
@@ -739,8 +734,7 @@ public class FragmentMapes extends Fragment {
     private void pintarMunicipisVisitats() {
         MunicipiViewModel viewModel = new ViewModelProvider(FragmentMapes.this).get(MunicipiViewModel.class);
         viewModel.obtenirMunicipisVisitats().observe(getViewLifecycleOwner(), municipisVisitats -> {
-            Log.d("pintarMunicipisVisitats", "Updating visited municipalities");
-
+            Log.d("pintarMunicipisVisitats", "Pintant de nou els muncipis");
             for (Municipi municipi : municipisVisitats) {
                 canviarColorSVG(municipi.id,  String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(context, R.color.llegComplet))));
             }
@@ -769,7 +763,6 @@ public class FragmentMapes extends Fragment {
                 String color = "";
                 if (value != null && !value.equals("null")) {
                     value = value.replace("\"", "");
-
                     String[] styles = value.split(";");
                     for (String style : styles) {
                         if (style.trim().startsWith("fill:")) {
@@ -784,7 +777,6 @@ public class FragmentMapes extends Fragment {
     }
     private void canviarColorSVG(String comarcaId, String color) {
         String escapedComarcaId = comarcaId.replace("'", "\\'");
-        //Log.i("color canviat", color);
         String jsCode = "document.getElementById('" + escapedComarcaId + "').style.fill = '" + color + "';";
         webView.evaluateJavascript(jsCode, null);
     }
