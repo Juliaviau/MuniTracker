@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -33,7 +34,9 @@ import com.example.MuniTracker.databinding.FragmentPerfilBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -75,58 +78,83 @@ public class FragmentPerfil extends Fragment {
 
         MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
         LinearLayout visitesContainer = view.findViewById(R.id.visitasContainer);
+        SearchView searchView = view.findViewById(R.id.searchViewperfil);
 
         viewModel.getAllVisitsOrderByData().observe(getViewLifecycleOwner(), visites -> {
+            List<Visita> filteredList = new ArrayList<>(visites);
 
-            visitesContainer.removeAllViews();
+            // Funció per actualitzar la vista
+            Runnable updateVisites = () -> {
+                visitesContainer.removeAllViews();
 
-            if (visites.isEmpty()) {
+                if (filteredList.isEmpty()) {
+                    TextView visitaTextView = new TextView(context);
+                    visitaTextView.setText("No hi ha cap visita per mostrar");
+                    visitaTextView.setPadding(16, 16, 16, 16);
+                    visitaTextView.setTextSize(16);
+                    visitaTextView.setGravity(Gravity.CENTER);
+                    visitaTextView.setTextColor(ContextCompat.getColor(context, R.color.black));
+                    visitaTextView.setTypeface(null, Typeface.ITALIC);
 
-                TextView visitaTextView = new TextView(context);
-                visitaTextView.setText("No hi ha cap visita per mostrar");
-                visitaTextView.setPadding(16, 16, 16, 16);
-                visitaTextView.setTextSize(16);
-                visitaTextView.setGravity(Gravity.CENTER); // Centra el texto dentro del TextView
-                visitaTextView.setTextColor(ContextCompat.getColor(context, R.color.black));
-                visitaTextView.setTypeface(null, Typeface.ITALIC);
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    );
+                    layoutParams.gravity = Gravity.CENTER;
+                    layoutParams.setMargins(8, 8, 8, 8);
+                    visitaTextView.setLayoutParams(layoutParams);
 
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                );
-                layoutParams.gravity = Gravity.CENTER;
-                layoutParams.setMargins(8, 8, 8, 8);
-                visitaTextView.setLayoutParams(layoutParams);
+                    visitesContainer.addView(visitaTextView);
+                } else {
+                    for (Visita visita : filteredList) {
+                        View visitaView = LayoutInflater.from(context).inflate(R.layout.item_visita_perfil, visitesContainer, false);
 
-                visitesContainer.addView(visitaTextView);
+                        TextView dataTextView = visitaView.findViewById(R.id.datavis);
+                        TextView municipiTextView = visitaView.findViewById(R.id.municipivis);
+                        ImageView contenotes = visitaView.findViewById(R.id.contenotes);
 
-            } else {
+                        if (visita.notes.equals("")) {
+                            contenotes.setVisibility(View.GONE);
+                        } else {
+                            contenotes.setVisibility(View.VISIBLE);
+                        }
 
-                for (Visita visita : visites) {
-                    View visitaView = LayoutInflater.from(context).inflate(R.layout.item_visita_perfil, visitesContainer, false);
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                        String formattedDate = sdf.format(new Date(visita.dataVisita));
 
-                    TextView dataTextView = visitaView.findViewById(R.id.datavis);
-                    TextView municipiTextView = visitaView.findViewById(R.id.municipivis);
-                    ImageView contenotes = visitaView.findViewById(R.id.contenotes);
+                        dataTextView.setText(formattedDate);
+                        municipiTextView.setText(visita.municipiId);
 
-                    if (visita.notes.equals("")) {
-                        contenotes.setVisibility(View.GONE);
-                    } else {
-                        contenotes.setVisibility(View.VISIBLE);
+                        visitaView.setOnClickListener(v -> {
+                            showNotasDialog(visita);
+                        });
+                        visitesContainer.addView(visitaView);
                     }
-
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                    String formattedDate = sdf.format(new Date(visita.dataVisita));
-
-                    dataTextView.setText(formattedDate);
-                    municipiTextView.setText(visita.municipiId);
-
-                    visitaView.setOnClickListener(v -> {
-                        showNotasDialog(visita);
-                    });
-                    visitesContainer.addView(visitaView);
                 }
-            }
+            };
+
+            // Filtrar visites amb el SearchView
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    filteredList.clear();
+                    for (Visita visita : visites) {
+                        if (visita.municipiId.toLowerCase().contains(newText.toLowerCase())) {
+                            filteredList.add(visita);
+                        }
+                    }
+                    updateVisites.run();
+                    return true;
+                }
+            });
+
+            // Inicialitzar la vista
+            updateVisites.run();
         });
 
         Button eliminarTot = view.findViewById(R.id.eliminarTot);
@@ -143,8 +171,10 @@ public class FragmentPerfil extends Fragment {
                     })
                     .show();
         });
+
         return view;
     }
+
 
     private void showNotasDialog(Visita visita) {
 

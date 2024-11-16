@@ -531,8 +531,111 @@ public class FragmentMapes extends Fragment {
             }
         });
     }
-
-
-
-
 }
+
+************************************************************************************************************************************************************
+946 de 804
+{
+  "comarques": {
+    "Alt Empordà": [],68
+    "Garrotxa": [],21
+    "Pla de l'Estany": [],11
+    "Gironès": [],27
+    "Baix Empordà": [],36
+    "Ripollès": [],19
+    "La Selva": [],26
+    "Montsià": [],12
+    "Baix Ebre": [],14
+    "Terra Alta": [],12
+    "Ribera d'Ebre": [],14
+    "Priorat": [],23
+    "Baix Camp": [],28
+    "Segrià": [],38
+    "Garrigues": [],24
+    "Tarragonès": [],21               22 falta canonja no esta marcat al mapa
+    "Alt Camp": [],23
+    "Conca de Barberà": [],  22
+    "Pla d'Urgell": [],16
+    "Baix Penedès": [],12 13          14
+    "Garraf": [],6
+    "Alt Penedès": [],25 27           27
+    "Urgell": [],20
+    "Noguera": [],30
+    "Segarra": [],21
+    "Anoia": [],33
+    "Pallars Jussà": [],14
+    "Alta Ribagorça": [],3
+    "Val d'Aran": [],9
+    "Pallars Sobirà": [],15
+    "Alt Urgell": [],20 19            19
+    "Baix Llobregat": [],30
+    "Barcelonès": [],5
+    "Maresme": [],30
+    "Solsonès": [],15
+    "Cerdanya": [],17
+    "Lluçanès": [],8
+    "Berguedà": [],30                 31
+    "Osona": [],42                    50
+    "Bages": [],26 30                 30
+    "Moianès": [],10
+    "Vallès Occidental": [],23
+    "Vallès Oriental": []39
+},
+
+  "provinciesMUN": {
+    "Província de Barcelona": [],296 267
+    "Província de Girona": [],223 161
+    "Província de Lleida": [],255 201
+    "Província de Tarragona": []181 184
+  },
+
+  "vegueriesMUN": {
+    "Alt Pirineu i Aran": [],78 77
+    "Terres de l'Ebre": [],52
+    "Camp de Tarragona": [],117 119
+    "Catalunya Central": [],131 135
+    "Girona": [],206 208
+    "Lleida": [],149
+    "Barcelona": [],133 127
+    "Penedès": []69 79
+  },
+
+
+
+
+  "vegueries": {
+    "Alt Pirineu i Aran": ["Alta Ribagorça", "Alt Urgell", "Cerdanya", "Pallars Jussà", "Pallars Sobirà", "Val d'Aran"],
+    "Terres de l'Ebre": ["Baix Ebre", "Montsià", "Ribera d'Ebre", "Terra Alta"],
+    "Camp de Tarragona": [ "Alt Camp", "Baix Camp",  "Conca de Barberà", "Priorat", "Tarragonès"],
+    "Catalunya Central": [ "Bages", "Berguedà", "Moianès", "Osona", "Solsonès","Lluçanès"],
+    "Girona": ["Alt Empordà", "Baix Empordà", "Garrotxa", "Gironès", "Pla de l'Estany", "La Selva","Ripollès"],
+    "Lleida": ["Noguera","Segarra","Urgell","Pla d'Urgell","Segrià", "Garrigues" ],
+    "Barcelona": ["Maresme","Vallès Occidental", "Vallès Oriental","Baix Llobregat", "Barcelonès", "Bages",  "Garraf",  "Osona" ],
+    "Penedès": ["Alt Penedès", "Anoia", "Baix Penedès", "Garraf"]
+  },
+  "provincies": {
+    "Província de Barcelona": ["Alt Penedès", "Anoia","Berguedà", "Bages", "Baix Llobregat", "Barcelonès", "Garraf", "Maresme", "Osona", "Vallès Occidental", "Vallès Oriental","Lluçanès"],
+    "Província de Girona": ["Alt Empordà", "Baix Empordà", "Cerdanya", "Garrotxa", "Gironès", "Pla de l'Estany", "La Selva","Ripollès"],
+    "Província de Lleida": ["Alta Ribagorça", "Alt Urgell", "Cerdanya", "Garrigues", "Noguera", "Pallars Jussà", "Pallars Sobirà", "Pla d'Urgell", "Segarra", "Segrià", "Solsonès", "Urgell", "Val d'Aran"],
+    "Província de Tarragona": ["Alt Camp", "Baix Camp", "Baix Ebre", "Baix Penedès", "Conca de Barberà", "Montsià", "Priorat", "Ribera d'Ebre", "Tarragonès", "Terra Alta"]
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

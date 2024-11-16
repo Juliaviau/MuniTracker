@@ -812,8 +812,9 @@ public class FragmentMapes extends Fragment {
                 "Castellví de Rosanes","Colbató","Cervelló", "Cornellà de Llobregat","Castelldefels","Canyelles","Cubelles","Caldes d'Estrac","Cabrils","Calella","Canet de Mar",
                 "Centelles","Calldetenes", "Castellbisbal","Cerdanyola del Vallès","Castellar del Vallès","Caldes de Montbui","Campins","Canovelles","Cardedeu","Cànoves i Samalús",
                 "Calonge i Sant Antoni","Cadaqués","Capmany","Castell-Platja d'Aro","Castelló d'Empúries","Cistella","Colera","Corçà","Cruïlles, Monells i Sant Sadurní de l'Heura",
-                "Castellfollit de la Roca","Cassà de la Selva","Celrà", "Campllong","Cornellà del Terri","Crespià","Camós","Campdevànol","Camprodon","Caldes de Malavella",
-                "Cabra del Camp","Capafonts","Castellvell del Camp","Colldejou","Cambrils","Camarles","Calafell","Cunit","Conesa","Cornudella de Montsant","Caseres","Cabaçés","Capçanes","Constantí","Creixell","Corbera d'Ebre",
+                "Castellfollit de la Roca","Cassà de la Selva","Celrà", "Campllong","Cornellà del Terri","Crespià","Camós","Campdevànol","Camprodon","Caldes de Malavella","Cabrera de Mar",
+                "Cabra del Camp","Capafonts","Castellvell del Camp","Colldejou","Cambrils","Camarles","Calafell","Cunit","Conesa","Cornudella de Montsant","Caseres","Cabaçés","Capçanes",
+                "Constantí","Creixell","Corbera d'Ebre",
 
                 "Dosrius","Darnius","Das","Duesaigües","Deltebre",
 
@@ -823,7 +824,7 @@ public class FragmentMapes extends Fragment {
                 "El Pinell de Brai","El Prat del Comte","Molins de Rei","Pallejà","La Palma de Cervelló",
 
                 "Font-rubí","Fonollosa","Folgueroles","Figaró-Montmany","Fogars de Montclús","Finca de les Fonts","Fontanals de Cerdanya","Fontanilles","Fornells de la Selva",
-                "Fontcoberta","Figueres","Forallac","Figuerola del Camp","Forès","Freginals","Falset","Flix","Fortià",
+                "Fontcoberta","Figueres","Forallac","Figuerola del Camp","Forès","Freginals","Falset","Flix","Fortià","Fígols",
 
                 "Gelida","Gaià","Gavà","Gurb","Galifa","Gualba","Granollers","Gualta","Guils de Cerdanya","Garriguella","Girona", "Gombrèn","Godall","Gratallops","Garcia","Ginestar","Gandesa",
 
@@ -859,7 +860,7 @@ public class FragmentMapes extends Fragment {
 
                 "Subirats", "Santa Margarida i els Monjos", "Sant Llorenç d'Hortons", "Sant Martí Sarroca", "Santa Fe del Penedès", "Sant Cugat Sesgarrigues", "Sant Quintí de Mediona",
                 "Sant Pere de Riudebitlles","Sant Sadurní d'Anoia", "Sant Martí Sesgueioles","Sant Martí de Tous", "Santa Margarida de Montbui", "Santa Maria de Miralles",
-                "St. Pere Sallavinera","Sant Feliu Sasserra","Sallent","Sant Mateu de Bages","Súria","Santpedor","Sant Fruitós de Bages", "Sant Joan de Vilatorrada",
+                "Sant Pere Sallavinera","Sant Feliu Sasserra","Sallent","Sant Mateu de Bages","Súria","Santpedor","Sant Fruitós de Bages", "Sant Joan de Vilatorrada",
                 "Sant Salvador de Guardiola","Sant Vicenç de Castellet","Sant Esteve Sesrovires","Sant Andreu de la Barca","Sant Feliu de LLobregat","Sant Vicenç dels Horts",
                 "Sant Just Desvern","Santa Coloma de Cervelló","Sant Joan Despí","Sant Climent de Llobregat","Sant Boi de Llobregat","Sant Climent de Llobregat","Santa Coloma de Gramenet",
                 "Sant Adrià del Besòs","Sitges","Sant Pere de Ribes","Santa Susanna","Sant Iscle de Vilalta","Sant Cebrià de Vallalta", "Sant Vicenç de Montalt","Sant Andreu de Llavaneres",
@@ -882,7 +883,7 @@ public class FragmentMapes extends Fragment {
                 "Vilassar de Mar","Vidrà", "Viladrau","Vilanova de Sau","Vic", "Vacarisses","Viladecavalls","Vallgorguina","Vallromanes","Vilanova del Vallès","Vilalba Sasserra",
                 "Vall d'en Bas",  "Vall de Bianya","Vilablareix","Vilademuls","Vallfogona de Ripollès","Vilallonga de Ter","Vidreres", "Vilobí d'Onyar","Valls","Vila-rodona","Vallmoll",
                 "Vilabella","Vinyols i els Arcs","Vilaplana","Vilanova d'Escornalbou","Vandellòs i l'Hospitalet de l'Infant","Vallfogona de Riucorb","Vimbodí i Poblet","Vallclara",
-                "Vilanova de Prades","Vilaverd","Vinebre","Vila-seca","Vespella de Gaià","Vilallonga del Camp","Vilalba dels Arcs",
+                "Vilanova de Prades","Vilaverd","Vinebre","Vila-seca","Vespella de Gaià","Vilallonga del Camp","Vilalba dels Arcs","Vilada",
 
                 "Xerta"
         );

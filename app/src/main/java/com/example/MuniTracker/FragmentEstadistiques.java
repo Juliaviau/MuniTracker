@@ -309,7 +309,6 @@ public class FragmentEstadistiques extends Fragment {
         for (int i = 0; i < topMunicipisVisitats.size(); i++) {
             MunicipiVisitCount municipi = topMunicipisVisitats.get(i);
             entries.add(new BarEntry(i, municipi.visitCount));
-
             labels.add(municipi.municipiId);
         }
 
@@ -358,7 +357,6 @@ public class FragmentEstadistiques extends Fragment {
         chart.invalidate();
     }
 
-
     private void actualitzarGraficVegueria() {
         ArrayList<PieEntry> yValues = new ArrayList<>();
 
@@ -370,41 +368,34 @@ public class FragmentEstadistiques extends Fragment {
             }
         }
 
-        // Configura el DataSet
         PieDataSet dataSet = new PieDataSet(yValues, "");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(10f);
 
-        // Genera colores automáticamente para cada entrada
         ArrayList<Integer> colors = new ArrayList<>();
         for (int i = 0; i < yValues.size(); i++) {
             colors.add(ColorTemplate.MATERIAL_COLORS[i % ColorTemplate.MATERIAL_COLORS.length]);
         }
         dataSet.setColors(colors);
 
-        // Configura el texto de los datos en el gráfico
         PieData data = new PieData(dataSet);
         data.setValueTextSize(12f);
         data.setValueTextColor(Color.WHITE);
-        data.setValueFormatter(new PercentFormatter(binding.pieChartVegueria)); // Muestra valores como porcentaje
+        data.setValueFormatter(new PercentFormatter(binding.pieChartVegueria));
 
-        // Estilos para el PieChart
         binding.pieChartVegueria.setData(data);
-        binding.pieChartVegueria.setUsePercentValues(true); // Muestra los valores en porcentajes
-        binding.pieChartVegueria.setDrawHoleEnabled(true); // Agujero en el centro
-        binding.pieChartVegueria.setHoleColor(Color.TRANSPARENT); // Agujero transparente en el centro
-        binding.pieChartVegueria.setHoleRadius(40f); // Radio del agujero
-        binding.pieChartVegueria.setTransparentCircleRadius(45f); // Radio del círculo transparente
+        binding.pieChartVegueria.setUsePercentValues(true);
+        binding.pieChartVegueria.setDrawHoleEnabled(true);
+        binding.pieChartVegueria.setHoleColor(Color.TRANSPARENT);
+        binding.pieChartVegueria.setHoleRadius(40f);
+        binding.pieChartVegueria.setTransparentCircleRadius(45f);
 
-        // Texto al centro del gráfico
         binding.pieChartVegueria.setCenterText("Municipis visitats per Vegueries");
         binding.pieChartVegueria.setCenterTextSize(14f);
         binding.pieChartVegueria.setCenterTextColor(Color.DKGRAY);
 
-        // Desactiva la descripción por defecto
         binding.pieChartVegueria.getDescription().setEnabled(false);
 
-        // Configura la leyenda
         Legend legend = binding.pieChartVegueria.getLegend();
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
         legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
@@ -413,24 +404,18 @@ public class FragmentEstadistiques extends Fragment {
         legend.setTextSize(12f);
         legend.setTextColor(Color.DKGRAY);
 
-        // Habilita el modo de "word wrap" para leyendas de múltiples filas
         legend.setWordWrapEnabled(true);
 
-        // Ajusta el espacio entre ítems para hacer la leyenda más compacta
-        legend.setFormToTextSpace(6f); // Espacio entre el símbolo de la leyenda y el texto
-        legend.setXEntrySpace(12f); // Espacio entre los elementos de la leyenda
-        legend.setYEntrySpace(6f); // Espacio vertical entre filas
+        legend.setFormToTextSpace(6f);
+        legend.setXEntrySpace(12f);
+        legend.setYEntrySpace(6f);
 
-        // Desactiva los textos dentro de las secciones
         binding.pieChartVegueria.setDrawEntryLabels(false);
 
-        // Animación para hacer el gráfico más atractivo
         binding.pieChartVegueria.animateY(1000, Easing.EaseInOutQuad);
-        binding.pieChartVegueria.invalidate(); // Refresca el gráfico con los nuevos datos
+        binding.pieChartVegueria.invalidate();
     }
 
-
-    // Mètode per actualitzar el gràfic amb estils i informació més atractius
     private void actualitzarGraficProvincies() {
         if (visitatsProvLleida.get() > 0 || visitatsProvBarcelona.get() > 0 ||
                 visitatsProvTarragona.get() > 0 || visitatsProvGirona.get() > 0) {
@@ -498,5 +483,4 @@ public class FragmentEstadistiques extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-
 }

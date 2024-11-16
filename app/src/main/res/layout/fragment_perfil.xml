@@ -54,6 +54,15 @@
             android:paddingBottom="8dp"
             android:gravity="center" />
 
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchViewperfil"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_margin="6dp"
+            android:queryHint="Cerca municipi"
+            android:background="@drawable/search_view_background_blanc"/>
+
         <LinearLayout
             android:id="@+id/visitasContainer"
             android:layout_width="match_parent"
