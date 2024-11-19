@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -29,6 +30,12 @@ public class MunicipiRepository implements Observer<Integer> {
             municipiDao.eliminarTotsMunicipis();
         });
     }
+
+
+    public LiveData<List<Municipi>> obtenirNomsMunicipisvisitatspercomarca(String comarca_id) {
+        return municipiDao.obtenirNomsMunicipisvisitatspercomarca(comarca_id);
+    }
+
 
 
     public LiveData<List<Municipi>> getMunicipisVisitats() {

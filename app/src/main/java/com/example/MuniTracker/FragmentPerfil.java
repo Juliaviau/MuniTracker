@@ -175,7 +175,6 @@ public class FragmentPerfil extends Fragment {
         return view;
     }
 
-
     private void showNotasDialog(Visita visita) {
 
         View view = getLayoutInflater().inflate(R.layout.dialog_visita, null);
@@ -216,6 +215,7 @@ public class FragmentPerfil extends Fragment {
         });
 
         ImageButton elimboto = view.findViewById(R.id.btnEliminar);
+        ImageButton editboto = view.findViewById(R.id.btnModificar);
         MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
 
         AppCompatImageButton tancarButton = view.findViewById(R.id.btntancar);
@@ -228,6 +228,10 @@ public class FragmentPerfil extends Fragment {
         AlertDialog dialog = new AlertDialog.Builder(context)
                 .setView(view)
                 .create();
+
+        editboto.setOnClickListener(v-> {
+
+        });
 
         elimboto.setOnClickListener(v -> {
             progressDialog.show();

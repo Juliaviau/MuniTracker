@@ -62,7 +62,7 @@ public class FragmentEstadistiques extends Fragment {
     private AtomicInteger visitatsProvTarragona = new AtomicInteger();
     private AtomicInteger visitatsProvGirona = new AtomicInteger();
 
-    private static final int TOTAL_MUNICIPIS = 804;
+    private static final int TOTAL_MUNICIPIS = 949;
 
     private Context context;
     MapesHelper mapesHelper;
@@ -138,7 +138,7 @@ public class FragmentEstadistiques extends Fragment {
             animator.setInterpolator(new DecelerateInterpolator());
             animator.start();
 
-            binding.munvisi.setText("S'han visitat " + nombreMunicipisVisitats + " municipis d'un total de 804.");
+            binding.munvisi.setText("S'han visitat " + nombreMunicipisVisitats + " municipis d'un total de 949.");
         });
 
         //****************************************************

@@ -34,6 +34,9 @@ public interface MunicipiDao {
     @Query("SELECT COUNT(*) FROM municipis WHERE comarca_id = :comarcaId AND visitat = 1")
     int getVisitadosMunicipisInComarca(String comarcaId);
 
+    @Query("SELECT * FROM municipis WHERE comarca_id = :comarca_id AND visitat = 1 ORDER BY id ASC")
+    LiveData<List<Municipi>> obtenirNomsMunicipisvisitatspercomarca(String comarca_id);
+
     @Query("SELECT COUNT(*) FROM municipis WHERE provincia_id = :provinciaId AND visitat = 1")
     int getVisitadosMunicipisInProvincia(String provinciaId);
 
@@ -44,14 +47,10 @@ public interface MunicipiDao {
     void eliminarMunicipi(String municipi);
 
     /*default int getPorcentajeVisitadosInComarca(String comarcaId) {
-
         int total = getTotalMunicipisInComarca(comarcaId);
         int visitados = getVisitadosMunicipisInComarca(comarcaId);
         //Log.d("MUNUCUOU", "total " + total + " visi " + visitados + " com " + comarcaId);
         return visitados;
         //return total == 0 ? 0 : (visitados * 100) / total;
     }*/
-
-
-
 }

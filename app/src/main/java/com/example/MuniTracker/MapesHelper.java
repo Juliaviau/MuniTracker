@@ -1,12 +1,16 @@
 package com.example.MuniTracker;
 
 import android.content.Context;
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class MapesHelper {
 
@@ -37,7 +41,7 @@ public class MapesHelper {
                 JSONArray municipis = vegueries.getJSONArray(vegueriaId);
                 cantidadMunicipios = municipis.length();
             } else {
-                System.out.println("Comarca con ID " + vegueriaId + " no encontrada.");
+                Log.i("MapesHelper","Comarca con ID " + vegueriaId + " no encontrada.");
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -55,7 +59,7 @@ public class MapesHelper {
                 JSONArray municipis = provincies.getJSONArray(provinciaId);
                 cantidadMunicipios = municipis.length();
             } else {
-                System.out.println("Comarca con ID " + provinciaId + " no encontrada.");
+                Log.i("MapesHelper","Comarca con ID " + provinciaId + " no encontrada.");
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -73,13 +77,51 @@ public class MapesHelper {
                 JSONArray municipis = comarques.getJSONArray(comarcaId);
                 cantidadMunicipios = municipis.length();
             } else {
-                System.out.println("Comarca con ID " + comarcaId + " no encontrada.");
+                Log.i("MapesHelper","Comarca con ID " + comarcaId + " no encontrada.");
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return cantidadMunicipios;
     }
+
+
+    public List<String> obtenirNomsMunicipisTotesComarques() {
+        List<String> nomsMunicipis = new ArrayList<>();
+        try {
+            JSONObject comarques = territorios.getJSONObject("comarques");
+            Iterator<String> comarcaIds = comarques.keys(); // Get all comarca IDs
+
+            while (comarcaIds.hasNext()) {
+                String comarcaId = comarcaIds.next();
+                JSONArray municipis = comarques.getJSONArray(comarcaId);
+                for (int i = 0; i < municipis.length(); i++) {
+                    String nomMunicipi = municipis.getString(i);
+                    nomsMunicipis.add(nomMunicipi);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return nomsMunicipis;
+    }
+
+    public List<String> obtenirNomsComarques() {
+        List<String> nomsComarques = new ArrayList<>();
+        try {
+            JSONObject comarques = territorios.getJSONObject("comarques");
+            Iterator<String> comarcaIds = comarques.keys(); // Get all comarca IDs
+
+            while (comarcaIds.hasNext()) {
+                String comarcaId = comarcaIds.next();
+                nomsComarques.add(comarcaId); // Add comarca ID to the list
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return nomsComarques;
+    }
+
 
     // Método para obtener la comarca, veguería y provincia
     public TerritoryData getTerritoryData(String municipiId) {

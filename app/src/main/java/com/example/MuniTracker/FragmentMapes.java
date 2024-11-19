@@ -132,8 +132,8 @@ public class FragmentMapes extends Fragment {
         RecyclerView llistaResultatsBuscador = view.findViewById(R.id.resultsRecyclerView);
         llistaResultatsBuscador.setLayoutManager(new LinearLayoutManager(context));
 
-        List<String> llistaMunicipis = obtenirLlistaDeMunicipis();
-        List<String> llistaComarques = obtenirLlistaDeComarques();
+        List<String> llistaMunicipis = mapesHelper.obtenirNomsMunicipisTotesComarques();
+        List<String> llistaComarques = mapesHelper.obtenirNomsComarques();
         List<String> llistaVegueries = obtenirLlistaDeVegueries();
         List<String> llistaProvincies = obtenirLlistaDeProvincies();
 
@@ -482,6 +482,36 @@ public class FragmentMapes extends Fragment {
             infoMuni.setText("S'han visitat " + nombreMunicipisVisitats + " de " + quantitatMunicipisComarca + " municipis");
         });
 
+        NestedScrollView scroll = bottomSheetView.findViewById(R.id.scrollViewS);
+        LinearLayout visitasContainer = bottomSheetView.findViewById(R.id.visitasContainerS);
+
+        viewModel.obtenirNomsMunicipisvisitatspercomarca(comarcaId).observe(getViewLifecycleOwner(), visites -> {
+
+            visitasContainer.removeAllViews();
+
+            for (Municipi visita : visites) {
+                TextView visitaTextView = new TextView(context);
+
+
+                visitaTextView.setText(visita.id);
+                visitaTextView.setPadding(16, 16, 16, 16);
+                visitaTextView.setBackgroundResource(R.drawable.rounded_card);
+                visitaTextView.setTextSize(16);
+                visitaTextView.setTextColor(ContextCompat.getColor(context, R.color.blau_mapa_fosc));
+                visitaTextView.setTypeface(null, Typeface.BOLD);
+                visitaTextView.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                ));
+                ((LinearLayout.LayoutParams) visitaTextView.getLayoutParams()).setMargins(8, 8, 8, 8);
+
+                visitasContainer.addView(visitaTextView);
+            }
+        });
+
+
+
+
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
     }
@@ -602,6 +632,11 @@ public class FragmentMapes extends Fragment {
         markAsVisitedButton.setVisibility(View.VISIBLE);
         viewBottom.setVisibility(View.VISIBLE);
 
+        /*TextView infoMuniP = bottomSheetView.findViewById(R.id.zonaIfnfoProv);
+        TextView infoMuniV = bottomSheetView.findViewById(R.id.zonaIfnfoVeg);
+        TextView infoMuniC = bottomSheetView.findViewById(R.id.zonaIfnfoCom);*/
+
+
         if (municipiVisitat) {
 
             infoMuni.setText("Visites anteriors");
@@ -721,7 +756,7 @@ public class FragmentMapes extends Fragment {
     }
     private void pintarComarquesPerVisites() {
         MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
-        List<String> llistaComarques = obtenirLlistaDeComarques();
+        List<String> llistaComarques = mapesHelper.obtenirNomsComarques();
         for (String comarcaId : llistaComarques) {
             viewModel.obtenirQuantitatMunicipisVisitatsComarca(comarcaId).observe(getViewLifecycleOwner(), nombreMunicipisVisitats -> {
                 int quantitatMunicipisComarca = mapesHelper.obtenirQuantitatMunicipisPerComarca(comarcaId);
@@ -785,13 +820,13 @@ public class FragmentMapes extends Fragment {
     private List<String> obtenirLlistaSegonsTipus() {
         switch (tipusMapa) {
             case "c":
-                return obtenirLlistaDeComarques();
+                return mapesHelper.obtenirNomsComarques();
             case "v":
                 return obtenirLlistaDeVegueries();
             case "p":
                 return obtenirLlistaDeProvincies();
             default:
-                return obtenirLlistaDeMunicipis();
+                return mapesHelper.obtenirNomsMunicipisTotesComarques();
         }
     }
     @NonNull

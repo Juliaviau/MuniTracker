@@ -24,6 +24,42 @@
         android:paddingBottom="10dp"
         android:gravity="center" />
 
+    <!--TextView
+        android:id="@+id/zonaIfnfoProv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Visites anteriors"
+        android:fontFamily="casual"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:paddingBottom="2dp"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/zonaIfnfoVeg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Visites anteriors"
+        android:fontFamily="casual"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:paddingBottom="2dp"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/zonaIfnfoCom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Visites anteriors"
+        android:fontFamily="casual"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:paddingBottom="2dp"
+        android:gravity="center" /-->
+
     <Button
         android:id="@+id/visit"
         android:layout_width="280dp"

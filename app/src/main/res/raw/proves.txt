@@ -615,28 +615,85 @@ public class FragmentMapes extends Fragment {
     "Penedès": ["Alt Penedès", "Anoia", "Baix Penedès", "Garraf"]
   },
   "provincies": {
-    "Província de Barcelona": ["Alt Penedès", "Anoia","Berguedà", "Bages", "Baix Llobregat", "Barcelonès", "Garraf", "Maresme", "Osona", "Vallès Occidental", "Vallès Oriental","Lluçanès"],
-    "Província de Girona": ["Alt Empordà", "Baix Empordà", "Cerdanya", "Garrotxa", "Gironès", "Pla de l'Estany", "La Selva","Ripollès"],
-    "Província de Lleida": ["Alta Ribagorça", "Alt Urgell", "Cerdanya", "Garrigues", "Noguera", "Pallars Jussà", "Pallars Sobirà", "Pla d'Urgell", "Segarra", "Segrià", "Solsonès", "Urgell", "Val d'Aran"],
-    "Província de Tarragona": ["Alt Camp", "Baix Camp", "Baix Ebre", "Baix Penedès", "Conca de Barberà", "Montsià", "Priorat", "Ribera d'Ebre", "Tarragonès", "Terra Alta"]
+    "Província de Barcelona": ["Alt Penedès", "Anoia","Berguedà", "Bages","Baix Llobregat", "Barcelonès","Garraf", "Maresme", "Osona", "Vallès Occidental","Vallès Oriental","Lluçanès"],
+    "Província de Girona": [ "Alt Empordà", "Baix Empordà", "Cerdanya", "Garrotxa", "Gironès", "Pla de l'Estany", "La Selva","Ripollès"],
+
+    "Província de Lleida": [
+    "Alta Ribagorça", "Alt Urgell",
+    "Cerdanya", "Garrigues", "Noguera",
+    "Pallars Jussà", "Pallars Sobirà",
+     "Pla d'Urgell", "Segarra", "Segrià",
+      "Solsonès", "Urgell", "Val d'Aran"],
+
+    "Província de Tarragona": ["Alt Camp", "Baix Camp",
+    "Baix Ebre", "Baix Penedès", "Conca de Barberà",
+     "Montsià", "Priorat", "Ribera d'Ebre",
+      "Tarragonès", "Terra Alta"]
   }
 }
 
+bcn 311  304
+gir 221  225   219
+lle 231  241   230
+tar 184  183 falta un no al mapa
 
 
+"Alfarràs","Almenar","Almacelles","Alguaire","La Portella","Lleida","Vilanova de Segrià",
+      "Gimenells i el Pla de la Font","Corbins","Vilanova de la Barca","Rosselló","Benavent de Segrià",
+      "Torre-serona","Alpicat","Torrefarrera","Montoliu de Lleida","Artesa de Lleida","Albatàrrec",
+      "Sudanell","Soses","Torres de Segre","Els Alamús","Alcarràs","Alcoletge","Puigverd de Lleida",
+      "Alfés","Aspa","Sarroca de Lleida","Seròs","Torrebesses","Maials","Almatret","Llardecans",
+      "La Granja d'Escalp","Alcanó","Massalcoreig","Aitona","Sunyer"
 
 
+"La Floresta","Els Omellons","Castelldans","Les Borges Blanques","Arbeca","Puiggrós","Vinaixa",
+      "Juneda","Espluga Calba","Fulleda","L'Albagés","El Cogul","El Soleràs","Juncosa","Tarrés",
+      "Granyena de les Garrigues","L'Albi","Cervià de les Garrigues","Els Torms","La Granadella",
+      "El Vilosell","Bellaguarda","Bovera","La Pobla de Cérvoles"
+
+"Castellnou de Seana","El Palau d'Anglesola","Bell-lloc d'Urgell","Mollerussa","Fondarella",
+      "Miralcamp","Torregrossa","Sidamon","Vilanova de Bellpuig","Golmés","Vila-sana","Barbens",
+      "El Poal","Ivars d'Urgell","Bellvís","Linyola"
+
+"Puigverd d'Agramunt","Agramunt","Castellserà","Tornabous","Tàrrega","La Fuliola","Vilagrassa",
+      "Sant Martí de Riucorb","Ossó de Sió","Anglesola","Bellpuig","Preixana","Verdú","Guimerà",
+      "Bellianes","Ciutadilla","Nalec","Maldà","Vallbona de les Monges","Els Omells de na Gaia"
+
+"Artesa de Segre","Àger","Camarasa","Vilanova de Meià", "Os de Balaguer","Tiurana",
+      "Alòs de Balaguer","Vilanova de l'Aguda","Ponts","Oliola","Ivars de Noguera","Foradada",
+      "Algerri","Preixens","Montgai","La Sentiu de Sió","Balaguer","Vallfogona de Balaguer",
+      "Albesa","Bellmunt d'Urgell","Menàrguens","Penelles","Térmens","Torrelameu","Bellcaire d'Urgell",
+      "Cubells","Cabanabona","Castelló de Farfanya","La Baronia de Rialb","Les Avellanes i Santa Linya"
+
+"Sant Guim de la Plana","Guissona","Ivorra","Massoteres","Torà","Sanaüja","Biosca","Granyanella",
+      "Els Plans de Sió","Ribera d'Ondara","Sant Ramon","Tarroja de Segarra","Estaràs","Les Oluges",
+      "Torrefeta i Florejacs","Cervera","Sant Guim de Freixenet","Montoliu de Segarra","Talavera",
+      "Granyena de Segarra", "Montornès de Segarra"
 
 
+"Conca de Dalt","Castell de Mur","La Torre de Cabdella","Sarroca de Bellera","Tremp","Senterada",
+      "La Pobla de Segur","Salàs de Pallars", "Abella de la Conca","Gavet de la Conca","Sant Esteve de la Sarga",
+      "Talarn","Llimiana","Isona i Conca Dellà"
+
+ "El Pont de Suert", "La Vall de Boí", "Vilaller"
+
+"Naut Aran","Vielha e Mijaran","Arres","Bausen","Canejan","Les","Bossòst",  "Es Bòrdes", "Vilamòs"
+
+"Alt Àneu","Vall de Cardós","Farrera","Baix Pallars","Ladorre","La Guingueta d'Àneu","Alins",
+      "Esterri d'Àneu","Espot","Esterri de Cardós","Llavorsí","Tírvia","Sort","Rialp","Soriguera"
 
 
+"Alàs i Cerc","Arsèguel","Bassella","Cabó","Cava","Coll de Nargó","Estamariu",
+      "Fígols i Alinyà","Josa i Tuixén","Montferrer i Castellbó","Oliana","Organyà","Peramola",
+      "El Pont de Bar","Ribera d'Uregellet","La Seu d'Urgell","Les Valls d'Aguilar",
+      "Les Valls de Valira","La Vansa i Fórnols"
 
+"Sant Llorenç de Morunys","Lladurs","Clariana de Cardener", "Solsona","La Molosa","Olius",
+      "Pinell de Solsonès","Navès","Pinós","Riner","Llobera","Castellar de la Ribera","La Coma i la Pedra",
+      "Odèn","Guixers"
 
-
-
-
-
-
-
+"Isòvol","Frontanals de Cerdanya","Prats i Sansor","Montellà i Martinet","Lles de Cerdanya",
+      "Meranges","Llívia","Guls de Cerdanya","Ger","Bellver de Cerdanya","Puigcerdà","Bolvir",
+      "Prullans","Alp","Urús","Riu de Cerdanya","Das"
 
 
