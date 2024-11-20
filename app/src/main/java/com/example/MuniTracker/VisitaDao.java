@@ -43,7 +43,7 @@ public interface VisitaDao {
     void delete(Visita visita);
 
     @Update
-    void update(Visita visita);
+    void updateVisita(Visita visita);
 
     @Query("SELECT municipiId, COUNT(*) AS visitCount " +
             "FROM visites " +

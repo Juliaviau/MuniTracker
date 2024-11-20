@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -38,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 public class FragmentPerfil extends Fragment {
@@ -229,9 +231,49 @@ public class FragmentPerfil extends Fragment {
                 .setView(view)
                 .create();
 
-        editboto.setOnClickListener(v-> {
+        editboto.setOnClickListener(v -> {
+            //dialog.dismiss();
 
+            // Pass the original visita and data to the dialog fragment
+            VisitaDialogFragment bottomSheet = new VisitaDialogFragment(visita.notes, visita.dataVisita, (dataModificada, notesModificades) -> {
+                // Update the visita object with the modified values
+                visita.setDataVisita(dataModificada);
+                visita.setNotes(notesModificades);
+                viewModel.updateVisita(visita); // Assuming afegirVisita handles updates as well
+                dialog.dismiss();
+            });
+
+            bottomSheet.show(getParentFragmentManager(), "AgregarVisitaBottomSheet");
         });
+
+        /*editboto.setOnClickListener(v -> {
+
+            dialog.dismiss();
+
+            VisitaDialogFragment bottomSheet = new VisitaDialogFragment((data, notes) -> {
+
+                //Visita visita = new Visita(municipiId, data, notes);
+                Visita visitanova = new Visita(visita.municipiId, data, notes);
+                viewModel.afegirVisita(visita);
+
+                //pintarMunicipisVisitats();
+            });
+
+            bottomSheet.show(getParentFragmentManager(), "AgregarVisitaBottomSheet");
+
+            //bottomSheetDialog.dismiss();
+        });*/
+
+
+
+
+        /*editboto.setOnClickListener(v-> {
+
+            //mostrar les dades i boto per guardar canvis, que es posaran com a nous a la visita que es crei nova
+            Visita visitanova = new Visita(visita.municipiId, visita.dataVisita, visita.notes);
+
+            viewModel.afegirVisita(visitanova);
+        });*/
 
         elimboto.setOnClickListener(v -> {
             progressDialog.show();
@@ -240,12 +282,12 @@ public class FragmentPerfil extends Fragment {
 
                 if (eliminada) {
                     progressDialog.dismiss();
-                    Toast.makeText(context, "Visita eliminada correctament", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "Visita eliminada correctament", Toast.LENGTH_SHORT).show();
                     viewModel.setVisitaEliminada(false);
                     dialog.dismiss();
 
                 } else {
-                    Toast.makeText(context, "No s'ha pogut eliminar la visita", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "No s'ha pogut eliminar la visita", Toast.LENGTH_SHORT).show();
                 }
             });
             // bottomSheetDialog.dismiss();

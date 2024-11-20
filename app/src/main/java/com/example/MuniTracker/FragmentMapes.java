@@ -396,6 +396,8 @@ public class FragmentMapes extends Fragment {
         });
 
         ImageButton elimboto = view.findViewById(R.id.btnEliminar);
+        ImageButton editboto = view.findViewById(R.id.btnModificar);
+
         MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
 
         AppCompatImageButton tancarButton = view.findViewById(R.id.btntancar);
@@ -407,6 +409,21 @@ public class FragmentMapes extends Fragment {
         AlertDialog dialog = new AlertDialog.Builder(context)
                 .setView(view)
                 .create();
+
+        editboto.setOnClickListener(v -> {
+            //dialog.dismiss();
+
+            // Pass the original visita and data to the dialog fragment
+            VisitaDialogFragment bottomSheet = new VisitaDialogFragment(visita.notes, visita.dataVisita, (dataModificada, notesModificades) -> {
+                // Update the visita object with the modified values
+                visita.setDataVisita(dataModificada);
+                visita.setNotes(notesModificades);
+                viewModel.updateVisita(visita); // Assuming afegirVisita handles updates as well
+                dialog.dismiss();
+            });
+
+            bottomSheet.show(getParentFragmentManager(), "AgregarVisitaBottomSheet");
+        });
 
         elimboto.setOnClickListener(v -> {
             progressDialog.show();
@@ -684,7 +701,7 @@ public class FragmentMapes extends Fragment {
         MapesHelper.TerritoryData territoryData = mapesHelper.getTerritoryData(municipiId);
 
         markAsVisitedButton.setOnClickListener(v -> {
-            VisitaDialogFragment bottomSheet = new VisitaDialogFragment((data, notes) -> {
+            VisitaDialogFragment bottomSheet = new VisitaDialogFragment("", 0, (data, notes) -> {
 
                 AtomicReference<Boolean> estaVisitat = new AtomicReference<>(false);
                 viewModel.obtenirMunicipisVisitats().observe(getViewLifecycleOwner(), municipisVisitats -> {

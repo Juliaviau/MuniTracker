@@ -111,6 +111,11 @@ public class MunicipiViewModel extends AndroidViewModel {
         municipiRepository.deleteVisita(visita);
         Log.i("deletevisita","visita eliminada view model");
     }
+
+    public void updateVisita(Visita visita) {
+        municipiRepository.updateVisita(visita);
+    }
+
     public LiveData<Boolean> getVisitaEliminada() {
         return municipiRepository.getVisitaEliminada();
     }

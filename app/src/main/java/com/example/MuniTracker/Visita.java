@@ -21,4 +21,11 @@ public class Visita {
         this.dataVisita = dataVisita;
         this.notes = notes;
     }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+    public void setDataVisita(long dataVisita) {
+        this.dataVisita = dataVisita;
+    }
 }

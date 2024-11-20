@@ -7,12 +7,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import kotlinx.coroutines.Dispatchers;
 
 public class MunicipiRepository implements Observer<Integer> {
     private final MunicipiDao municipiDao;
@@ -158,6 +154,14 @@ public class MunicipiRepository implements Observer<Integer> {
                 Log.i("qqqqqq municipi encara visitat", String.valueOf(numeroVisites));
             }
             visitaEliminada.postValue(true);
+        }).start();
+    }
+
+    public void updateVisita(Visita visita) {
+        new Thread(() -> {
+            visitaDao.updateVisita(visita);
+            //visitaEliminada.postValue(true);
+            Log.i("qqqqqq", "visita actualizada");
         }).start();
     }
 
