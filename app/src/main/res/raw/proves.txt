@@ -697,3 +697,55 @@ tar 184  183 falta un no al mapa
       "Prullans","Alp","Urús","Riu de Cerdanya","Das"
 
 
+/////////////////////////////////////////////////////
+
+74 de 79
+"Penedès": ["Castellet i la Gornal","Olesa de Bonesvalls", "Mediona","Torrelavit","Font-rubí","Subirats",
+      "Avinyonet del Penedès","Castellví de la Marca","Olèrdola","Santa Margarida i els Monjos",
+      "Sant Llorenç d'Hortons", "Torrelles de Foix","El Pla del Penedès","Sant Martí Sarroca",
+      "Puigdàlber","Santa Fe del Penedès", "La Granada","Les Cabanyes","Pacs del Penedès",
+      "Vilafranca del Penedès","Sant Cugat Sesgarrigues","Vilobí del Penedès", "Pontons",
+      "Sant Quintí de Mediona","Sant Pere de Riudebitlles","Sant Sadurní d'Anoia","Gelida",
+
+      "Orpí", "Cabrera d'Anoia","Castellfollit de Riubregós","Calonge de Segarra","Pujalt","Calaf",
+      "Sant Martí Sesgueioles","Veciana","Rubió", "Copons","Òdena","El Bruc", "Argençola","Montmaneu",
+      "Jorba", "Castellolí", "Igualada", "Sant Martí de Tous", "Santa Margarida de Montbui","La Pobla de Claramunt",
+      "Vilanova del Camí", "Piera", "Els Hostalets de Pierola","Vallbona d'Anoia", "Carme", "La Torre de Claramunt",
+      "Santa Maria de Miralles","Bellprat","Capellades", "La Llacuna","Masquefa","Els Prats de Rei","St. Pere Sallavinera",
+
+      "Llorenç del Penedès","La Bisbal del Penedès", "Sant Jaume de Domenys","Banyeres del Penedès",
+      "Masllorenç","Santa Oliva","Albinyana","Bellvei","Bonastre","El Vendrell","Calafell","Cunit","El Montmell",
+
+      "Canyelles","Olivella", "Sitges","Vilanova i la Geltrú","Cubelles","Sant Pere de Ribes"]
+
+117 de 119
+"Camp de Tarragona": [
+      "Querol","Aiguamúrcia",
+
+      "Cabra del Camp","Figuerola del Camp","El Pla de Santa Maria","Valls","Vila-rodona",
+      "El Pont d'Armentera","Mont-ral","La Riba","Alió","L'Arboç","Alcover","El Rourell",
+      "Els Garidells","Puigpelat","Rodonyà","Bràfim","Montferri","Vallmoll","Vilabella","Nulles",
+      "El Milà","La Masó",
+
+      "Vinyols i els Arcs","Prades","Capafonts","La Febró","Vilaplana","L'Albiol","Arbolí","Maspujols",
+      "Castellvell del Camp","Les Borjes del Camp","Almoster","Alforja","L'Aleixar","La Selva del Camp",
+      "Riudecols","Riudecanyes","Riudoms","L'Argentera","Montbrió del Camp","Vilanova d'Escornalbou",
+      "Reus","Duesaigües","Botarell","Colldejou","Mont-roig del Camp","Cambrils","Pratdip",
+      "Vandellòs i l'Hospitalet de l'Infant",
+
+      "Sarral","Solivella","Les Piles","Pontils","Senan","Rocafort de Queralt","Llorac",
+      "Forès","Vallfogona de Riucorb","Santa Coloma de Queralt","Savallà del Comtat",
+      "Passanant i Belltall","Conesa","Blancafort","L'Espluga de Francolí", "Montblanc",
+      "Barberà de la Conca","Vimbodí i Poblet","Pira","Vallclara","Vilanova de Prades","Vilaverd",
+
+      "Margalef","Ulldemolins","Cornudella de Montsant","La Morera de Montsant","Poboleda",
+      "La Morera de Montsant","La Bisbal de Falset","La Vilella Alta","Torroja del Priorat","Cabaçés",
+      "La Vilella Baixa","La Figuera","El Lloar","Gratallops","Pradell de la Teixeta","Porrera",
+      "La Torre de Fontaubella","El Molar","Falset","Bellmunt del Proiorat","El Masroig","Marçà",
+      "Els Guiamets","Capçanes",
+
+      "La Pobla de Mafumet", "Altafulla","Salou", "Tarragona","Els Pallaresos","El Catllar","Perafort",
+      "Vila-seca","Torredembarra","La Riera de Gaià","Constantí","El Morell","La Nou de Gaià",
+      "Roda de Berà","Creixell","La Pobla de Montornès","Vespella de Gaià","Vilallonga del Camp",
+      "La Secuita","Renau","Salomó"],
+

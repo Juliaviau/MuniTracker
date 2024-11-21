@@ -12,7 +12,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -23,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, FragmentLogin.class));
 
         // Cargar el fragmento inicial
-        loadFragment(new FragmentMapes());
+        loadFragment(new FragmentMapes(), true);  // Indicamos que es el fragmento inicial
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
 
@@ -31,10 +30,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 Fragment fragment = null;
-
                 int itemId = menuItem.getItemId();
                 if (itemId == R.id.mapaId) {
-                    fragment = new FragmentMapes();
+                    fragment = new FragmentMapes();  // Regresar al mapa
                 } else if (itemId == R.id.altreId) {
                     fragment = new FragmentPerfil();
                 } else if (itemId == R.id.estadistiquesId) {
@@ -44,23 +42,25 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if (fragment != null) {
-                    loadFragment(fragment);  // Reemplaza el fragmento actual
+                    loadFragment(fragment, true);  // Recargar fragmento seleccionado
                 }
-
                 return true;  // Indica que el item fue seleccionado
             }
         });
     }
 
-    private void loadFragment(Fragment fragment) {
-        // Reemplaza el fragmento actual
+    private void loadFragment(Fragment fragment, boolean reloadMap) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment);  // Siempre usa replace
+
+        // Si el fragmento es el de mapa, asegura que se recargue
+        if (fragment instanceof FragmentMapes && reloadMap) {
+            fragmentTransaction.addToBackStack(null);  // Asegura que el estado anterior sea restaurado
+        }
         fragmentTransaction.commit();
     }
 }
-
 
 
 

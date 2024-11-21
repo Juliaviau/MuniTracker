@@ -125,6 +125,7 @@ public class FragmentPerfil extends Fragment {
         }
     }
 
+    //todo: posar recyclerview i no linear
     private void mostrarMensajeSinVisitas(LinearLayout container) {
         TextView visitaTextView = new TextView(context);
         visitaTextView.setText(R.string.no_visitas_disponibles);
@@ -159,8 +160,21 @@ public class FragmentPerfil extends Fragment {
         municipiTextView.setText(visita.municipiId);
 
         visitaView.setOnClickListener(v -> showNotasDialog(visita));
+
+        // Añadir margen a la vista inflada
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+
+        // Establece márgenes (por ejemplo, 8 píxeles en todos los lados)
+        layoutParams.setMargins(0, 8, 0, 8);  // Ajusta los valores según lo que necesites
+
+        visitaView.setLayoutParams(layoutParams);
+
         return visitaView;
     }
+
 
     private void configurarBotonEliminarTot(Button eliminarTot, MunicipiViewModel viewModel) {
         eliminarTot.setOnClickListener(v -> {

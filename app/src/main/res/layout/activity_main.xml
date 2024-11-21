@@ -11,7 +11,7 @@
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="60dp"/>
+        android:layout_marginBottom="40dp"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
@@ -21,7 +21,7 @@
         android:background="@drawable/round_corner"
         app:menu="@menu/navigation_items"
         app:itemRippleColor="@color/blau_mapa"
-        app:itemTextColor="@color/icons_color"
+        app:itemTextColor="@color/text_color"
         app:itemIconTint="@color/icons_color" />
 
 </RelativeLayout>

@@ -11,8 +11,25 @@
 
     <color name="lilafosc">#60526e</color>
 
-    <color name="lleg25">#76c7c0</color>
+
+    <color name="lleg25">#fff7b2</color> <!-- Groc molt clar (subtil, fàcil de veure) -->
+    <color name="lleg50">#ffd966</color> <!-- Groc viu, però no massa cridaner -->
+    <color name="lleg75">#ffa631</color> <!-- Taronja clar càlid -->
+    <color name="lleg99">#d98a2d</color> <!-- Taronja-marró suau -->
+    <color name="llegComplet">#a65e2e</color> <!-- Marró ataronjat intens -->
+
+
+
+
+
+
+
+
+
+
+    <!--color name="lleg25">#76c7c0</color>
     <color name="lleg50">#4ea8de</color>
     <color name="lleg75">#357ab7</color>
-    <color name="llegComplet">#1b3a5f</color>
+    <color name="llegComplet">#251B5F</color>
+    <color name="llegCompletTTT">#1b3a5f</color-->
 </resources>

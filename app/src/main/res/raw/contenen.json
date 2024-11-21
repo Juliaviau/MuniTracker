@@ -512,10 +512,16 @@
       "La Pobla de Massaluca","La Fatarella","Vilalba dels Arcs","Batea","Corbera d'Ebre","Gandesa",
       "El Pinell de Brai","Bot","El Prat del Comte","Arnes","Horta de Sant Joan","Caseres"],
     "Camp de Tarragona": [
-      "Querol","Cabra del Camp","Figuerola del Camp","El Pla de Santa Maria","Valls","Vila-rodona",
-      "Aiguamúrcia","El Pont d'Armentera","Mont-ral","La Riba","Alió","L'Arboç","Alcover","El Rourell",
-      "Els Garidells","Puigpelat","Rodonyà","Bràfim","Montferri","Vallmoll","Vilabella","Nulles",
-      "El Milà","La Masó",
+
+      "Aiguamúrcia","Alcover","Alió","Bràfim","Cabra del Camp","Figuerola del Camp","Mont-ral",
+      "Montferri","Nulles","Puigpelat","Querol","Rodonyà","Vallmoll","Valls","Vila-rodona",
+      "Vilabella","El Milà","El Pla de Santa Maria","El Pont d'Armentera","El Rourell",
+      "Els Garidells", "La Masó","La Riba",
+
+      "L'Arboç",
+
+
+
 
       "Vinyols i els Arcs","Prades","Capafonts","La Febró","Vilaplana","L'Albiol","Arbolí","Maspujols",
       "Castellvell del Camp","Les Borjes del Camp","Almoster","Alforja","L'Aleixar","La Selva del Camp",
@@ -523,21 +529,29 @@
       "Reus","Duesaigües","Botarell","Colldejou","Mont-roig del Camp","Cambrils","Pratdip",
       "Vandellòs i l'Hospitalet de l'Infant",
 
+
+
+
       "Sarral","Solivella","Les Piles","Pontils","Senan","Rocafort de Queralt","Llorac",
       "Forès","Vallfogona de Riucorb","Santa Coloma de Queralt","Savallà del Comtat",
       "Passanant i Belltall","Conesa","Blancafort","L'Espluga de Francolí", "Montblanc",
       "Barberà de la Conca","Vimbodí i Poblet","Pira","Vallclara","Vilanova de Prades","Vilaverd",
 
-      "Margalef","Ulldemolins","Cornudella de Montsant","La Morera de Montsant","Poboleda",
-      "La Morera de Montsant","La Bisbal de Falset","La Vilella Alta","Torroja del Priorat","Cabaçés",
+
+      "Margalef","Ulldemolins","Cornudella de Montsant","La Morera de Montsant",
+      "La Bisbal de Falset","Poboleda","La Vilella Alta","Torroja del Priorat","Cabaçés",
       "La Vilella Baixa","La Figuera","El Lloar","Gratallops","Pradell de la Teixeta","Porrera",
-      "La Torre de Fontaubella","El Molar","Falset","Bellmunt del Proiorat","El Masroig","Marçà",
+      "La Torre de Fontaubella","El Molar","Falset","Bellmunt del Priorat","El Masroig","Marçà",
       "Els Guiamets","Capçanes",
+
+
+
 
       "La Pobla de Mafumet", "Altafulla","Salou", "Tarragona","Els Pallaresos","El Catllar","Perafort",
       "Vila-seca","Torredembarra","La Riera de Gaià","Constantí","El Morell","La Nou de Gaià",
       "Roda de Berà","Creixell","La Pobla de Montornès","Vespella de Gaià","Vilallonga del Camp",
       "La Secuita","Renau","Salomó"],
+
     "Catalunya Central": [
       "El Pont de Vilomara i Rocafort","Navarcles","Castellbell i el Vilar","Sant Feliu Sasserra","Gaià",
       "Cardona", "Navàs", "Avinyó","Sallent","Balsareny", "Castellnou de Bages","Sant Mateu de Bages",
@@ -684,6 +698,9 @@
 
       "Llorenç del Penedès","La Bisbal del Penedès", "Sant Jaume de Domenys","Banyeres del Penedès",
       "Masllorenç","Santa Oliva","Albinyana","Bellvei","Bonastre","El Vendrell","Calafell","Cunit","El Montmell",
+
+
+
       "Canyelles","Olivella", "Sitges","Vilanova i la Geltrú","Cubelles","Sant Pere de Ribes"]
   },
 

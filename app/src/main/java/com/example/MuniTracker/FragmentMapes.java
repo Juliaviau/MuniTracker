@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.icu.text.DecimalFormat;
@@ -25,7 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -38,7 +38,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -46,38 +45,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.example.MuniTracker.databinding.FragmentMapesBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*public class FragmentMapes extends Fragment {
+public class FragmentMapes extends Fragment {
 
     private WebView webView;
     private Context context;
@@ -87,7 +66,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
     MapesHelper mapesHelper;
     String tipusMapa = "m";
     BottomSheetDialog bottomSheetDialog;
-    String colorVisitat = "rgb(27, 58, 95)";
+    String colorVisitat = "rgb(166, 94, 46)";
 
     private static final String TERRITORY_TYPE_MUNICIPALITY = "m";
     private static final String TERRITORY_TYPE_COMARCA = "c";
@@ -100,6 +79,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
     private LinearLayout layoutLlegenda;
     private MunicipiViewModel viewModel;
 
+
+    private Map<String, String> cachedSVGs = new HashMap<>();
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -110,12 +93,18 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = FragmentMapesBinding.inflate(getLayoutInflater());
+        // Precargar mapas en memoria
+        cachedSVGs.put(TERRITORY_TYPE_MUNICIPALITY, obtenirSVG(R.raw.municipis));
+        cachedSVGs.put(TERRITORY_TYPE_COMARCA, obtenirSVG(R.raw.comarquesactu));
+        cachedSVGs.put(TERRITORY_TYPE_VEGUERIA, obtenirSVG(R.raw.vegueries));
+        cachedSVGs.put(TERRITORY_TYPE_PROVINCIA, obtenirSVG(R.raw.provincies));
+        setRetainInstance(true); // Mantener estado entre configuraciones
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        pintarMunicipisVisitats();
+        //pintarMunicipisVisitats();
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -149,18 +138,26 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
         layoutLlegenda = view.findViewById(R.id.legendLayout);
         layoutLlegenda.setVisibility(View.GONE);
 
-        carregarMapa(R.raw.municipis);
+        carregarMapa(TERRITORY_TYPE_MUNICIPALITY);
 
         webView.setWebViewClient(new WebViewClient() {
+
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                pintarMunicipisVisitats();
+                Log.i("juuuuuuuLIAAAAA","ESTIC AL setWebViewClient*****333333333***********" + tipusMapa);
+                //new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    Log.i("juuuuuuuLIAAAAA","ESTIC AL setWebViewClient********************************" + tipusMapa);
+                    if (tipusMapa.equals(TERRITORY_TYPE_MUNICIPALITY)) {
+                        Log.i("juuuuuuuLIAAAAA","ESTIC AL setWebViewClient******dins**************************");
+                        pintarMunicipisVisitats();
+                    }
+                //}, 100);
             }
         });
 
         webView.addJavascriptInterface(new WebAppInterface(), "Android");
-        webView.setWebViewClient(new WebViewClient());
+        //webView.setWebViewClient(new WebViewClient());
 
         SearchView buscador = view.findViewById(R.id.searchView);
         llistaResultatsBuscador = view.findViewById(R.id.resultsRecyclerView);
@@ -179,10 +176,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
         llistaResultatsBuscador.setAdapter(adapterMunicipis);
         adaptadorActual = adapterMunicipis;
 
-        setupTerritoryButton(binding.btProvincies, R.raw.provincies, adapterProvincies, TERRITORY_TYPE_PROVINCIA);
-        setupTerritoryButton(binding.btVegueries, R.raw.vegueries, adapterVegueries, TERRITORY_TYPE_VEGUERIA);
-        setupTerritoryButton(binding.btComarques, R.raw.comarquesactu, adapterComarques, TERRITORY_TYPE_COMARCA);
-        setupTerritoryButton(binding.btMunicipis, R.raw.municipis, adapterMunicipis, TERRITORY_TYPE_MUNICIPALITY);
+        setupTerritoryButton(binding.btProvincies, TERRITORY_TYPE_PROVINCIA, adapterProvincies);
+        setupTerritoryButton(binding.btVegueries, TERRITORY_TYPE_VEGUERIA, adapterVegueries);
+        setupTerritoryButton(binding.btComarques, TERRITORY_TYPE_COMARCA, adapterComarques);
+        setupTerritoryButton(binding.btMunicipis, TERRITORY_TYPE_MUNICIPALITY, adapterMunicipis);
 
         buscador.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -217,31 +214,37 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
         return view;
     }
 
-    private void setupTerritoryButton(Button button, int mapResource, SearchAdapter adapter, String territoryType) {
+    private void setupTerritoryButton(Button button, String territoryType, SearchAdapter adapter) {
         button.setOnClickListener(v -> {
-            carregarMapa(mapResource);
+            tipusMapa = territoryType;
+            carregarMapa(territoryType); // Usar mapas precargados
+            adaptadorActual = adapter;
+            llistaResultatsBuscador.setAdapter(adaptadorActual);
+
             webView.setWebViewClient(new WebViewClient() {
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
                     layoutLlegenda.setVisibility(View.VISIBLE);
-                    adaptadorActual = adapter;
-                    llistaResultatsBuscador.setAdapter(adaptadorActual);
-                    // ... (Call appropriate painting method based on territoryType)
-                    if (territoryType.equals(TERRITORY_TYPE_MUNICIPALITY)) {
-                        pintarMunicipisVisitats();
-                    } else if (territoryType.equals(TERRITORY_TYPE_COMARCA)) {
-                        pintarComarquesPerVisites();
-                    } else if (territoryType.equals(TERRITORY_TYPE_VEGUERIA)) {
-                        pintarVegueriesPerVisites();
-                    } else if (territoryType.equals(TERRITORY_TYPE_PROVINCIA)) {
-                        pintarProvinciesPerVisites();
+                    switch (territoryType) {
+                        case TERRITORY_TYPE_MUNICIPALITY:
+                            pintarMunicipisVisitats();
+                            break;
+                        case TERRITORY_TYPE_COMARCA:
+                            pintarComarquesPerVisites();
+                            break;
+                        case TERRITORY_TYPE_VEGUERIA:
+                            pintarVegueriesPerVisites();
+                            break;
+                        case TERRITORY_TYPE_PROVINCIA:
+                            pintarProvinciesPerVisites();
+                            break;
                     }
-                    FragmentMapes.this.territoryType = territoryType;
                 }
             });
         });
     }
+
 
     private void setAdapterListeners(SearchAdapter adapter, SearchView searchView, RecyclerView resultsRecyclerView) {
         adapter.setOnItemClickListener(municipi -> {
@@ -271,24 +274,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
         });
     }
 
-    private void carregarMapa(int mapaSVG) {
-        String contingutSVG = obtenirSVG(mapaSVG);
+    private void carregarMapa(String territoryType) {
+        String contingutSVG = cachedSVGs.get(territoryType);
         if (contingutSVG != null) {
             String dadesSVG = "<html><body style=\"margin: 0; padding: 0;\">" + contingutSVG + "</body></html>";
             webView.loadDataWithBaseURL(null, dadesSVG, "text/html", "UTF-8", null);
-            if (mapaSVG == R.raw.municipis) {
-                tipusMapa = TERRITORY_TYPE_MUNICIPALITY;
-                webView.setWebViewClient(new WebViewClient() {
-                    @Override
-                    public void onPageFinished(WebView view, String url) {
-                        super.onPageFinished(view, url);
-                        pintarMunicipisVisitats();
-                        inicialitzarMapa();
-                    }
-                });
-            }
         }
     }
+
 
     private void inicialitzarMapa() {
         webView.evaluateJavascript(
@@ -454,7 +447,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
                     // actualizarBottomSheet();
 
                     canviarColorSVG(visita.municipiId, colorVisitat);
-                    carregarMapa(R.raw.municipis);
+                    carregarMapa(TERRITORY_TYPE_MUNICIPALITY);
 
                     viewModel.setVisitaEliminada(false);
 
@@ -549,7 +542,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
         NestedScrollView scroll = bottomSheetView.findViewById(R.id.scrollView);
         View viewBottom = bottomSheetView.findViewById(R.id.viewbottom);
 
-        boolean municipiVisitat = comparaColor(originalColor, "rgb(27, 58, 95)");
+        boolean municipiVisitat = comparaColor(originalColor, colorVisitat);//rgb(27, 58, 95) es el blau fosc
         MunicipiViewModel viewModel = new ViewModelProvider(this, viewModelFactory).get(MunicipiViewModel.class);
 
         if (municipiVisitat) {
@@ -664,25 +657,35 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
         }
     }
     private void pintarMunicipisVisitats() {
-        MunicipiViewModel viewModel = new ViewModelProvider(FragmentMapes.this).get(MunicipiViewModel.class);
+        MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
         viewModel.obtenirMunicipisVisitats().observe(getViewLifecycleOwner(), municipisVisitats -> {
-            Log.d("pintarMunicipisVisitats", "Pintant de nou els muncipis");
-            for (Municipi municipi : municipisVisitats) {
-                canviarColorSVG(municipi.id,  String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(context, R.color.llegComplet))));
+            if (municipisVisitats != null) {
+                for (Municipi municipi : municipisVisitats) {
+                    canviarColorSVG(municipi.id, String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(context, R.color.llegComplet))));
+                }
             }
         });
     }
+
+
 
 
     private boolean comparaColor (String color1, String color2) {
         return color1.equalsIgnoreCase(color2);
     }
 
+    //0
+    //0 25
+    //25 50
+    //50 75
+    //75 100
+    //100
     public int obtenirColorPerPercentatge(double percentatge) {
         if (percentatge == 0.0) return ContextCompat.getColor(context, R.color.blau_mapa);
-        else if (percentatge < 25.0) return ContextCompat.getColor(context, R.color.lleg25);
-        else if (percentatge < 50.0) return ContextCompat.getColor(context, R.color.lleg50);
-        else if (percentatge < 75.0) return ContextCompat.getColor(context, R.color.lleg75);
+        else if (percentatge <= 25.0) return ContextCompat.getColor(context, R.color.lleg25);
+        else if (percentatge <= 50.0) return ContextCompat.getColor(context, R.color.lleg50);
+        else if (percentatge <= 75.0) return ContextCompat.getColor(context, R.color.lleg75);
+        else if (percentatge < 100.0) return ContextCompat.getColor(context, R.color.lleg99);
         else return ContextCompat.getColor(context, R.color.llegComplet);
     }
 
@@ -716,6 +719,25 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
         webView.evaluateJavascript(jsCode, null);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Restaurar el estado de los municipios visitados
+        restoreVisitedMunicipalities();
+
+        // Recargar el WebView si es necesario
+        if (webView != null) {
+            webView.reload();
+        }
+    }
+    private void restoreVisitedMunicipalities() {
+        // Restaurar la lista de municipios desde SharedPreferences o alguna fuente persistente
+        SharedPreferences preferences = getActivity().getSharedPreferences("MunicipalitiesPrefs", Context.MODE_PRIVATE);
+        String visitedMunicipalities = preferences.getString("visited_municipalities", "");
+        // Aquí puedes usar la lista de municipios para pintarlos nuevamente en el mapa
+    }
+
 
     private List<String> obtenirLlistaSegonsTipus() {
         switch (tipusMapa) {
@@ -741,5 +763,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
         return Arrays.asList(
                 "Província de Barcelona","Província de Girona","Província de Lleida","Província de Tarragona");
     }
-}*/
+
+
+}
 //859 728
