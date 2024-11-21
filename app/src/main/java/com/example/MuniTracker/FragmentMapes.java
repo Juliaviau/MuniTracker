@@ -6,12 +6,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.icu.text.DecimalFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.animation.DecelerateInterpolator;
@@ -205,6 +207,32 @@ public class FragmentMapes extends Fragment {
                 return true;
             }
         });
+
+// Esconder la lista al pulsar la cruz del SearchView
+        buscador.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                llistaResultatsBuscador.setVisibility(View.GONE); // Oculta la lista
+                return false;
+            }
+        });
+
+// Esconder la lista cuando se hace clic fuera del SearchView
+        //TODO: NO FA RES AQUESTA PART. EN TOCAR LA PANTALLA AMAGR LA LLISTA
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    Rect outRect = new Rect();
+                    buscador.getGlobalVisibleRect(outRect);  // Obtén el rectángulo de la vista del SearchView
+                    if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
+                        llistaResultatsBuscador.setVisibility(View.GONE); // Ocultar la lista si el toque está fuera del SearchView
+                    }
+                }
+                return false;  // No consumimos el toque
+            }
+        });
+
 
         setAdapterListeners(adapterMunicipis, buscador,llistaResultatsBuscador);
         setAdapterListeners(adapterComarques, buscador, llistaResultatsBuscador);

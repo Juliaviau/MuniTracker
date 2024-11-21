@@ -1,14 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#DCD9D9"
+    android:orientation="vertical"
     tools:context=".FragmentConfiguracio">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+        <TextView
+            android:layout_marginTop="150dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/hello_blank_fragment"
+            android:layout_margin="20dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttona"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:background="@drawable/estilboto"
+            android:text="Canviar mode app" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttoninici"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/estilboto"
+
+            android:layout_margin="20dp"
+            android:text="Anar a la pantalla d'inici" />
+
+
+
+</LinearLayout>
