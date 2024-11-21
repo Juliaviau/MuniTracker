@@ -1,14 +1,22 @@
+
+
 <resources>
-    <string name="app_name">MuniTracker</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome!"</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
+<!-- General -->
+<string name="app_name">MuniTracker</string>
+
+<!-- FragmentPerfil -->
+<string name="no_visitas_disponibles">No hi ha cap visita per mostrar</string>
+<string name="eliminar_datos_titulo">Confirmació per eliminar totes les dades</string>
+<string name="eliminar_datos_mensaje">Estàs segur que vols eliminar totes les dades? Aquesta acció no es pot desfer i les dades no es podran recuperar.</string>
+<string name="eliminar">Eliminar</string>
+<string name="cancelar">Cancel·lar</string>
+<string name="datos_eliminados">Dades eliminades correctament</string>
+
+<!-- Dialog Visita -->
+<string name="visita_titulo">Visita a %1$s</string>
+<string name="no_notas_disponibles">No hi ha notes guardades</string>
+<string name="eliminando">Eliminant...</string>
+
+
+    <string name="hello_blank_fragment">hello_blank_fragment...</string>
 </resources>

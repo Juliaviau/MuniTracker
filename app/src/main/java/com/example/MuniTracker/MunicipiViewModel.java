@@ -115,7 +115,6 @@ public class MunicipiViewModel extends AndroidViewModel {
     public void updateVisita(Visita visita) {
         municipiRepository.updateVisita(visita);
     }
-
     public LiveData<Boolean> getVisitaEliminada() {
         return municipiRepository.getVisitaEliminada();
     }

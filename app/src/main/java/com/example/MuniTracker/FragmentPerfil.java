@@ -41,16 +41,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 
-
 public class FragmentPerfil extends Fragment {
 
-    // Veure totes les visites ordenades segons data
-    // Eliminar totes les dades
-    // ??
-
-    FragmentPerfilBinding binding;
+    private FragmentPerfilBinding binding;
     private Context context;
 
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
@@ -62,14 +58,16 @@ public class FragmentPerfil extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = FragmentPerfilBinding.inflate(getLayoutInflater());
+        configurarStatusBar();
+    }
 
+    private void configurarStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Activity activity = getActivity();
             if (activity != null) {
                 Window window = activity.getWindow();
                 window.setStatusBarColor(ContextCompat.getColor(activity, R.color.fons));
-                View decorView = window.getDecorView();
-                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
             }
         }
     }
@@ -77,224 +75,182 @@ public class FragmentPerfil extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
-
         MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
-        LinearLayout visitesContainer = view.findViewById(R.id.visitasContainer);
+
+        LinearLayout visitesListContainer = view.findViewById(R.id.visitasContainer);
         SearchView searchView = view.findViewById(R.id.searchViewperfil);
-
-        viewModel.getAllVisitsOrderByData().observe(getViewLifecycleOwner(), visites -> {
-            List<Visita> filteredList = new ArrayList<>(visites);
-
-            // Funció per actualitzar la vista
-            Runnable updateVisites = () -> {
-                visitesContainer.removeAllViews();
-
-                if (filteredList.isEmpty()) {
-                    TextView visitaTextView = new TextView(context);
-                    visitaTextView.setText("No hi ha cap visita per mostrar");
-                    visitaTextView.setPadding(16, 16, 16, 16);
-                    visitaTextView.setTextSize(16);
-                    visitaTextView.setGravity(Gravity.CENTER);
-                    visitaTextView.setTextColor(ContextCompat.getColor(context, R.color.black));
-                    visitaTextView.setTypeface(null, Typeface.ITALIC);
-
-                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                    );
-                    layoutParams.gravity = Gravity.CENTER;
-                    layoutParams.setMargins(8, 8, 8, 8);
-                    visitaTextView.setLayoutParams(layoutParams);
-
-                    visitesContainer.addView(visitaTextView);
-                } else {
-                    for (Visita visita : filteredList) {
-                        View visitaView = LayoutInflater.from(context).inflate(R.layout.item_visita_perfil, visitesContainer, false);
-
-                        TextView dataTextView = visitaView.findViewById(R.id.datavis);
-                        TextView municipiTextView = visitaView.findViewById(R.id.municipivis);
-                        ImageView contenotes = visitaView.findViewById(R.id.contenotes);
-
-                        if (visita.notes.equals("")) {
-                            contenotes.setVisibility(View.GONE);
-                        } else {
-                            contenotes.setVisibility(View.VISIBLE);
-                        }
-
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                        String formattedDate = sdf.format(new Date(visita.dataVisita));
-
-                        dataTextView.setText(formattedDate);
-                        municipiTextView.setText(visita.municipiId);
-
-                        visitaView.setOnClickListener(v -> {
-                            showNotasDialog(visita);
-                        });
-                        visitesContainer.addView(visitaView);
-                    }
-                }
-            };
-
-            // Filtrar visites amb el SearchView
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    return false;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    filteredList.clear();
-                    for (Visita visita : visites) {
-                        if (visita.municipiId.toLowerCase().contains(newText.toLowerCase())) {
-                            filteredList.add(visita);
-                        }
-                    }
-                    updateVisites.run();
-                    return true;
-                }
-            });
-
-            // Inicialitzar la vista
-            updateVisites.run();
-        });
-
         Button eliminarTot = view.findViewById(R.id.eliminarTot);
-        eliminarTot.setOnClickListener(v -> {
-            new AlertDialog.Builder(context)
-                    .setTitle("Confirmació per eliminar totes les dades")
-                    .setMessage("Estàs segur que vols eliminar totes les dades? Aquesta acció no es pot desfer i les dades no es podran recuperar.")
-                    .setPositiveButton("Eliminar", (dialog, which) -> {
-                        viewModel.eliminarTotMunicipiVisites();
-                        Toast.makeText(context, "Dades eliminades correctament", Toast.LENGTH_SHORT).show();
-                    })
-                    .setNegativeButton("Cancel·lar", (dialog, which) -> {
-                        dialog.dismiss();
-                    })
-                    .show();
-        });
+
+        observarVisites(viewModel, visitesListContainer, searchView);
+        configurarBotonEliminarTot(eliminarTot, viewModel);
 
         return view;
     }
 
-    private void showNotasDialog(Visita visita) {
+    private void observarVisites(MunicipiViewModel viewModel, LinearLayout visitesListContainer, SearchView searchView) {
+        viewModel.getAllVisitsOrderByData().observe(getViewLifecycleOwner(), visites -> {
+            List<Visita> filteredList = new ArrayList<>(visites);
 
+            Runnable updateVisites = () -> actualizarVistaVisites(filteredList, visitesListContainer);
+            configurarSearchView(searchView, visites, filteredList, updateVisites);
+            updateVisites.run();
+        });
+    }
+
+    private void configurarSearchView(SearchView searchView, List<Visita> visites, List<Visita> filteredList, Runnable updateVisites) {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filteredList.clear();
+                filteredList.addAll(visites.stream()
+                        .filter(visita -> visita.municipiId.toLowerCase().contains(newText.toLowerCase()))
+                        .toList());
+                updateVisites.run();
+                return true;
+            }
+        });
+    }
+
+    private void actualizarVistaVisites(List<Visita> filteredList, LinearLayout visitesListContainer) {
+        visitesListContainer.removeAllViews();
+        if (filteredList.isEmpty()) {
+            mostrarMensajeSinVisitas(visitesListContainer);
+        } else {
+            filteredList.forEach(visita -> visitesListContainer.addView(crearVistaVisita(visita)));
+        }
+    }
+
+    private void mostrarMensajeSinVisitas(LinearLayout container) {
+        TextView visitaTextView = new TextView(context);
+        visitaTextView.setText(R.string.no_visitas_disponibles);
+        visitaTextView.setPadding(16, 16, 16, 16);
+        visitaTextView.setTextSize(16);
+        visitaTextView.setGravity(Gravity.CENTER);
+        visitaTextView.setTextColor(ContextCompat.getColor(context, R.color.black));
+        visitaTextView.setTypeface(null, Typeface.ITALIC);
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        layoutParams.gravity = Gravity.CENTER;
+        layoutParams.setMargins(8, 8, 8, 8);
+        visitaTextView.setLayoutParams(layoutParams);
+
+        container.addView(visitaTextView);
+    }
+
+    private View crearVistaVisita(Visita visita) {
+        View visitaView = LayoutInflater.from(context).inflate(R.layout.item_visita_perfil, null, false);
+
+        TextView dataTextView = visitaView.findViewById(R.id.datavis);
+        TextView municipiTextView = visitaView.findViewById(R.id.municipivis);
+        ImageView notesIcona = visitaView.findViewById(R.id.contenotes);
+
+        notesIcona.setVisibility(visita.notes.isEmpty() ? View.GONE : View.VISIBLE);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        dataTextView.setText(sdf.format(new Date(visita.dataVisita)));
+        municipiTextView.setText(visita.municipiId);
+
+        visitaView.setOnClickListener(v -> showNotasDialog(visita));
+        return visitaView;
+    }
+
+    private void configurarBotonEliminarTot(Button eliminarTot, MunicipiViewModel viewModel) {
+        eliminarTot.setOnClickListener(v -> {
+            new AlertDialog.Builder(context)
+                    .setTitle(R.string.eliminar_datos_titulo)
+                    .setMessage(R.string.eliminar_datos_mensaje)
+                    .setPositiveButton(R.string.eliminar, (dialog, which) -> {
+                        viewModel.eliminarTotMunicipiVisites();
+                        Toast.makeText(context, R.string.datos_eliminados, Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton(R.string.cancelar, (dialog, which) -> dialog.dismiss())
+                    .show();
+        });
+    }
+
+    private void showNotasDialog(Visita visita) {
         View view = getLayoutInflater().inflate(R.layout.dialog_visita, null);
 
         TextView titolNotaTextView = view.findViewById(R.id.titolnota);
-        titolNotaTextView.setText("Visita a " + visita.municipiId);
+        titolNotaTextView.setText(getString(R.string.visita_titulo, visita.municipiId));
 
         TextView dataVisitaTextView = view.findViewById(R.id.datavisita);
-
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        String formattedDate = sdf.format(new Date(visita.dataVisita));
-        dataVisitaTextView.setText(formattedDate);
+        dataVisitaTextView.setText(sdf.format(new Date(visita.dataVisita)));
 
+        configurarVistaNotas(view, visita);
+
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setView(view)
+                .create();
+
+        configurarBotonesDialog(view, dialog, visita);
+
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.show();
+    }
+
+    private void configurarVistaNotas(View view, Visita visita) {
         TextView notesTextView = view.findViewById(R.id.succesdesc);
-        notesTextView.setText(visita.notes);
-
         ScrollView scrollView = view.findViewById(R.id.scrollView);
 
-        final int midaMaxima = (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics());
+        notesTextView.setText(visita.notes.isEmpty() ? getString(R.string.no_notas_disponibles) : visita.notes);
 
         notesTextView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 notesTextView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
-                if (notesTextView.getHeight() > midaMaxima) {
-                    scrollView.getLayoutParams().height = midaMaxima;
-                } else if (visita.notes.equals("")) {
-                    notesTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                    scrollView.getLayoutParams().height = notesTextView.getHeight() + 100;
-                    notesTextView.setText("No hi ha notes guardades");
-                } else {
-                    scrollView.getLayoutParams().height = notesTextView.getHeight();
-                }
+                int maxScrollHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics());
+                scrollView.getLayoutParams().height = Math.min(notesTextView.getHeight(), maxScrollHeight);
                 scrollView.requestLayout();
             }
         });
+    }
 
-        ImageButton elimboto = view.findViewById(R.id.btnEliminar);
+    private void configurarBotonesDialog(View view, AlertDialog dialog, Visita visita) {
         ImageButton editboto = view.findViewById(R.id.btnModificar);
+        ImageButton elimboto = view.findViewById(R.id.btnEliminar);
+        AppCompatImageButton tancarButton = view.findViewById(R.id.btntancar);
         MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
 
-        AppCompatImageButton tancarButton = view.findViewById(R.id.btntancar);
-
-        //On es mostra?
-        ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage("Eliminant...");
-        progressDialog.setCancelable(false);
-
-        AlertDialog dialog = new AlertDialog.Builder(context)
-                .setView(view)
-                .create();
-
-        editboto.setOnClickListener(v -> {
-            //dialog.dismiss();
-
-            // Pass the original visita and data to the dialog fragment
-            VisitaDialogFragment bottomSheet = new VisitaDialogFragment(visita.notes, visita.dataVisita, (dataModificada, notesModificades) -> {
-                // Update the visita object with the modified values
-                visita.setDataVisita(dataModificada);
-                visita.setNotes(notesModificades);
-                viewModel.updateVisita(visita); // Assuming afegirVisita handles updates as well
-                dialog.dismiss();
-            });
-
-            bottomSheet.show(getParentFragmentManager(), "AgregarVisitaBottomSheet");
-        });
-
-        /*editboto.setOnClickListener(v -> {
-
-            dialog.dismiss();
-
-            VisitaDialogFragment bottomSheet = new VisitaDialogFragment((data, notes) -> {
-
-                //Visita visita = new Visita(municipiId, data, notes);
-                Visita visitanova = new Visita(visita.municipiId, data, notes);
-                viewModel.afegirVisita(visita);
-
-                //pintarMunicipisVisitats();
-            });
-
-            bottomSheet.show(getParentFragmentManager(), "AgregarVisitaBottomSheet");
-
-            //bottomSheetDialog.dismiss();
-        });*/
-
-
-
-
-        /*editboto.setOnClickListener(v-> {
-
-            //mostrar les dades i boto per guardar canvis, que es posaran com a nous a la visita que es crei nova
-            Visita visitanova = new Visita(visita.municipiId, visita.dataVisita, visita.notes);
-
-            viewModel.afegirVisita(visitanova);
-        });*/
-
-        elimboto.setOnClickListener(v -> {
-            progressDialog.show();
-            viewModel.deleteVisita(visita);
-            viewModel.getVisitaEliminada().observe(getViewLifecycleOwner(), eliminada -> {
-
-                if (eliminada) {
-                    progressDialog.dismiss();
-                    //Toast.makeText(context, "Visita eliminada correctament", Toast.LENGTH_SHORT).show();
-                    viewModel.setVisitaEliminada(false);
-                    dialog.dismiss();
-
-                } else {
-                    //Toast.makeText(context, "No s'ha pogut eliminar la visita", Toast.LENGTH_SHORT).show();
-                }
-            });
-            // bottomSheetDialog.dismiss();
-        });
+        editboto.setOnClickListener(v -> editarVisita(visita, dialog));
+        elimboto.setOnClickListener(v -> eliminarVisita(visita, dialog, viewModel));
         tancarButton.setOnClickListener(v -> dialog.dismiss());
+    }
 
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        dialog.show();
+    private void editarVisita(Visita visita, AlertDialog dialog) {
+        VisitaDialogFragment bottomSheet = new VisitaDialogFragment(visita.notes, visita.dataVisita, (dataModificada, notesModificades) -> {
+            visita.setDataVisita(dataModificada);
+            visita.setNotes(notesModificades);
+            new ViewModelProvider(this).get(MunicipiViewModel.class).updateVisita(visita);
+            dialog.dismiss();
+        });
+
+        bottomSheet.show(getParentFragmentManager(), "AgregarVisitaBottomSheet");
+    }
+
+    private void eliminarVisita(Visita visita, AlertDialog dialog, MunicipiViewModel viewModel) {
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage(getString(R.string.eliminando));
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        viewModel.deleteVisita(visita);
+        viewModel.getVisitaEliminada().observe(getViewLifecycleOwner(), eliminada -> {
+            if (eliminada) {
+                progressDialog.dismiss();
+                viewModel.setVisitaEliminada(false);
+                dialog.dismiss();
+            }
+        });
     }
 }

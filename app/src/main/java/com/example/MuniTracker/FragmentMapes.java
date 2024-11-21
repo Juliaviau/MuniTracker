@@ -34,6 +34,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,7 +48,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,7 +60,24 @@ import android.widget.Toast;
 import com.example.MuniTracker.databinding.FragmentMapesBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
-public class FragmentMapes extends Fragment {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*public class FragmentMapes extends Fragment {
 
     private WebView webView;
     private Context context;
@@ -68,6 +88,17 @@ public class FragmentMapes extends Fragment {
     String tipusMapa = "m";
     BottomSheetDialog bottomSheetDialog;
     String colorVisitat = "rgb(27, 58, 95)";
+
+    private static final String TERRITORY_TYPE_MUNICIPALITY = "m";
+    private static final String TERRITORY_TYPE_COMARCA = "c";
+    private static final String TERRITORY_TYPE_VEGUERIA = "v";
+    private static final String TERRITORY_TYPE_PROVINCIA = "p";
+
+    private String territoryType = TERRITORY_TYPE_MUNICIPALITY;
+    private SearchAdapter adaptadorActual;
+    private RecyclerView llistaResultatsBuscador;
+    private LinearLayout layoutLlegenda;
+    private MunicipiViewModel viewModel;
 
     @Override
     public void onAttach(Context context) {
@@ -90,8 +121,11 @@ public class FragmentMapes extends Fragment {
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_mapes, container, false);
+        binding = FragmentMapesBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+        context = requireContext();
+        //View view = inflater.inflate(R.layout.fragment_mapes, container, false);
+        viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Activity activity = getActivity();
@@ -112,7 +146,7 @@ public class FragmentMapes extends Fragment {
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setUseWideViewPort(true);
 
-        LinearLayout layoutLlegenda = view.findViewById(R.id.legendLayout);
+        layoutLlegenda = view.findViewById(R.id.legendLayout);
         layoutLlegenda.setVisibility(View.GONE);
 
         carregarMapa(R.raw.municipis);
@@ -129,7 +163,7 @@ public class FragmentMapes extends Fragment {
         webView.setWebViewClient(new WebViewClient());
 
         SearchView buscador = view.findViewById(R.id.searchView);
-        RecyclerView llistaResultatsBuscador = view.findViewById(R.id.resultsRecyclerView);
+        llistaResultatsBuscador = view.findViewById(R.id.resultsRecyclerView);
         llistaResultatsBuscador.setLayoutManager(new LinearLayoutManager(context));
 
         List<String> llistaMunicipis = mapesHelper.obtenirNomsMunicipisTotesComarques();
@@ -143,62 +177,12 @@ public class FragmentMapes extends Fragment {
         SearchAdapter adapterProvincies = new SearchAdapter(llistaProvincies);
 
         llistaResultatsBuscador.setAdapter(adapterMunicipis);
-        final SearchAdapter[] adaptadorActual = {adapterMunicipis};
+        adaptadorActual = adapterMunicipis;
 
-        Button botoProvincies = view.findViewById(R.id.btProvincies);
-        Button botoVegueries = view.findViewById(R.id.btVegueries);
-        Button botoComarques = view.findViewById(R.id.btComarques);
-        Button botoMunicipis = view.findViewById(R.id.btMunicipis);
-
-        botoProvincies.setOnClickListener(v -> {
-            carregarMapa(R.raw.provincies);
-            webView.setWebViewClient(new WebViewClient() {
-                @Override
-                public void onPageFinished(WebView view, String url) {
-                    super.onPageFinished(view, url);
-                    layoutLlegenda.setVisibility(View.VISIBLE);
-                    adaptadorActual[0] = adapterProvincies;
-                    llistaResultatsBuscador.setAdapter(adaptadorActual[0]);
-                    pintarProvinciesPerVisites();
-                    tipusMapa = "p";
-                }
-            });
-        });
-        botoVegueries.setOnClickListener(v -> {
-            carregarMapa(R.raw.vegueries);
-            webView.setWebViewClient(new WebViewClient() {
-                @Override
-                public void onPageFinished(WebView view, String url) {
-                    super.onPageFinished(view, url);
-                    layoutLlegenda.setVisibility(View.VISIBLE);
-                    adaptadorActual[0] = adapterVegueries;
-                    llistaResultatsBuscador.setAdapter(adaptadorActual[0]);
-                    pintarVegueriesPerVisites();
-                    tipusMapa = "v";
-                }
-            });
-        });
-        botoComarques.setOnClickListener(v -> {
-            carregarMapa(R.raw.comarquesactu);
-            webView.setWebViewClient(new WebViewClient() {
-                @Override
-                public void onPageFinished(WebView view, String url) {
-                    super.onPageFinished(view, url);
-                    layoutLlegenda.setVisibility(View.VISIBLE);
-                    adaptadorActual[0] = adapterComarques;
-                    llistaResultatsBuscador.setAdapter(adaptadorActual[0]);
-                    pintarComarquesPerVisites();
-                    tipusMapa = "c";
-                }
-            });
-        });
-        botoMunicipis.setOnClickListener(v -> {
-            layoutLlegenda.setVisibility(View.GONE);
-           // adapter[0] = new SearchAdapter(llistaMunicipis);
-            adaptadorActual[0] = adapterMunicipis;
-            llistaResultatsBuscador.setAdapter(adaptadorActual[0]);
-            carregarMapa(R.raw.municipis);
-        });
+        setupTerritoryButton(binding.btProvincies, R.raw.provincies, adapterProvincies, TERRITORY_TYPE_PROVINCIA);
+        setupTerritoryButton(binding.btVegueries, R.raw.vegueries, adapterVegueries, TERRITORY_TYPE_VEGUERIA);
+        setupTerritoryButton(binding.btComarques, R.raw.comarquesactu, adapterComarques, TERRITORY_TYPE_COMARCA);
+        setupTerritoryButton(binding.btMunicipis, R.raw.municipis, adapterMunicipis, TERRITORY_TYPE_MUNICIPALITY);
 
         buscador.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -219,18 +203,44 @@ public class FragmentMapes extends Fragment {
                         filteredMunicipis.add(item);
                     }
                 }
-                adaptadorActual[0].updateList(filteredMunicipis);
+                adaptadorActual.updateList(filteredMunicipis);
                 llistaResultatsBuscador.setVisibility(filteredMunicipis.isEmpty() ? View.GONE : View.VISIBLE);
                 return true;
             }
         });
 
-        setAdapterListeners(adapterMunicipis,buscador,llistaResultatsBuscador);
+        setAdapterListeners(adapterMunicipis, buscador,llistaResultatsBuscador);
         setAdapterListeners(adapterComarques, buscador, llistaResultatsBuscador);
         setAdapterListeners(adapterVegueries, buscador, llistaResultatsBuscador);
         setAdapterListeners(adapterProvincies, buscador, llistaResultatsBuscador);
 
         return view;
+    }
+
+    private void setupTerritoryButton(Button button, int mapResource, SearchAdapter adapter, String territoryType) {
+        button.setOnClickListener(v -> {
+            carregarMapa(mapResource);
+            webView.setWebViewClient(new WebViewClient() {
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    super.onPageFinished(view, url);
+                    layoutLlegenda.setVisibility(View.VISIBLE);
+                    adaptadorActual = adapter;
+                    llistaResultatsBuscador.setAdapter(adaptadorActual);
+                    // ... (Call appropriate painting method based on territoryType)
+                    if (territoryType.equals(TERRITORY_TYPE_MUNICIPALITY)) {
+                        pintarMunicipisVisitats();
+                    } else if (territoryType.equals(TERRITORY_TYPE_COMARCA)) {
+                        pintarComarquesPerVisites();
+                    } else if (territoryType.equals(TERRITORY_TYPE_VEGUERIA)) {
+                        pintarVegueriesPerVisites();
+                    } else if (territoryType.equals(TERRITORY_TYPE_PROVINCIA)) {
+                        pintarProvinciesPerVisites();
+                    }
+                    FragmentMapes.this.territoryType = territoryType;
+                }
+            });
+        });
     }
 
     private void setAdapterListeners(SearchAdapter adapter, SearchView searchView, RecyclerView resultsRecyclerView) {
@@ -240,20 +250,22 @@ public class FragmentMapes extends Fragment {
             resultsRecyclerView.setVisibility(View.GONE);
         });
     }
+
     private void processarCerca(String query) {
         obtenirColorSVG(query, color -> {
             switch (tipusMapa) {
-                case "m":
-                    mostrarMunicipi(query, color, "0 0 425 400");
+                case TERRITORY_TYPE_MUNICIPALITY:
+                    mostrarZona(query, color, "0 0 425 400", TipoZona.MUNICIPI, new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()));
                     break;
-                case "c":
-                    mostrarComarca(query, color, "0 0 425 400");
+                case TERRITORY_TYPE_COMARCA:
+                    mostrarZona(query, color, "0 0 425 400", TipoZona.COMARCA, new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()));
                     break;
-                case "v":
-                    mostrarVegueria(query, color, "0 0 425 400");
+                case TERRITORY_TYPE_VEGUERIA:
+                    //mostrarVegueria(query, color, "0 0 425 400");
+                    mostrarZona(query, color, "0 0 425 400", TipoZona.VEGUERIA, new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()));
                     break;
-                case "p":
-                    mostrarProvincia(query, color, "0 0 425 400");
+                case TERRITORY_TYPE_PROVINCIA:
+                    mostrarZona(query, color, "0 0 425 400", TipoZona.PROVINCIA, new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()));
                     break;
             }
         });
@@ -265,7 +277,7 @@ public class FragmentMapes extends Fragment {
             String dadesSVG = "<html><body style=\"margin: 0; padding: 0;\">" + contingutSVG + "</body></html>";
             webView.loadDataWithBaseURL(null, dadesSVG, "text/html", "UTF-8", null);
             if (mapaSVG == R.raw.municipis) {
-                tipusMapa = "m";
+                tipusMapa = TERRITORY_TYPE_MUNICIPALITY;
                 webView.setWebViewClient(new WebViewClient() {
                     @Override
                     public void onPageFinished(WebView view, String url) {
@@ -277,6 +289,7 @@ public class FragmentMapes extends Fragment {
             }
         }
     }
+
     private void inicialitzarMapa() {
         webView.evaluateJavascript(
                 "document.getElementsByTagName('svg')[0].getAttribute('viewBox');",
@@ -286,6 +299,7 @@ public class FragmentMapes extends Fragment {
                 }
         );
     }
+
     private String obtenirSVG(int resourceId) {
         InputStream inputStream = getResources().openRawResource(resourceId);
         try {
@@ -297,6 +311,7 @@ public class FragmentMapes extends Fragment {
             return null;
         }
     }
+
     private void resetZoom(String originalViewBox) {
         Log.d("NouZOOM", "Mapa inicialitzat amb viewBox: " + originalViewBox);
         String jsCode = "document.getElementsByTagName('svg')[0].setAttribute('viewBox', '" + originalViewBox + "');";
@@ -311,12 +326,12 @@ public class FragmentMapes extends Fragment {
         }
 
         @JavascriptInterface
-        public void showProvince(final String comarcaId, final String originalColor, final String originalViewBox) {
+        public void showProvince(final String provinciaId, final String originalColor, final String originalViewBox) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ultimID = comarcaId;
-                    mostrarProvincia(comarcaId, originalColor, originalViewBox);
+                    ultimID = provinciaId;
+                    mostrarZona(provinciaId, originalColor, originalViewBox, TipoZona.PROVINCIA, new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()));
                 }
             });
         }
@@ -327,34 +342,35 @@ public class FragmentMapes extends Fragment {
                 @Override
                 public void run() {
                     ultimID = comarcaId;
-                    mostrarComarca(comarcaId, originalColor, originalViewBox);
+                    mostrarZona(comarcaId, originalColor, originalViewBox, TipoZona.COMARCA, new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()));
                 }
             });
         }
 
         @JavascriptInterface
-        public void showVegueria(final String comarcaId, final String originalColor, final String originalViewBox) {
+        public void showVegueria(final String vegueriaId, final String originalColor, final String originalViewBox) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ultimID = comarcaId;
-                    mostrarVegueria(comarcaId, originalColor, originalViewBox);
+                    ultimID = vegueriaId;
+                    mostrarZona(vegueriaId, originalColor, originalViewBox, TipoZona.VEGUERIA, new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()));
                 }
             });
         }
 
         @JavascriptInterface
-        public void showMunicipi(final String comarcaId, final String originalColor, final String originalViewBox) {
+        public void showMunicipi(final String municipiId, final String originalColor, final String originalViewBox) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ultimID = comarcaId;
-                    mostrarMunicipi(comarcaId, originalColor, originalViewBox);
+                    ultimID = municipiId;
+                    //mostrarMunicipi(municipiId, originalColor, originalViewBox);
+                    mostrarZona(municipiId, originalColor, originalViewBox, TipoZona.MUNICIPI, new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication()));
+
                 }
             });
         }
     }
-
 
     private void showNotasDialog(Visita visita, BottomSheetDialog bottomSheetDialog) {
 
@@ -412,7 +428,6 @@ public class FragmentMapes extends Fragment {
 
         editboto.setOnClickListener(v -> {
             //dialog.dismiss();
-
             // Pass the original visita and data to the dialog fragment
             VisitaDialogFragment bottomSheet = new VisitaDialogFragment(visita.notes, visita.dataVisita, (dataModificada, notesModificades) -> {
                 // Update the visita object with the modified values
@@ -456,296 +471,161 @@ public class FragmentMapes extends Fragment {
         dialog.show();
     }
 
+    //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
 
-    private void mostrarComarca(String comarcaId, String originalColor, String originalViewBox) {
+    private void mostrarZona(String zonaId, String originalColor, String originalViewBox, TipoZona tipoZona, ViewModelProvider.Factory viewModelFactory) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
-        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
 
-        TextView comarcaInfo = bottomSheetView.findViewById(R.id.zonacNom);
-        comarcaInfo.setText(comarcaId);
+        int layoutId = (tipoZona == TipoZona.MUNICIPI) ? R.layout.bottom_sheet_dialog_municipis : R.layout.bottom_sheet_dialog;
 
-        canviarColorSVG(comarcaId, "white");
+        View bottomSheetView = getLayoutInflater().inflate(layoutId, null);
+
+        TextView zonaInfo = bottomSheetView.findViewById(R.id.zonaNom);
+        zonaInfo.setText(zonaId);
+
+        canviarColorSVG(zonaId, "white");
 
         Button closeButton = bottomSheetView.findViewById(R.id.closeButton);
         closeButton.setOnClickListener(v -> {
-            canviarColorSVG(comarcaId, originalColor);
-            resetZoom(originalViewBox);
-            bottomSheetDialog.dismiss();
+            restaurarVistaZona(zonaId, originalColor, originalViewBox, bottomSheetDialog);
         });
 
         bottomSheetDialog.setOnDismissListener(dialog -> {
-            canviarColorSVG(comarcaId, originalColor);
-            resetZoom(originalViewBox);
+            restaurarVistaZona(zonaId, originalColor, originalViewBox, null);
         });
 
-        TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
-        TextView indicadorpercentatge = bottomSheetView.findViewById(R.id.indicadorpercentatge);
-
-        ProgressBar progressBar = bottomSheetView.findViewById(R.id.progressBar);
-        progressBar.setProgress(0);
-
-        MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
-
-        viewModel.obtenirQuantitatMunicipisVisitatsComarca(comarcaId).observe(getViewLifecycleOwner(), nombreMunicipisVisitats -> {
-            int quantitatMunicipisComarca = mapesHelper.obtenirQuantitatMunicipisPerComarca(comarcaId);
-            double percentatge = quantitatMunicipisComarca == 0 ? 0 : (double) (nombreMunicipisVisitats * 100) / quantitatMunicipisComarca;
-            DecimalFormat df = new DecimalFormat("#.##");
-            progressBar.setMax(quantitatMunicipisComarca);
-            indicadorpercentatge.setText(df.format(percentatge) + " %");
-            ObjectAnimator animator = ObjectAnimator.ofInt(progressBar, "progress", nombreMunicipisVisitats);
-            animator.setDuration(400);
-            animator.setInterpolator(new DecelerateInterpolator());
-            animator.start();
-            infoMuni.setText("S'han visitat " + nombreMunicipisVisitats + " de " + quantitatMunicipisComarca + " municipis");
-        });
-
-        NestedScrollView scroll = bottomSheetView.findViewById(R.id.scrollViewS);
-        LinearLayout visitasContainer = bottomSheetView.findViewById(R.id.visitasContainerS);
-
-        viewModel.obtenirNomsMunicipisvisitatspercomarca(comarcaId).observe(getViewLifecycleOwner(), visites -> {
-
-            visitasContainer.removeAllViews();
-
-            for (Municipi visita : visites) {
-                TextView visitaTextView = new TextView(context);
-
-
-                visitaTextView.setText(visita.id);
-                visitaTextView.setPadding(16, 16, 16, 16);
-                visitaTextView.setBackgroundResource(R.drawable.rounded_card);
-                visitaTextView.setTextSize(16);
-                visitaTextView.setTextColor(ContextCompat.getColor(context, R.color.blau_mapa_fosc));
-                visitaTextView.setTypeface(null, Typeface.BOLD);
-                visitaTextView.setLayoutParams(new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                ));
-                ((LinearLayout.LayoutParams) visitaTextView.getLayoutParams()).setMargins(8, 8, 8, 8);
-
-                visitasContainer.addView(visitaTextView);
-            }
-        });
-
-
-
+        if (tipoZona == TipoZona.MUNICIPI) {
+            manejarMunicipi(zonaId, bottomSheetView, viewModelFactory, bottomSheetDialog, originalColor, originalViewBox);
+        } else {
+            manejarZonaGeneral(zonaId, tipoZona, bottomSheetView, viewModelFactory);
+        }
 
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
     }
-    private void mostrarProvincia(String provinciaId, String originalColor, String originalViewBox) {
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
-        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
 
-        TextView provinciaInfo = bottomSheetView.findViewById(R.id.zonacNom);
-        provinciaInfo.setText(provinciaId);
-
-        canviarColorSVG(provinciaId, "white");
-
-        Button closeButton = bottomSheetView.findViewById(R.id.closeButton);
-        closeButton.setOnClickListener(v -> {
-            canviarColorSVG(provinciaId, originalColor);
-            resetZoom(originalViewBox);
-            bottomSheetDialog.dismiss();
-        });
-
-        bottomSheetDialog.setOnDismissListener(dialog -> {
-            canviarColorSVG(provinciaId, originalColor);
-            resetZoom(originalViewBox);
-        });
-
+    private void manejarZonaGeneral(String zonaId, TipoZona tipoZona, View bottomSheetView, ViewModelProvider.Factory viewModelFactory) {
         TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
-        TextView indicadorpercentatge = bottomSheetView.findViewById(R.id.indicadorpercentatge);
-
+        TextView indicadorPercentatge = bottomSheetView.findViewById(R.id.indicadorpercentatge);
         ProgressBar progressBar = bottomSheetView.findViewById(R.id.progressBar);
-        progressBar.setProgress(0);
 
-        MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
+        MunicipiViewModel viewModel = new ViewModelProvider(this, viewModelFactory).get(MunicipiViewModel.class);
+        LiveData<Integer> quantitatVisitada;
+        int totalMunicipis;
 
-        viewModel.obtenirQuantitatMunicipisVisitatsProvincia(provinciaId).observe(getViewLifecycleOwner(), nombreMunicipisVisitats -> {
-            int quantitatMunicipisComarca = mapesHelper.obtenirQuantitatMunicipisPerProvincia(provinciaId);
-            double percentatge = quantitatMunicipisComarca == 0 ? 0 : (double) (nombreMunicipisVisitats * 100) / quantitatMunicipisComarca;
+        switch (tipoZona) {
+            case COMARCA:
+                quantitatVisitada = viewModel.obtenirQuantitatMunicipisVisitatsComarca(zonaId);
+                totalMunicipis = mapesHelper.obtenirQuantitatMunicipisPerComarca(zonaId);
+                break;
+            case PROVINCIA:
+                quantitatVisitada = viewModel.obtenirQuantitatMunicipisVisitatsProvincia(zonaId);
+                totalMunicipis = mapesHelper.obtenirQuantitatMunicipisPerProvincia(zonaId);
+                break;
+            case VEGUERIA:
+            default:
+                quantitatVisitada = viewModel.obtenirQuantitatMunicipisVisitatsVegueria(zonaId);
+                totalMunicipis = mapesHelper.obtenirQuantitatMunicipisPerVegueria(zonaId);
+                break;
+        }
+
+        progressBar.setMax(totalMunicipis);
+        quantitatVisitada.observe(getViewLifecycleOwner(), visitats -> {
+            double percentatge = totalMunicipis == 0 ? 0 : (double) (visitats * 100) / totalMunicipis;
             DecimalFormat df = new DecimalFormat("#.##");
-            progressBar.setMax(quantitatMunicipisComarca);
-            indicadorpercentatge.setText(df.format(percentatge) + " %");
-            ObjectAnimator animator = ObjectAnimator.ofInt(progressBar, "progress", nombreMunicipisVisitats);
+            indicadorPercentatge.setText(df.format(percentatge) + " %");
+            ObjectAnimator animator = ObjectAnimator.ofInt(progressBar, "progress", visitats);
             animator.setDuration(400);
             animator.setInterpolator(new DecelerateInterpolator());
             animator.start();
-            infoMuni.setText("S'han visitat " + nombreMunicipisVisitats + " de " + quantitatMunicipisComarca + " municipis");
-
+            infoMuni.setText("S'han visitat " + visitats + " de " + totalMunicipis + " municipis");
         });
-
-        bottomSheetDialog.setContentView(bottomSheetView);
-        bottomSheetDialog.show();
     }
-    private void mostrarVegueria(String vegueriaId, String originalColor, String originalViewBox) {
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
-        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog, null);
 
-        TextView vegueriaInfo = bottomSheetView.findViewById(R.id.zonacNom);
-        vegueriaInfo.setText(vegueriaId);
-
-        canviarColorSVG(vegueriaId, "white");
-
-        Button closeButton = bottomSheetView.findViewById(R.id.closeButton);
-        closeButton.setOnClickListener(v -> {
-            canviarColorSVG(vegueriaId, originalColor);
-            resetZoom(originalViewBox);
-            bottomSheetDialog.dismiss();
-        });
-
-        bottomSheetDialog.setOnDismissListener(dialog -> {
-            canviarColorSVG(vegueriaId, originalColor);
-            resetZoom(originalViewBox);
-        });
-
+    private void manejarMunicipi(String municipiId, View bottomSheetView, ViewModelProvider.Factory viewModelFactory,
+                                 BottomSheetDialog bottomSheetDialog, String originalColor, String originalViewBox) {
         TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
-        TextView indicadorpercentatge = bottomSheetView.findViewById(R.id.indicadorpercentatge);
-
-        ProgressBar progressBar = bottomSheetView.findViewById(R.id.progressBar);
-        progressBar.setProgress(0);
-
-        MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
-
-        viewModel.obtenirQuantitatMunicipisVisitatsVegueria(vegueriaId).observe(getViewLifecycleOwner(), nombreMunicipisVisitats -> {
-            int quantitatMunicipisComarca = mapesHelper.obtenirQuantitatMunicipisPerVegueria(vegueriaId);
-            double percentatge = quantitatMunicipisComarca == 0 ? 0 : (double) (nombreMunicipisVisitats * 100) / quantitatMunicipisComarca;
-            DecimalFormat df = new DecimalFormat("#.##");
-            progressBar.setMax(quantitatMunicipisComarca);
-            indicadorpercentatge.setText(df.format(percentatge) + " %");
-            ObjectAnimator animator = ObjectAnimator.ofInt(progressBar, "progress", nombreMunicipisVisitats);
-            animator.setDuration(400);
-            animator.setInterpolator(new DecelerateInterpolator());
-            animator.start();
-            infoMuni.setText("S'han visitat " + nombreMunicipisVisitats + " de " + quantitatMunicipisComarca + " municipis");
-
-        });
-
-        bottomSheetDialog.setContentView(bottomSheetView);
-        bottomSheetDialog.show();
-    }
-    private void mostrarMunicipi(String municipiId, String originalColor, String originalViewBox) {
-
-        Log.i("mostrarMunicipiIIIIIIIIIII", municipiId + " " + originalColor + " " + originalViewBox);
-
-        bottomSheetDialog = new BottomSheetDialog(context);
-        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_dialog_municipis, null);
-        TextView municipiInfo = bottomSheetView.findViewById(R.id.zonaNom);
-        municipiInfo.setText(municipiId);
-
         Button markAsVisitedButton = bottomSheetView.findViewById(R.id.visit);
-        MunicipiViewModel viewModel= new ViewModelProvider(this).get(MunicipiViewModel.class);
-        Button closeButton = bottomSheetView.findViewById(R.id.closeButton);
+        NestedScrollView scroll = bottomSheetView.findViewById(R.id.scrollView);
         View viewBottom = bottomSheetView.findViewById(R.id.viewbottom);
 
-        Log.d("Color " , originalColor);
-        boolean municipiVisitat = comparaColor(originalColor,"rgb(27, 58, 95)");
-        TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
-
-        NestedScrollView scroll = bottomSheetView.findViewById(R.id.scrollView);
-
-        closeButton.setVisibility(View.VISIBLE);
-        scroll.setVisibility(View.VISIBLE);
-        markAsVisitedButton.setVisibility(View.VISIBLE);
-        viewBottom.setVisibility(View.VISIBLE);
-
-        /*TextView infoMuniP = bottomSheetView.findViewById(R.id.zonaIfnfoProv);
-        TextView infoMuniV = bottomSheetView.findViewById(R.id.zonaIfnfoVeg);
-        TextView infoMuniC = bottomSheetView.findViewById(R.id.zonaIfnfoCom);*/
-
+        boolean municipiVisitat = comparaColor(originalColor, "rgb(27, 58, 95)");
+        MunicipiViewModel viewModel = new ViewModelProvider(this, viewModelFactory).get(MunicipiViewModel.class);
 
         if (municipiVisitat) {
-
             infoMuni.setText("Visites anteriors");
             markAsVisitedButton.setText("Afegir visita");
-
-            LinearLayout visitasContainer = bottomSheetView.findViewById(R.id.visitasContainer);
-
-            viewModel.getVisitasByMunicipiId(municipiId).observe(getViewLifecycleOwner(), visites -> {
-
-                visitasContainer.removeAllViews();
-
-                for (Visita visita : visites) {
-                    TextView visitaTextView = new TextView(context);
-
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                    String formattedDate = sdf.format(new Date(visita.dataVisita));
-                    visitaTextView.setText(formattedDate + "        " + visita.notes);
-                    visitaTextView.setPadding(16, 16, 16, 16);
-                    visitaTextView.setBackgroundResource(R.drawable.rounded_card);
-                    visitaTextView.setTextSize(16);
-                    visitaTextView.setTextColor(ContextCompat.getColor(context, R.color.blau_mapa_fosc));
-                    visitaTextView.setTypeface(null, Typeface.BOLD);
-                    visitaTextView.setLayoutParams(new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                    ));
-                    ((LinearLayout.LayoutParams) visitaTextView.getLayoutParams()).setMargins(8, 8, 8, 8);
-                    visitaTextView.setOnClickListener(v ->  {
-                        showNotasDialog(visita,bottomSheetDialog);
-                        //mostrarMunicipi(municipiId, originalColor, originalViewBox);
-
-                    });
-                    visitasContainer.addView(visitaTextView);
-                }
-            });
-
+            mostrarVisitesMunicipi(municipiId, viewModel, bottomSheetView);
         } else {
             infoMuni.setText("");
-            closeButton.setVisibility(View.GONE);
             scroll.setVisibility(View.GONE);
             markAsVisitedButton.setText("Marcar com a visitat");
             viewBottom.setVisibility(View.GONE);
         }
 
         MapesHelper.TerritoryData territoryData = mapesHelper.getTerritoryData(municipiId);
-
         markAsVisitedButton.setOnClickListener(v -> {
-            VisitaDialogFragment bottomSheet = new VisitaDialogFragment("", 0, (data, notes) -> {
-
-                AtomicReference<Boolean> estaVisitat = new AtomicReference<>(false);
-                viewModel.obtenirMunicipisVisitats().observe(getViewLifecycleOwner(), municipisVisitats -> {
-                    for (Municipi municipi : municipisVisitats) {
-                        if (municipi.id.equals(municipiId)) {
-                            estaVisitat.set(true);
-                            break;
-                        }
-                    }
-                    if (!estaVisitat.get()) {
-                        Log.d("CREA MUNI ", municipiId + " " + territoryData.comarcaId+ " " + territoryData.vegueriaId+ " " + territoryData.provinciaId);
-                        Municipi municipi = new Municipi(municipiId, municipiId, true, territoryData.comarcaId, territoryData.vegueriaId, territoryData.provinciaId);
-                        viewModel.afegirMunicipi(municipi);
-                    }
-                });
+            VisitaDialogFragment dialog = new VisitaDialogFragment("", 0, (data, notes) -> {
+                if (!municipiVisitat) {
+                    Municipi municipi = new Municipi(municipiId, municipiId, true, territoryData.comarcaId, territoryData.vegueriaId, territoryData.provinciaId);
+                    viewModel.afegirMunicipi(municipi);
+                }
                 Visita visita = new Visita(municipiId, data, notes);
-
                 viewModel.afegirVisita(visita);
-
                 pintarMunicipisVisitats();
             });
-
-            bottomSheet.show(getParentFragmentManager(), "AgregarVisitaBottomSheet");
-
+            dialog.show(getParentFragmentManager(), "AgregarVisitaBottomSheet");
             bottomSheetDialog.dismiss();
         });
-
-
-        closeButton.setOnClickListener(v -> {
-            canviarColorSVG(municipiId, originalColor);
-            resetZoom(originalViewBox);
-            bottomSheetDialog.dismiss();
-        });
-
-        bottomSheetDialog.setOnDismissListener(dialog -> {
-            canviarColorSVG(municipiId, originalColor);
-            resetZoom(originalViewBox);
-            bottomSheetDialog.dismiss();
-        });
-
-        bottomSheetDialog.setContentView(bottomSheetView);
-        bottomSheetDialog.show();
     }
 
+    private void mostrarVisitesMunicipi(String municipiId, MunicipiViewModel viewModel, View bottomSheetView) {
+        LinearLayout visitasContainer = bottomSheetView.findViewById(R.id.visitasContainer);
+        viewModel.getVisitasByMunicipiId(municipiId).observe(getViewLifecycleOwner(), visites -> {
+            visitasContainer.removeAllViews();
+            for (Visita visita : visites) {
+                TextView visitaTextView = crearVisitaTextView(visita);
+                visitasContainer.addView(visitaTextView);
+            }
+        });
+    }
+
+    private TextView crearVisitaTextView(Visita visita) {
+        TextView visitaTextView = new TextView(context);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        visitaTextView.setText(sdf.format(new Date(visita.dataVisita)) + "        " + visita.notes);
+        visitaTextView.setPadding(16, 16, 16, 16);
+        visitaTextView.setBackgroundResource(R.drawable.rounded_card);
+        visitaTextView.setTextSize(16);
+        visitaTextView.setTextColor(ContextCompat.getColor(context, R.color.blau_mapa_fosc));
+        visitaTextView.setTypeface(null, Typeface.BOLD);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        params.setMargins(8, 8, 8, 8);
+        visitaTextView.setLayoutParams(params);
+        visitaTextView.setOnClickListener(v ->  {
+            showNotasDialog(visita,bottomSheetDialog);
+            //mostrarMunicipi(municipiId, originalColor, originalViewBox);
+
+        });
+        return visitaTextView;
+    }
+
+    private void restaurarVistaZona(String zonaId, String originalColor, String originalViewBox, BottomSheetDialog dialog) {
+        canviarColorSVG(zonaId, originalColor);
+        resetZoom(originalViewBox);
+        if (dialog != null) {
+            dialog.dismiss();
+        }
+    }
+
+    enum TipoZona {
+        COMARCA, PROVINCIA, VEGUERIA, MUNICIPI
+    }
+
+    //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
 
     private void pintarVegueriesPerVisites() {
         MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
@@ -797,6 +677,7 @@ public class FragmentMapes extends Fragment {
     private boolean comparaColor (String color1, String color2) {
         return color1.equalsIgnoreCase(color2);
     }
+
     public int obtenirColorPerPercentatge(double percentatge) {
         if (percentatge == 0.0) return ContextCompat.getColor(context, R.color.blau_mapa);
         else if (percentatge < 25.0) return ContextCompat.getColor(context, R.color.lleg25);
@@ -804,9 +685,11 @@ public class FragmentMapes extends Fragment {
         else if (percentatge < 75.0) return ContextCompat.getColor(context, R.color.lleg75);
         else return ContextCompat.getColor(context, R.color.llegComplet);
     }
+
     public interface ColorCallback {
         void onColorReceived(String color);
     }
+
     private void obtenirColorSVG(String id, ColorCallback callback) {
         String jsCode = "document.getElementById('" + id + "').getAttribute('style');";
         webView.evaluateJavascript(jsCode, new ValueCallback<String>() {
@@ -836,121 +719,17 @@ public class FragmentMapes extends Fragment {
 
     private List<String> obtenirLlistaSegonsTipus() {
         switch (tipusMapa) {
-            case "c":
+            case TERRITORY_TYPE_COMARCA:
                 return mapesHelper.obtenirNomsComarques();
-            case "v":
+            case TERRITORY_TYPE_VEGUERIA:
                 return obtenirLlistaDeVegueries();
-            case "p":
+            case TERRITORY_TYPE_PROVINCIA:
                 return obtenirLlistaDeProvincies();
             default:
                 return mapesHelper.obtenirNomsMunicipisTotesComarques();
         }
     }
-    @NonNull
-    private List<String> obtenirLlistaDeMunicipis() {
 
-
-        return Arrays.asList(
-                "Avinyonet del Penedès","Argençola","Avinyó","Artés","Aguilar de Segarra","Abrera", "Alella","Arenys de Munt","Argentona","Arenys de Mar","Aiguafreda",
-                "Agullana","Albanyà","Alp","Avinyonet de Puigventós","Argelaguer","Aiguaviva","Anglès", "Amer", "Arbúcies","Aiguamúrcia","Alió","Alcover","Arbolí","Almoster","Alforja",
-                "Albinyana","Alcanar","Amposta","Alfara de Carles","Aldover","Ascó","Altafulla", "Arnes",
-
-                "Bellprat","Balsareny","Begues","Barcelona","Badalona","Balenyà","Badia del Vallès","Barberà del Vallès","Bigues i Riells","Blanes",
-                "Begur","Bellcaire d'Empordà","Biure","Bolvir","Borrassà","Besalú","Beuda","Bordils","Banyoles","Blanes","Breda", "Brunyola i Sant Martí Sapresa","Bràfim","Botarell",
-                "Benifallet","Banyeres del Penedès","Bellvei","Bonastre","Blancafort","Barberà de la Conca","Batea","Benissanet","Bot","Bellmunt del Proiorat",
-
-                "Castellet i la Gornal","Castellví de la Marca","Cabrera d'Anoia","Castellfollit de Riubregós","Calonge de Segarra", "Calaf", "Copons","Castellolí","Carme",
-                "Capellades", "Castellbell i el Vilar","Cardona", "Castellnou de Bages","Callús","Castellfollit del Boix", "Castellgalí","Corbera de Llobregat",
-                "Castellví de Rosanes","Colbató","Cervelló", "Cornellà de Llobregat","Castelldefels","Canyelles","Cubelles","Caldes d'Estrac","Cabrils","Calella","Canet de Mar",
-                "Centelles","Calldetenes", "Castellbisbal","Cerdanyola del Vallès","Castellar del Vallès","Caldes de Montbui","Campins","Canovelles","Cardedeu","Cànoves i Samalús",
-                "Calonge i Sant Antoni","Cadaqués","Capmany","Castell-Platja d'Aro","Castelló d'Empúries","Cistella","Colera","Corçà","Cruïlles, Monells i Sant Sadurní de l'Heura",
-                "Castellfollit de la Roca","Cassà de la Selva","Celrà", "Campllong","Cornellà del Terri","Crespià","Camós","Campdevànol","Camprodon","Caldes de Malavella","Cabrera de Mar",
-                "Cabra del Camp","Capafonts","Castellvell del Camp","Colldejou","Cambrils","Camarles","Calafell","Cunit","Conesa","Cornudella de Montsant","Caseres","Cabaçés","Capçanes",
-                "Constantí","Creixell","Corbera d'Ebre",
-
-                "Dosrius","Darnius","Das","Duesaigües","Deltebre",
-
-                "El Pla del Penedès","El Bruc","Els Hostalets de Pierola","Els Prats de Rei","El Pont de Vilomara i Rocafort","El Papiol","El Prat de Llobregat", "Esparreguera",
-                "Esplugues de Llobregat", "El Masnou", "El Brull","Espinelves","Empuriabrava","Espolla", "Esponellà","El Pla de Santa Maria","El Pont d'Armentera","El Rourell",
-                "Els Garidells","El Milà","El Perelló","El Vendrell","El Montmell","Els Guiamets","El Molar","El Lloar","El Masroig","Els Pallaresos","El Catllar","El Morell",
-                "El Pinell de Brai","El Prat del Comte","Molins de Rei","Pallejà","La Palma de Cervelló",
-
-                "Font-rubí","Fonollosa","Folgueroles","Figaró-Montmany","Fogars de Montclús","Finca de les Fonts","Fontanals de Cerdanya","Fontanilles","Fornells de la Selva",
-                "Fontcoberta","Figueres","Forallac","Figuerola del Camp","Forès","Freginals","Falset","Flix","Fortià","Fígols",
-
-                "Gelida","Gaià","Gavà","Gurb","Galifa","Gualba","Granollers","Gualta","Guils de Cerdanya","Garriguella","Girona", "Gombrèn","Godall","Gratallops","Garcia","Ginestar","Gandesa",
-
-                "Hospitalet de Llobregat","Horta de Sant Joan",
-
-                "Igualada","Isòvol",
-
-                "Jorba","Jafre","Juià",
-
-                "La Granada","Les Cabanyes","La Pobla de Claramunt","La Torre de Claramunt","La Llacuna","L'Esquirol","Les Masies de Voltregà","Les Masies de Roda","Llinars del Vallès",
-                "La Garriga", "La Llagosta","La Roca del Vallès","L'Ametlla del Vallès","Lliçà d'Amunt", "Lliçà de Vall","Les Franqueses del Vallès",
-                "La Bisbal d'Empordà","La Jonquera","La Pera","L'Escala","Llançà","Llers","Llívia","Les Planes d'Hostoles", "Les Preses", "Llagostera","Llambilles","Llanars","Lloret de Mar","La Riba",
-                "L'Arboç","La Masó","La Febró","L'Albiol","Les Borjes del Camp","L'Aleixar","La Selva del Camp","L'Argentera","L'Aldea","L'Ametlla de Mar","L'Ampolla","Llorenç del Penedès",
-                "La Bisbal del Penedès","Les Piles","Llorac", "L'Espluga de Francolí", "La Galera","La Sènia","La Pobla de Massaluca","La Fatarella","La Morera de Montsant","La Morera de Montsant",
-                "La Bisbal de Falset","La Torre de Fontaubella","La Palma d'Ebre","La Vilella Alta","La Vilella Baixa","La Figuera","La Torre de l'Espanyol","La Pobla de Mafumet","La Riera de Gaià",
-                "La Nou de Gaià","La Pobla de Montornès","La Secuita","Queralbs","Quart", "Querol","La Pobla de Lillet",
-
-                "Mediona","Montmaneu","Masquefa","Manresa","Mura","Marganell","Monistrol de Montserrat","Martorell","Mataró","Montgat","Malgrat de Mar","Muntanyola","Montesquiu", "Malla","Manlleu","Montcada i Reixac","Matadepera",
-                "Martorelles","Mollet del Vallès", "Montmeló","Montornès del Vallès","Montseny","Maçanet de Cabrenys","Meranges","Mont-ras","Maià de Montcal","Mieres","Montagut i Oix","Molló",
-                "Massanes","Maçanet de la Selva","Madremanya","Mont-ral","Montferri", "Maspujols", "Mont-roig del Camp", "Masllorenç", "Montblanc", "Mas de Barberans", "Masdenverge", "Margalef",
-                "Marçà","Móra d'Ebre","Móra la Nova","Miravet", "Montbrió del Camp",
-
-                "Navarcles","Navàs","Nulles",
-
-                "Olesa de Bonesvalls", "Olèrdola","Orpí", "Òdena","Olesa de Montserrat","Olivella","Òrrius","Orís","Ordis","Olot","Ogassa","Osor",
-
-                "Puigdàlber","Pacs del Penedès",  "Pontons","Pujalt","Piera","Premià de Dalt","Premià de Mar", "Palafolls","Pineda de Mar","Palau-solità i Plegamans", "Polinyà","Parets del Vallès",
-                "Pau","Peralada","Palafrugell","Palamós","Pont de Molins","Parlavà",  "Portbou","Palol de Revardit", "Porqueres", "Pardines","Planoles","Puigpelat","Prades","Pratdip","Paüls","Pontils",
-                "Passanant i Belltall","Pira","Poboleda","Pradell de la Teixeta","Porrera","Perafort","Palau-saverdera","Pals","Prats i Sansor","Puigcerdà","Prats de Lluçanès",
-
-                "Rubió","Rupit i Pruit","Roda de Ter","Rellinars","Rubí","Rajadell","Ripollet","Regencós","Roses","Riudaura","Ripoll",  "Ribes de Freser","Riudarenes","Rodonyà","Riudecols",
-                "Riudecanyes","Riudoms","Reus","Roquetes","Rocafort de Queralt","Riba-roja d'Ebre","Rasquera","Roda de Berà","Renau","Riumors",
-
-                "Subirats", "Santa Margarida i els Monjos", "Sant Llorenç d'Hortons", "Sant Martí Sarroca", "Santa Fe del Penedès", "Sant Cugat Sesgarrigues", "Sant Quintí de Mediona",
-                "Sant Pere de Riudebitlles","Sant Sadurní d'Anoia", "Sant Martí Sesgueioles","Sant Martí de Tous", "Santa Margarida de Montbui", "Santa Maria de Miralles",
-                "Sant Pere Sallavinera","Sant Feliu Sasserra","Sallent","Sant Mateu de Bages","Súria","Santpedor","Sant Fruitós de Bages", "Sant Joan de Vilatorrada",
-                "Sant Salvador de Guardiola","Sant Vicenç de Castellet","Sant Esteve Sesrovires","Sant Andreu de la Barca","Sant Feliu de LLobregat","Sant Vicenç dels Horts",
-                "Sant Just Desvern","Santa Coloma de Cervelló","Sant Joan Despí","Sant Climent de Llobregat","Sant Boi de Llobregat","Sant Climent de Llobregat","Santa Coloma de Gramenet",
-                "Sant Adrià del Besòs","Sitges","Sant Pere de Ribes","Santa Susanna","Sant Iscle de Vilalta","Sant Cebrià de Vallalta", "Sant Vicenç de Montalt","Sant Andreu de Llavaneres",
-                "Sant Pol de Mar","Seva","Sant Martí de Centelles","Santa Eulàlia de Riuprimer","Santa Maria de Besora", "Sora","Sant Quirze de Besora","Sant Pere de Torelló",
-                "Sant Agustí de Lluçanès","Sant Vicenç de Torelló","Sant Boi de Lluçanès","Sant Hipòlit de Voltregà","Santa Cecilia de Voltregà","Sant Bartolomeu del Grau","Sant Julià de Vilatorta",
-                "Sant Sadurní d'Osmort","Santa Eugènia de Berga","Sant Cugat del Vallès","Sant Llorenç Savall","Santmenat","Sabadell","Santa Perpètua de Mogoda", "Sant Quirze del Vallès",
-                "Sant Antoni de Vilamajor","Sant Celoni","Sant Esteve de Palautordera","Sant Feliu de Codines","Sant Fost de Campsentelles","Sant Pere de Vilamajor","Santa Eulàlia de Ronçana",
-                "Santa Maria de Martorelles","Santa Maria de Palautordera","Sant Climent Sescebes","Sant Feliu de Guíxols","Sant Miquel de Fluvià","Sant Pere Pescador","Siurana","Sales de Llierca",
-                "Sant Aniol de Finestres","Sant Feliu de Pallerols","Sant Jaume de Llierca", "Santa Pau","Salt","Sant Gregori", "Sant Julià de Ramis","Sarrià de Ter","Sant Martí Vell",
-                "Sant Andreu Salou","Sant Miquel de Campmajor","Serinyà", "Sant Joan de les Abadesses", "Sant Pau de Segúries", "Setcases","Sant Hilari Sacalm", "Sils", "Santa Coloma de Farners",
-                "Sant Julià del Llor i Bonmatí","Susqueda", "Sant Jaume dels Domenys","Santa Oliva","Sarral","Solivella","Senan","Santa Coloma de Queralt","Savallà del Comtat","Sant Jaume d'Enveja",
-                "Santa Bàrbara","Sant Carles de la Ràpita","Salomó","Salou",
-
-                "Torrelavit", "Torrelles de Foix","Talamanca","Tordera","Teià","Tiana","Tona","Taradell","Travertet","Torelló","Tavèrnoles","Terrassa","Tagamanent",
-                "Torrent","Tossa de Mar","Torroella de Fluvià","Torroella de Montgrí","Tivenys","Tortosa","Torroja del Priorat","Tivissa", "Tarragona","Torredembarra",
-
-                "Ullastrell","Ullà","Ullastret","Urús","Vilabertran","Vilafant","Vilajuïga","Vilamacolum","Vila-sacra","Vilanova de la Muga","Verges", "Ulldecona","Ulldemolins",
-
-                "Vilafranca del Penedès", "Vilobí del Penedès", "Veciana","Vilanova del Camí",  "Vallbona d'Anoia","Vallirana","Viladecans","Vilanova i la Geltrú","Vilassar de Dalt",
-                "Vilassar de Mar","Vidrà", "Viladrau","Vilanova de Sau","Vic", "Vacarisses","Viladecavalls","Vallgorguina","Vallromanes","Vilanova del Vallès","Vilalba Sasserra",
-                "Vall d'en Bas",  "Vall de Bianya","Vilablareix","Vilademuls","Vallfogona de Ripollès","Vilallonga de Ter","Vidreres", "Vilobí d'Onyar","Valls","Vila-rodona","Vallmoll",
-                "Vilabella","Vinyols i els Arcs","Vilaplana","Vilanova d'Escornalbou","Vandellòs i l'Hospitalet de l'Infant","Vallfogona de Riucorb","Vimbodí i Poblet","Vallclara",
-                "Vilanova de Prades","Vilaverd","Vinebre","Vila-seca","Vespella de Gaià","Vilallonga del Camp","Vilalba dels Arcs","Vilada",
-
-                "Xerta"
-        );
-
-    }
-    @NonNull
-    private List<String> obtenirLlistaDeComarques() {
-        return Arrays.asList(
-                "Alt Empordà","Garrotxa","Pla de l'Estany","Gironès","Baix Empordà", "Ripollès","La Selva","Montsià",
-                "Baix Ebre", "Terra Alta","Ribera d'Ebre","Priorat","Baix Camp","Segrià","Garrigues","Tarragonès",
-                "Alt Camp", "Conca de Barberà", "Pla d'Urgell","Baix Penedès","Garraf", "Alt Penedès","Urgell",
-                "Noguera", "Segarra","Anoia","Pallars Jussà","Alta Ribagorça","Val d'Aran","Pallars Sobirà",
-                "Alt Urgell","Baix Llobregat","Barcelonès","Maresme","Solsonès","Cerdanya","Lluçanès", "Berguedà",
-                "Osona","Bages","Moianès","Vallès Occidental","Vallès Oriental");
-    }
     @NonNull
     private List<String> obtenirLlistaDeVegueries() {
         return Arrays.asList(
@@ -962,4 +741,5 @@ public class FragmentMapes extends Fragment {
         return Arrays.asList(
                 "Província de Barcelona","Província de Girona","Província de Lleida","Província de Tarragona");
     }
-}
+}*/
+//859 728
