@@ -168,7 +168,7 @@ public class FragmentPerfil extends Fragment {
         );
 
         // Establece márgenes (por ejemplo, 8 píxeles en todos los lados)
-        layoutParams.setMargins(0, 8, 0, 8);  // Ajusta los valores según lo que necesites
+        layoutParams.setMargins(0, 8, 0, 8); // Ajusta los valores según lo que necesites
 
         visitaView.setLayoutParams(layoutParams);
 

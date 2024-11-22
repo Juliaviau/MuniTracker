@@ -81,9 +81,7 @@ public class FragmentMapes extends Fragment {
     private LinearLayout layoutLlegenda;
     private MunicipiViewModel viewModel;
 
-
     private Map<String, String> cachedSVGs = new HashMap<>();
-
 
     @Override
     public void onAttach(Context context) {
@@ -147,11 +145,8 @@ public class FragmentMapes extends Fragment {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                Log.i("juuuuuuuLIAAAAA","ESTIC AL setWebViewClient*****333333333***********" + tipusMapa);
                 //new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                    Log.i("juuuuuuuLIAAAAA","ESTIC AL setWebViewClient********************************" + tipusMapa);
                     if (tipusMapa.equals(TERRITORY_TYPE_MUNICIPALITY)) {
-                        Log.i("juuuuuuuLIAAAAA","ESTIC AL setWebViewClient******dins**************************");
                         pintarMunicipisVisitats();
                     }
                 //}, 100);
@@ -208,7 +203,7 @@ public class FragmentMapes extends Fragment {
             }
         });
 
-// Esconder la lista al pulsar la cruz del SearchView
+        // Esconder la lista al pulsar la cruz del SearchView
         buscador.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
@@ -217,7 +212,7 @@ public class FragmentMapes extends Fragment {
             }
         });
 
-// Esconder la lista cuando se hace clic fuera del SearchView
+        // Esconder la lista cuando se hace clic fuera del SearchView
         //TODO: NO FA RES AQUESTA PART. EN TOCAR LA PANTALLA AMAGR LA LLISTA
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
