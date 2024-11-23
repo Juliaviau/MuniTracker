@@ -63,5 +63,13 @@ dependencies {
 
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
+    implementation ("androidx.paging:paging-runtime:3.1.1")
+    // Paging 3
+
+    // Room con soporte para Paging
+    implementation ("androidx.room:room-runtime:2.5.0")
+    annotationProcessor ("androidx.room:room-compiler:2.5.0")
+
+    implementation ("androidx.room:room-paging:2.5.0")
 
 }

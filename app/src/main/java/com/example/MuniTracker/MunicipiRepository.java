@@ -6,6 +6,9 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.paging.Pager;
+import androidx.paging.PagingConfig;
+import androidx.paging.PagingData;
 
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -170,6 +173,16 @@ public class MunicipiRepository implements Observer<Integer> {
             municipiDao.eliminarMunicipi(municipi);
         });
     }
+
+   /* public LiveData<PagingData<Visita>> getAllVisitsPaged(int maxSize) {
+        boolean enablePlaceholders;
+        return (LiveData<PagingData<Visita>>) new Pager<>(
+                new PagingConfig(
+                       50,10,false
+                ),
+                visitaDao::getAllVisitsPaged
+        ).liveData;
+    }*/
 
 
 

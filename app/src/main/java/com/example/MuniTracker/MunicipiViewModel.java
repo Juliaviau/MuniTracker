@@ -8,6 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.paging.Pager;
+import androidx.paging.PagingConfig;
+import androidx.paging.PagingData;
 
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -46,6 +49,10 @@ public class MunicipiViewModel extends AndroidViewModel {
     public void eliminarTotMunicipiVisites() {
         municipiRepository.eliminarTotMunicipiVisites();
     }
+
+
+
+
 
     public LiveData<Integer> obtenirQuantitatMunicipisVisitatsComarca(String comarcaId) {
         MutableLiveData<Integer> porcentaje = new MutableLiveData<>();
