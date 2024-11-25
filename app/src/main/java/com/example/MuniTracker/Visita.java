@@ -28,4 +28,8 @@ public class Visita {
     public void setDataVisita(long dataVisita) {
         this.dataVisita = dataVisita;
     }
+
+
+
+
 }

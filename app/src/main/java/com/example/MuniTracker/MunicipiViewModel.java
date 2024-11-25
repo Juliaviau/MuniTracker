@@ -8,6 +8,10 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.paging.DataSource;
+import androidx.paging.LivePagedListBuilder;
+import androidx.paging.PagedList;
+import androidx.paging.PositionalDataSource;
 import androidx.paging.Pager;
 import androidx.paging.PagingConfig;
 import androidx.paging.PagingData;
@@ -51,6 +55,12 @@ public class MunicipiViewModel extends AndroidViewModel {
     }
 
 
+    public LiveData<PagingData<Visita>> getAllVisitsPaged() {
+
+        return municipiRepository.getAllVisitsPaged();
+                //.liveData
+                //.cachedIn(viewModelScope); // Cachear los datos en el ViewModelScope
+    }
 
 
 

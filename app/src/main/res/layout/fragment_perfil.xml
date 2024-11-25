@@ -63,7 +63,7 @@
             android:queryHint="Cerca municipi"
             android:background="@drawable/search_view_background_blanc"/>
 
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/visitasContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

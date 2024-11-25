@@ -92,11 +92,28 @@ public class FragmentPerfil extends Fragment {
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
         MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
 
-        LinearLayout visitesListContainer = view.findViewById(R.id.visitasContainer);
+        //LinearLayout visitesListContainer = view.findViewById(R.id.visitasContainer);
         SearchView searchView = view.findViewById(R.id.searchViewperfil);
         Button eliminarTot = view.findViewById(R.id.eliminarTot);
 
-        observarVisites(viewModel, visitesListContainer, searchView);
+       // En el FragmentPerfil
+       RecyclerView recyclerView = view.findViewById(R.id.visitasContainer); // Reemplazar visitasContainer con un RecyclerView
+       recyclerView.setLayoutManager(new LinearLayoutManager(context));
+       VisitaAdapter adapter = new VisitaAdapter();
+       recyclerView.setAdapter(adapter);
+
+       /*viewModel.getAllVisitsOrderByData().observe(getViewLifecycleOwner(), visitas -> {
+           adapter.submitList(visitas); // Actualizar la lista del adaptador
+       });*/
+
+
+
+       viewModel.getAllVisitsPaged().observe(viewLifecycleOwner) { pagingData ->
+               lifecycleScope.launch {
+                    adapter.submitData(pagingData)
+                }
+       }
+        //observarVisites(viewModel, visitesListContainer, searchView);
         configurarBotonEliminarTot(eliminarTot, viewModel);
 
         return view;

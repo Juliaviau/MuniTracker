@@ -32,7 +32,7 @@ public interface VisitaDao {
     @Query("SELECT COUNT(*) FROM visites WHERE municipiId = :municipiId")
     int getNumeroVisitesByMunicipiSync(String municipiId);
 
-    @Query("SELECT * FROM visites ORDER BY dataVisita DESC")
+    @Query("SELECT * FROM visitEs ORDER BY dataVisita DESC")
     PagingSource<Integer, Visita> getAllVisitsPaged();
 
 

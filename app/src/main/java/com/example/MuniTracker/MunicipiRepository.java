@@ -186,6 +186,15 @@ public class MunicipiRepository implements Observer<Integer> {
 
 
 
+    public LiveData<PagingData<Visita>> getAllVisitsPaged() {
+        return new Pager<>(
+                new PagingConfig( 20), // Define el tamaño de la página
+                () -> visitaDao.getAllVisitsPaged()
+        );
+    }
+
+
+
     public LiveData<List<MunicipiVisitCount>> getTop10MostVisitedMunicipalities() {
         return visitaDao.getTop10MostVisitedMunicipalities();
     }

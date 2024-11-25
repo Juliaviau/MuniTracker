@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.car.ui.lib)
+    implementation(libs.filament.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -70,6 +71,15 @@ dependencies {
     implementation ("androidx.room:room-runtime:2.5.0")
     annotationProcessor ("androidx.room:room-compiler:2.5.0")
 
+    implementation ("androidx.room:room-paging:2.5.0")
+
+
+    implementation ("androidx.lifecycle:lifecycle-viewmodel:2.5.1")
+    implementation ("androidx.lifecycle:lifecycle-livedata:2.5.1")
+
+    implementation ("androidx.paging:paging-runtime:3.1.1")
+    implementation ("androidx.room:room-runtime:2.5.0")
+   // kapt "androidx.room:room-compiler:$2.5.0"
     implementation ("androidx.room:room-paging:2.5.0")
 
 }
