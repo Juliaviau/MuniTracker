@@ -7,10 +7,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.Lifecycle;
-import androidx.paging.PagingData;
+import androidx.paging.PagingDataAdapter;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
@@ -18,9 +16,10 @@ import java.util.Date;
 import java.util.Locale;
 
 // Adaptador para el RecyclerView
-public class VisitaAdapter extends ListAdapter<Visita, VisitaAdapter.VisitaViewHolder> {
+public class VisitaPagingAdapter extends PagingDataAdapter<Visita, VisitaPagingAdapter.VisitaViewHolder> {
 
-    public VisitaAdapter() {
+
+    public VisitaPagingAdapter() {
         super(new VisitaDiffCallback());
     }
 
@@ -63,6 +62,21 @@ public class VisitaAdapter extends ListAdapter<Visita, VisitaAdapter.VisitaViewH
             });
         }
     }
+
+    private static final DiffUtil.ItemCallback<Visita> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<Visita>() {
+                @Override
+                public boolean areItemsTheSame(@NonNull Visita oldItem, @NonNull Visita newItem) {
+                    return oldItem.visitaId == newItem.visitaId;
+                }
+
+                @Override
+                public boolean areContentsTheSame(@NonNull Visita oldItem, @NonNull Visita newItem) {
+                    return oldItem.municipiId.equals(newItem.municipiId) &&
+                            oldItem.dataVisita == newItem.dataVisita &&
+                            oldItem.notes.equals(newItem.notes);
+                }
+            };
 
     // DiffCallback para DiffUtil
     static class VisitaDiffCallback extends DiffUtil.ItemCallback<Visita> {
