@@ -26,6 +26,7 @@ public interface VisitaDao {
     LiveData<List<Visita>> getAllVisitsOrderByData();
 
 
+
     @Query("SELECT COUNT(*) FROM visites WHERE municipiId = :municipiId")
     LiveData<Integer> getNumeroVisitesByMunicipi(String municipiId);
 

@@ -12,8 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MuniTracker"
         tools:targetApi="31"
-        android:enableOnBackInvokedCallback="true">
-
+        android:enableOnBackInvokedCallback="true"
+        >
 
         <!--activity
             android:name=".FragmentLogin"

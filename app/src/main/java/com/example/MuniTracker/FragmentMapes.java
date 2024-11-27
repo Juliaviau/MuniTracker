@@ -305,7 +305,6 @@ public class FragmentMapes extends Fragment {
         }
     }
 
-
     private void inicialitzarMapa() {
         webView.evaluateJavascript(
                 "document.getElementsByTagName('svg')[0].getAttribute('viewBox');",
@@ -529,19 +528,101 @@ public class FragmentMapes extends Fragment {
         LiveData<Integer> quantitatVisitada;
         int totalMunicipis;
 
+        //ScrollView scrollView = bottomSheetView.findViewById(R.id.scrollViewS);
+        LinearLayout visitasContainer = bottomSheetView.findViewById(R.id.visitasContainerS);
+
         switch (tipoZona) {
             case COMARCA:
                 quantitatVisitada = viewModel.obtenirQuantitatMunicipisVisitatsComarca(zonaId);
                 totalMunicipis = mapesHelper.obtenirQuantitatMunicipisPerComarca(zonaId);
+
+                viewModel.obtenirNomsMunicipisvisitatspercomarca(zonaId).observe(getViewLifecycleOwner(), municipis -> {
+                    visitasContainer.removeAllViews();
+                    for (Municipi municipi : municipis) {
+                        TextView visitaTextView = new TextView(context);
+                        visitaTextView.setText(municipi.id + " " + municipi.comarcaId );
+                        visitaTextView.setPadding(16, 16, 16, 16);
+                        visitaTextView.setBackgroundResource(R.drawable.rounded_card);
+                        visitaTextView.setTextSize(16);
+                        visitaTextView.setTextColor(ContextCompat.getColor(context, R.color.blau_mapa_fosc));
+                        visitaTextView.setTypeface(null, Typeface.BOLD);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                        );
+                        params.setMargins(8, 8, 8, 8);
+                        visitaTextView.setLayoutParams(params);
+                        /*visitaTextView.setOnClickListener(v ->  {
+                            showNotasDialog(municipi,bottomSheetDialog);
+                            //mostrarMunicipi(municipiId, originalColor, originalViewBox);
+
+                        });*/
+
+
+                        visitasContainer.addView(visitaTextView);
+                    }
+                });
                 break;
             case PROVINCIA:
                 quantitatVisitada = viewModel.obtenirQuantitatMunicipisVisitatsProvincia(zonaId);
                 totalMunicipis = mapesHelper.obtenirQuantitatMunicipisPerProvincia(zonaId);
+                viewModel.obtenirNomsMunicipisvisitatsPerProvincia(zonaId).observe(getViewLifecycleOwner(), municipis -> {
+                    visitasContainer.removeAllViews();
+                    for (Municipi municipi : municipis) {
+                        TextView visitaTextView = new TextView(context);
+                        visitaTextView.setText(municipi.id + " " + municipi.provinciaId);
+                        visitaTextView.setPadding(16, 16, 16, 16);
+                        visitaTextView.setBackgroundResource(R.drawable.rounded_card);
+                        visitaTextView.setTextSize(16);
+                        visitaTextView.setTextColor(ContextCompat.getColor(context, R.color.blau_mapa_fosc));
+                        visitaTextView.setTypeface(null, Typeface.BOLD);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                        );
+                        params.setMargins(8, 8, 8, 8);
+                        visitaTextView.setLayoutParams(params);
+                        /*visitaTextView.setOnClickListener(v ->  {
+                            showNotasDialog(municipi,bottomSheetDialog);
+                            //mostrarMunicipi(municipiId, originalColor, originalViewBox);
+
+                        });*/
+
+
+                        visitasContainer.addView(visitaTextView);
+                    }
+                });
                 break;
             case VEGUERIA:
             default:
                 quantitatVisitada = viewModel.obtenirQuantitatMunicipisVisitatsVegueria(zonaId);
                 totalMunicipis = mapesHelper.obtenirQuantitatMunicipisPerVegueria(zonaId);
+                viewModel.obtenirNomsMunicipisvisitatsPerVegueria(zonaId).observe(getViewLifecycleOwner(), municipis -> {
+                    visitasContainer.removeAllViews();
+                    for (Municipi municipi : municipis) {
+                        TextView visitaTextView = new TextView(context);
+                        visitaTextView.setText(municipi.id + " " + municipi.vegueriaId);
+                        visitaTextView.setPadding(16, 16, 16, 16);
+                        visitaTextView.setBackgroundResource(R.drawable.rounded_card);
+                        visitaTextView.setTextSize(16);
+                        visitaTextView.setTextColor(ContextCompat.getColor(context, R.color.blau_mapa_fosc));
+                        visitaTextView.setTypeface(null, Typeface.BOLD);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                        );
+                        params.setMargins(8, 8, 8, 8);
+                        visitaTextView.setLayoutParams(params);
+                        /*visitaTextView.setOnClickListener(v ->  {
+                            showNotasDialog(municipi,bottomSheetDialog);
+                            //mostrarMunicipi(municipiId, originalColor, originalViewBox);
+
+                        });*/
+
+
+                        visitasContainer.addView(visitaTextView);
+                    }
+                });
                 break;
         }
 

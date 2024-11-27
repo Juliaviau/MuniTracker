@@ -249,7 +249,7 @@ public class FragmentEstadistiques extends Fragment {
             labels.add(municipi.comarcaID);
         }
 
-        BarDataSet dataSet = new BarDataSet(entries, "Visitas");
+        BarDataSet dataSet = new BarDataSet(entries, "");
         dataSet.setColors(customColors);
         dataSet.setValueTextSize(12f);
 
@@ -283,6 +283,8 @@ public class FragmentEstadistiques extends Fragment {
         chart.setData(barData);
         chart.setFitBars(true);
         chart.setDrawValueAboveBar(true);
+
+        chart.getLegend().setEnabled(false);
 
         Description description = new Description();
         description.setText("");
@@ -328,7 +330,7 @@ public class FragmentEstadistiques extends Fragment {
 
         BarChart chart = getView().findViewById(R.id.barChartGa);
 
-        BarDataSet dataSet = new BarDataSet(entries, "Visitas");
+        BarDataSet dataSet = new BarDataSet(entries, "");
         dataSet.setColors(customColors);
         dataSet.setValueTextSize(12f);
 
@@ -362,6 +364,8 @@ public class FragmentEstadistiques extends Fragment {
         chart.setData(barData);
         chart.setFitBars(true);
         chart.setDrawValueAboveBar(true);
+
+        chart.getLegend().setEnabled(false);
 
         Description description = new Description();
         description.setText("");

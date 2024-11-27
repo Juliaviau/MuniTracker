@@ -37,6 +37,12 @@ public interface MunicipiDao {
     @Query("SELECT * FROM municipis WHERE comarca_id = :comarca_id AND visitat = 1 ORDER BY id ASC")
     LiveData<List<Municipi>> obtenirNomsMunicipisvisitatspercomarca(String comarca_id);
 
+    @Query("SELECT * FROM municipis WHERE vegueria_id = :vegueria_id AND visitat = 1 ORDER BY id ASC")
+    LiveData<List<Municipi>> obtenirNomsMunicipisVisitatsPerVegueria(String vegueria_id);
+
+    @Query("SELECT * FROM municipis WHERE provincia_id = :provincia_id AND visitat = 1 ORDER BY id ASC")
+    LiveData<List<Municipi>> obtenirNomsMunicipisVisitatsPerProvincia(String provincia_id);
+
     @Query("SELECT COUNT(*) FROM municipis WHERE provincia_id = :provinciaId AND visitat = 1")
     int getVisitadosMunicipisInProvincia(String provinciaId);
 

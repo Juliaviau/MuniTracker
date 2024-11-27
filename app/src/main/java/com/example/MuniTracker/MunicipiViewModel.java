@@ -46,6 +46,14 @@ public class MunicipiViewModel extends AndroidViewModel {
         return municipiRepository.obtenirNomsMunicipisvisitatspercomarca(comarcaId);
     }
 
+    public LiveData<List<Municipi>> obtenirNomsMunicipisvisitatsPerProvincia(String comarcaId) {
+        return municipiRepository.obtenirNomsMunicipisvisitatsPerProvincia(comarcaId);
+    }
+
+    public LiveData<List<Municipi>> obtenirNomsMunicipisvisitatsPerVegueria(String comarcaId) {
+        return municipiRepository.obtenirNomsMunicipisvisitatsPerVegueria(comarcaId);
+    }
+
     public void eliminarTotMunicipiVisites() {
         municipiRepository.eliminarTotMunicipiVisites();
     }

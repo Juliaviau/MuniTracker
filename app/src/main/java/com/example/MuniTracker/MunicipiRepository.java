@@ -35,6 +35,14 @@ public class MunicipiRepository implements Observer<Integer> {
         return municipiDao.obtenirNomsMunicipisvisitatspercomarca(comarca_id);
     }
 
+    public LiveData<List<Municipi>> obtenirNomsMunicipisvisitatsPerVegueria(String comarca_id) {
+        return municipiDao.obtenirNomsMunicipisVisitatsPerVegueria(comarca_id);
+    }
+
+    public LiveData<List<Municipi>> obtenirNomsMunicipisvisitatsPerProvincia(String comarca_id) {
+        return municipiDao.obtenirNomsMunicipisVisitatsPerProvincia(comarca_id);
+    }
+
 
 
     public LiveData<List<Municipi>> getMunicipisVisitats() {

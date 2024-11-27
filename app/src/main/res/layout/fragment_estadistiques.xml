@@ -14,61 +14,60 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="15dp">
+            android:layout_margin="15dp"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Estadístiques"
+                android:layout_margin="15dp"
                 android:gravity="center"
-                android:textStyle="bold"
+                android:text="Estadístiques"
                 android:textSize="22dp"
-                android:layout_margin="15dp"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Municipis visitats"
-                android:textStyle="bold"
-                android:textSize="16dp"/>
+                android:textSize="16dp"
+                android:textStyle="bold" />
 
             <TextView
-                android:layout_marginTop="10dp"
+                android:id="@+id/munvisi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/munvisi"
+                android:layout_marginTop="10dp"
                 android:text="S'han visitat x municipis d'un total de 804."
-                android:textSize="14dp"/>
+                android:textSize="14dp" />
 
 
-            <androidx.cardview.widget.CardView
-                xmlns:android="http://schemas.android.com/apk/res/android"
+            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="16dp"
                 android:layout_marginHorizontal="2dp"
-                app:cardElevation="4dp"
+                android:layout_marginVertical="16dp"
+                app:cardBackgroundColor="#FFFFFF"
                 app:cardCornerRadius="8dp"
-                app:cardBackgroundColor="#FFFFFF">
+                app:cardElevation="4dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingVertical="18dp"
                     android:paddingHorizontal="16dp"
-                    android:gravity="center_vertical">
+                    android:paddingVertical="18dp">
 
                     <!-- Barra de progreso, centrada -->
                     <ProgressBar
                         android:id="@+id/progressBar"
+                        style="?android:attr/progressBarStyleHorizontal"
                         android:layout_width="0dp"
                         android:layout_height="22dp"
                         android:layout_weight="1"
-                        android:progressDrawable="@drawable/progress_bar_custom"
-                        style="?android:attr/progressBarStyleHorizontal" />
+                        android:progressDrawable="@drawable/progress_bar_custom" />
 
                     <!-- Texto del porcentaje, con ancho fijo -->
                     <TextView
@@ -77,43 +76,64 @@
                         android:layout_height="wrap_content"
                         android:gravity="end"
                         android:paddingStart="4dp"
-                        android:textSize="14sp"
-                        android:textColor="#444444" />
+                        android:textColor="#444444"
+                        android:textSize="14sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Distribució dels municipis visitats"
-                android:textStyle="bold"
                 android:layout_marginVertical="15dp"
-                android:textSize="16dp"/>
+                android:text="Distribució dels municipis visitats"
+                android:textSize="16dp"
+                android:textStyle="bold" />
 
-            <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/pieChart"
-                android:layout_width="360dp"
-                android:layout_height="360dp"
-                android:layout_marginBottom="15dp"
-                android:layout_gravity="center"/>
+            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="2dp"
+                android:layout_marginVertical="16dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="4dp">
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pieChart"
+                    android:layout_width="350dp"
+                    android:layout_height="350dp"
+                    android:layout_gravity="center"
+                    android:layout_marginVertical="15dp" />
+            </androidx.cardview.widget.CardView>
 
-            <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/pieChartVegueria"
-                android:layout_width="380dp"
-                android:layout_height="380dp"
-                android:layout_gravity="center"/>
+
+            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="2dp"
+                android:layout_marginVertical="16dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="4dp">
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pieChartVegueria"
+                    android:layout_width="350dp"
+                    android:layout_height="350dp"
+                    android:layout_gravity="center"
+                    android:layout_marginVertical="15dp" />
+            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Percentatge de municipis visitats per comarques"
-                android:textStyle="bold"
                 android:layout_marginTop="30dp"
-                android:textSize="16dp"/>
+                android:text="Percentatge de municipis visitats per comarques"
+                android:textSize="16dp"
+                android:textStyle="bold" />
 
 
-            <ScrollView
-                xmlns:android="http://schemas.android.com/apk/res/android"
+            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
@@ -125,75 +145,120 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:spacing="8dp"/>
+                    android:spacing="8dp" />
             </ScrollView>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"
                 android:text="Top 10 municipis més visitats"
-                android:textStyle="bold"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="10dp"
-                android:textSize="16dp"/>
+                android:textSize="16dp"
+                android:textStyle="bold" />
 
-            <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/barChartGa"
-                android:layout_marginTop="15dp"
+            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
-                android:layout_height="500dp"/>
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="2dp"
+                android:layout_marginVertical="16dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="4dp">
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/barChartGa"
+                    android:layout_width="match_parent"
+                    android:layout_height="500dp"
+                    android:layout_marginVertical="15dp"
+                    android:layout_marginHorizontal="10dp"/>
+            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"
                 android:text="Top 5 comarques més visitades"
-                android:textStyle="bold"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="10dp"
-                android:textSize="16dp"/>
+                android:textSize="16dp"
+                android:textStyle="bold" />
 
-            <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/barChartCovi"
-                android:layout_marginTop="15dp"
+            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
-                android:layout_height="500dp"/>
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="2dp"
+                android:layout_marginVertical="16dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="4dp">
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/barChartCovi"
+                    android:layout_width="match_parent"
+                    android:layout_height="500dp"
+                    android:layout_marginVertical="15dp"
+                    android:layout_marginHorizontal="10dp"/>
+            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"
                 android:text="Top 3 vegueries més visitades"
-                android:textStyle="bold"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="10dp"
-                android:textSize="16dp"/>
+                android:textSize="16dp"
+                android:textStyle="bold" />
 
-            <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/barChartVevi"
-                android:layout_marginTop="15dp"
+            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
-                android:layout_height="500dp"/>
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="2dp"
+                android:layout_marginVertical="16dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="4dp">
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/barChartVevi"
+                    android:layout_width="match_parent"
+                    android:layout_height="500dp"
+                    android:layout_marginVertical="15dp"
+                    android:layout_marginHorizontal="10dp"/>
+            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"
                 android:text="Top 3 províncies més visitades"
-                android:textStyle="bold"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="70dp"
-                android:textSize="16dp"/>
+                android:textSize="16dp"
+                android:textStyle="bold" />
 
-            <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/barChartPrvi"
-                android:layout_marginTop="15dp"
+            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
-                android:layout_height="500dp"
-                />
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="2dp"
+                android:layout_marginVertical="16dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="4dp">
 
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/barChartPrvi"
+                    android:layout_width="match_parent"
+                    android:layout_height="500dp"
+                    android:layout_marginVertical="15dp"
+                    android:layout_marginHorizontal="10dp"/>
+            </androidx.cardview.widget.CardView>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="60dp"/>
-
+                android:layout_height="60dp" />
 
 
             <!--TextView
