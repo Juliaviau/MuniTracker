@@ -1,8 +1,5 @@
-import java.util.regex.Pattern.compile
-
 plugins {
     alias(libs.plugins.android.application)
-    //id("com.google.devtools.ksp")
 }
 
 android {
@@ -67,43 +64,22 @@ dependencies {
 
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
-    //paging
-
+    implementation ("androidx.paging:paging-runtime:3.1.1")
     // Paging 3
 
-    // Room
-    implementation(libs.androidx.room.runtime)
-    //kapt("androidx.room:room-compiler:2.5.0") // Usa kapt para el procesador de anotaciones de Room
-    implementation(libs.androidx.room.paging) // Para usar Paging 3 con Room
+    // Room con soporte para Paging
+    implementation ("androidx.room:room-runtime:2.5.0")
+    annotationProcessor ("androidx.room:room-compiler:2.5.0")
 
-    // Lifecycle
-    implementation(libs.androidx.lifecycle.runtime.ktx) // Para viewLifecycleOwner y lifecycleScope
-    implementation(libs.androidx.lifecycle.viewmodel.ktx.v262) // Usa la versión -ktx para coroutines en el ViewModel
-    implementation(libs.androidx.lifecycle.livedata.ktx.v262) // Usa la versión -ktx para coroutines en LiveData
-
-    implementation ("androidx.lifecycle:lifecycle-process:2.8.7")
-    compile ("android.arch.persistence.room:runtime:1.1.1")
-    annotationProcessor ("android.arch.persistence.room:compiler:1.1.1")
-
-    compile ("and roid.arch.lifecycle:runtime:1.0.0-beta2")
-    compile ("android.arch.lifecycle:extensions:1.1.1")
-    annotationProcessor ("android.arch.lifecycle:compiler:1.1.1")
-
-    implementation ("androidx.paging:paging-runtime:3.3.4") // Asegúrate de usar la última versión
+    implementation ("androidx.room:room-paging:2.5.0")
 
 
+    implementation ("androidx.lifecycle:lifecycle-viewmodel:2.5.1")
+    implementation ("androidx.lifecycle:lifecycle-livedata:2.5.1")
 
-
-    // Coroutines para usar lifecycleScope, launch, collectLatest
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3") // Asegúrate de tener la última versión
-
-    // Lifecycle para usar lifecycleScope y la integración con coroutines
-    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1") // Asegúrate de tener la versión más reciente
-
-    // Paging 3 para la paginación
-    implementation ("androidx.paging:paging-runtime:3.3.4") // O la última versión disponible
-
-    // Otras dependencias necesarias para tu proyecto
-
+    implementation ("androidx.paging:paging-runtime:3.1.1")
+    implementation ("androidx.room:room-runtime:2.5.0")
+    // kapt "androidx.room:room-compiler:$2.5.0"
+    implementation ("androidx.room:room-paging:2.5.0")
 
 }

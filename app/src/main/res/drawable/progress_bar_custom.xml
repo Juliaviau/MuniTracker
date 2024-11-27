@@ -14,9 +14,9 @@
             <shape android:shape="rectangle">
                 <!-- Gradiente de color del progreso -->
                 <gradient
-                    android:endColor="@color/lleg25"
-                    android:centerColor="@color/lleg50"
-                    android:startColor="@color/lleg75"
+                    android:endColor="@color/per25"
+                    android:centerColor="@color/per50"
+                    android:startColor="@color/per75"
                     android:angle="0" />
                 <corners android:radius="6dp" />
             </shape>

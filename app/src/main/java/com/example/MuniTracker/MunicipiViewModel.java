@@ -1,46 +1,27 @@
 package com.example.MuniTracker;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.paging.LivePagedListBuilder;
-import androidx.paging.PagedList;
 import androidx.paging.Pager;
 import androidx.paging.PagingConfig;
 import androidx.paging.PagingData;
-import kotlinx.coroutines.flow.Flow;
 
 import java.util.List;
 import java.util.concurrent.Executors;
 
 public class MunicipiViewModel extends AndroidViewModel {
     private final MunicipiRepository municipiRepository;
-    //private final LiveData<PagedList<Visita>> visitsPaged;
 
     public MunicipiViewModel(@NonNull Application application) {
         super(application);
-        /*municipiRepository = new MunicipiRepository(application);
-        visitsPaged = new LivePagedListBuilder<>(
-                municipiRepository.getAllVisitsFactory(),
-                new PagedList.Config.Builder()
-                        .setEnablePlaceholders(false) // Evita usar marcadores de posición
-                        .setPageSize(20)             // Tamaño de página
-                        .build()
-        ).build();*/
-        this.municipiRepository = new MunicipiRepository(application);
+        municipiRepository = new MunicipiRepository(application);
     }
-
-    public Flow<PagingData<Visita>> getVisitsPaged() {
-        return municipiRepository.getAllVisitsPaged(); // Directamente devuelve el Flow del Repository
-    }
-
-    /*public LiveData<PagedList<Visita>> getVisitsPaged() {
-        return visitsPaged;
-    }*/
 
     public LiveData<List<Municipi>> obtenirMunicipisVisitats() {
         return municipiRepository.getMunicipisVisitats();
@@ -68,23 +49,6 @@ public class MunicipiViewModel extends AndroidViewModel {
     public void eliminarTotMunicipiVisites() {
         municipiRepository.eliminarTotMunicipiVisites();
     }
-
-
-    /*public Pager<Integer, Visita> getAllVisitsPaged() {
-
-        return municipiRepository.getAllVisitsPaged();
-                //.liveData
-                //.cachedIn(viewModelScope); // Cachear los datos en el ViewModelScope
-    }*/
-    /*public LiveData<PagingData<Visita>> getAllVisitsPagedAsLiveData() {
-        return (LiveData<PagingData<Visita>>) new Pager<>(
-                new PagingConfig(20),
-                () -> municipiRepository.getAllVisitsPaged()
-        ).getFlow();
-    }*/
-
-
-
 
     public LiveData<Integer> obtenirQuantitatMunicipisVisitatsComarca(String comarcaId) {
         MutableLiveData<Integer> porcentaje = new MutableLiveData<>();
@@ -173,11 +137,9 @@ public class MunicipiViewModel extends AndroidViewModel {
     /*public void deleteMunicipi(Municipi municipi) {
         municipiRepository.deleteMunicipi(municipi);
     }
-
     public void deleteVisitasByMunicipiId(String municipiId) {
         municipiRepository.deleteVisitasByMunicipiId(municipiId);
     }
-
     public void deleteAllVisitas() {
         municipiRepository.deleteAllVisitas();
     }   */

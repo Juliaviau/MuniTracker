@@ -1,19 +1,17 @@
 package com.example.MuniTracker;
 
 import androidx.lifecycle.LiveData;
-import androidx.paging.DataSource;
-
+import androidx.paging.PagingSource;
+import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
-
+import androidx.room.Query;
 import androidx.room.Update;
 
 import java.util.List;
 
-import androidx.paging.PagingSource;
-import androidx.room.Dao;
-import androidx.room.Query;
+
 
 @Dao
 public interface VisitaDao {
@@ -34,10 +32,11 @@ public interface VisitaDao {
     @Query("SELECT COUNT(*) FROM visites WHERE municipiId = :municipiId")
     int getNumeroVisitesByMunicipiSync(String municipiId);
 
-    //@Query("SELECT * FROM visites ORDER BY dataVisita DESC")
-    //DataSource.Factory<Integer, Visita> getAllVisitsFactory();
-    @Query("SELECT * FROM visites ORDER BY dataVisita DESC")
-    PagingSource<Integer, Visita> getAllVisitsPaged();
+    /*@Query("SELECT * FROM visites ORDER BY dataVisita DESC")
+    PagingSource<Integer, Visita> getAllVisitsPaged();*/
+
+   // @Query("SELECT * FROM visites ORDER BY dataVisita DESC")
+    //LiveData<List<Visita>> getAllVisits();
 
     @Query("SELECT COUNT(*) FROM visites")
     LiveData<Integer> getNumeroTotalVisites();

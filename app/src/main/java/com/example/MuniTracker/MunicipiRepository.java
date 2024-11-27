@@ -1,6 +1,4 @@
 package com.example.MuniTracker;
-
-
 import android.app.Application;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -10,14 +8,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.paging.Pager;
 import androidx.paging.PagingConfig;
-import androidx.paging.Pager;
-import androidx.paging.PagingConfig;
 import androidx.paging.PagingData;
-import androidx.paging.PagingSource;
+
 import java.util.List;
 import java.util.concurrent.Executors;
-
-import kotlinx.coroutines.flow.Flow;
 
 public class MunicipiRepository implements Observer<Integer> {
     private final MunicipiDao municipiDao;
@@ -52,7 +46,9 @@ public class MunicipiRepository implements Observer<Integer> {
     }
 
     public LiveData<List<Visita>> getAllVisitsOrderByData() {
-        return visitaDao.getAllVisitsOrderByData();
+        //Executors.newSingleThreadExecutor().execute(() -> {
+            return visitaDao.getAllVisitsOrderByData();
+        //});
     }
 
 
@@ -190,25 +186,6 @@ public class MunicipiRepository implements Observer<Integer> {
         ).liveData;
     }*/
 
-    /* public Pager<Integer, Visita> getAllVisitsPaged() {
-        return new Pager<>(
-                new PagingConfig( 20), // Define el tamaño de la página
-                () -> new VisitaPagingSource(visitaDao) // Usa VisitaPagingSource
-        );
-    }*/
-
-    /*public PagingSource<Integer, Visita> getAllVisitsPaged() {
-        return visitaDao.getAllVisitsPaged();
-    }*/
-    /*public DataSource.Factory<Integer, Visita> getAllVisitsFactory() {
-        return visitaDao.getAllVisitsFactory();
-    }*/
-    public Flow<PagingData<Visita>> getAllVisitsPaged() {
-        return new Pager<>(
-                new PagingConfig(20), // Tamaño de página
-                () -> visitaDao.getAllVisitsPaged() // Método del DAO para obtener un PagingSource
-        ).getFlow(); // Usa getFlow() para obtener el Flow<PagingData>
-    }
 
     public LiveData<List<MunicipiVisitCount>> getTop10MostVisitedMunicipalities() {
         return visitaDao.getTop10MostVisitedMunicipalities();

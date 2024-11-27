@@ -27,9 +27,9 @@
 
 
 
-    <!--color name="lleg25">#76c7c0</color>
-    <color name="lleg50">#4ea8de</color>
-    <color name="lleg75">#357ab7</color>
-    <color name="llegComplet">#251B5F</color>
+    <color name="per25">#76c7c0</color>
+    <color name="per50">#4ea8de</color>
+    <color name="per75">#357ab7</color>
+    <!--color name="llegComplet">#251B5F</color>
     <color name="llegCompletTTT">#1b3a5f</color-->
 </resources>

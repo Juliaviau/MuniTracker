@@ -62,6 +62,20 @@ public class FragmentEstadistiques extends Fragment {
     private AtomicInteger visitatsProvTarragona = new AtomicInteger();
     private AtomicInteger visitatsProvGirona = new AtomicInteger();
 
+    int[] customColors = {
+            Color.parseColor("#4E79A7"), // Azul oscuro
+            Color.parseColor("#F28E2B"), // Naranja cálido
+            Color.parseColor("#E15759"), // Rojo suave
+            Color.parseColor("#76B7B2"), // Verde-azulado
+            Color.parseColor("#59A14F"), // Verde oliva
+            Color.parseColor("#EDC948"), // Amarillo dorado
+            Color.parseColor("#AF7AA1"), // Lila pastel
+            Color.parseColor("#FF9DA7"), // Rosa opaco
+            Color.parseColor("#9C755F"), // Marrón
+            Color.parseColor("#BAB0AC"), // Gris claro
+    };
+
+
     private static final int TOTAL_MUNICIPIS = 949;
 
     private Context context;
@@ -236,7 +250,7 @@ public class FragmentEstadistiques extends Fragment {
         }
 
         BarDataSet dataSet = new BarDataSet(entries, "Visitas");
-        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        dataSet.setColors(customColors);
         dataSet.setValueTextSize(12f);
 
         BarData barData = new BarData(dataSet);
@@ -315,7 +329,7 @@ public class FragmentEstadistiques extends Fragment {
         BarChart chart = getView().findViewById(R.id.barChartGa);
 
         BarDataSet dataSet = new BarDataSet(entries, "Visitas");
-        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        dataSet.setColors(customColors);
         dataSet.setValueTextSize(12f);
 
         BarData barData = new BarData(dataSet);
@@ -374,7 +388,7 @@ public class FragmentEstadistiques extends Fragment {
 
         ArrayList<Integer> colors = new ArrayList<>();
         for (int i = 0; i < yValues.size(); i++) {
-            colors.add(ColorTemplate.MATERIAL_COLORS[i % ColorTemplate.MATERIAL_COLORS.length]);
+            colors.add(customColors[i % customColors.length]);
         }
         dataSet.setColors(colors);
 
@@ -431,13 +445,14 @@ public class FragmentEstadistiques extends Fragment {
             dataSet.setSliceSpace(3f);
             dataSet.setSelectionShift(10f);
 
+
             // Colors personalitzats per cada segment
             ArrayList<Integer> colors = new ArrayList<>();
             colors.add(Color.parseColor("#FFA726")); // Taronja per Lleida
             colors.add(Color.parseColor("#66BB6A")); // Verd per Girona
             colors.add(Color.parseColor("#42A5F5")); // Blau per Barcelona
             colors.add(Color.parseColor("#FF7043")); // Vermell per Tarragona
-            dataSet.setColors(colors);
+            dataSet.setColors(customColors);
 
             // Configura el text de les dades al gràfic
             PieData data = new PieData(dataSet);
