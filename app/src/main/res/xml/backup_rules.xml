@@ -8,9 +8,9 @@
 <full-backup-content>
     <!--
    <include domain="sharedpref" path="."/>
-   <exclude domain="sharedpref" path="device.xml"/>
+   <exclude domain="sharedpref" path="device.xml"/><include domain="database" path="catalunya_db"/>
 -->
 
-    <include domain="database" path="catalunya_db"/>
+
 
 </full-backup-content>
