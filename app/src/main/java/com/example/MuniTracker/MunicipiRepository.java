@@ -30,7 +30,6 @@ public class MunicipiRepository implements Observer<Integer> {
         });
     }
 
-
     public LiveData<List<Municipi>> obtenirNomsMunicipisvisitatspercomarca(String comarca_id) {
         return municipiDao.obtenirNomsMunicipisvisitatspercomarca(comarca_id);
     }
@@ -42,8 +41,6 @@ public class MunicipiRepository implements Observer<Integer> {
     public LiveData<List<Municipi>> obtenirNomsMunicipisvisitatsPerProvincia(String comarca_id) {
         return municipiDao.obtenirNomsMunicipisVisitatsPerProvincia(comarca_id);
     }
-
-
 
     public LiveData<List<Municipi>> getMunicipisVisitats() {
         return  municipiDao.getMunicipisVisitats(); // Verifica que tu DAO también devuelva LiveData o Flow
@@ -59,7 +56,6 @@ public class MunicipiRepository implements Observer<Integer> {
         //});
     }
 
-
     public void afegirMunicipi(Municipi municipi) {
         Executors.newSingleThreadExecutor().execute(() -> {
             municipiDao.insert(municipi);
@@ -74,7 +70,6 @@ public class MunicipiRepository implements Observer<Integer> {
 
     @Override
     public void onChanged(Integer integer) {
-
     }
 
     private static class UpdateMunicipiAsyncTask extends AsyncTask<Municipi, Void, Void> {
