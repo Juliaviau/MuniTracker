@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, FragmentLogin.class));
 
         // Cargar el fragmento inicial
-        loadFragment(new FragmentMapes(), true);  // Indicamos que es el fragmento inicial
+        loadFragment(new FragmentMapes(), true);
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
 
@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment);  // Siempre usa replace
 
-        // Si el fragmento es el de mapa, asegura que se recargue
         if (fragment instanceof FragmentMapes && reloadMap) {
             fragmentTransaction.addToBackStack(null);  // Asegura que el estado anterior sea restaurado
         }

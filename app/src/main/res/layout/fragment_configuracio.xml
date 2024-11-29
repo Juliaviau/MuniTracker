@@ -6,17 +6,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#DCD9D9"
+    android:layout_gravity="center"
     android:orientation="vertical"
     tools:context=".FragmentConfiguracio">
 
-    <!-- TODO: Update blank fragment layout -->
 
-        <TextView
-            android:layout_marginTop="150dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/hello_blank_fragment"
-            android:layout_margin="20dp"/>
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation_view"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentBottom="true"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/gearloader" />
+
+    <!--TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:gravity="center"
+        android:text="Configuració"
+        android:textSize="22dp"
+        android:textStyle="bold" /-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="180dp">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttona"
@@ -33,9 +51,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@drawable/estilboto"
-
-            android:layout_margin="20dp"
+            android:layout_margin="60dp"
             android:text="Anar a la pantalla d'inici" />
+
+    </LinearLayout>
+
 
 
 

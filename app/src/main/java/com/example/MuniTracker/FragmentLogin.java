@@ -63,7 +63,6 @@ public class FragmentLogin extends AppCompatActivity {
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            // Cambiar el color del texto de la barra de estado a oscuro (para fondos claros)
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
 

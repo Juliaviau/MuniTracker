@@ -1,9 +1,12 @@
 package com.example.MuniTracker;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -11,9 +14,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
+
+import com.example.MuniTracker.databinding.FragmentConfiguracioBinding;
+import com.example.MuniTracker.databinding.FragmentEstadistiquesBinding;
 
 public class FragmentConfiguracio extends Fragment {
-
+    private Context context;
+    @NonNull
+    FragmentConfiguracioBinding binding;
     // Canviar mode clar fosc app
     // Veure anunci
 
@@ -22,6 +31,11 @@ public class FragmentConfiguracio extends Fragment {
         // Required empty public constructor
     }
 
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,12 +50,27 @@ public class FragmentConfiguracio extends Fragment {
         }
 
 
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        binding = FragmentConfiguracioBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-        return inflater.inflate(R.layout.fragment_configuracio, container, false);
+        binding.buttoninici.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    finalize();
+                } catch (Throwable e) {
+                    throw new RuntimeException(e);
+                }
+                startActivity(new Intent(getActivity(), FragmentLogin.class));
+            }
+        });
+
+        return view;
     }
 }
