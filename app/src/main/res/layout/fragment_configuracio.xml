@@ -14,21 +14,21 @@
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animation_view"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="90dp"
         android:layout_marginTop="20dp"
         android:layout_alignParentBottom="true"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/gearloader" />
 
-    <!--TextView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="30dp"
+        android:layout_marginBottom="30dp"
         android:gravity="center"
         android:text="Configuració"
         android:textSize="22dp"
-        android:textStyle="bold" /-->
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -55,8 +55,4 @@
             android:text="Anar a la pantalla d'inici" />
 
     </LinearLayout>
-
-
-
-
 </LinearLayout>
