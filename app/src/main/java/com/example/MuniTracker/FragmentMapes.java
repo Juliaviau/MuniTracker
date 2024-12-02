@@ -196,8 +196,6 @@ public class FragmentMapes extends Fragment {
                     if (item.toLowerCase().contains(query)) {
                         filteredMunicipis.add(item);
                     }
-
-
                 }
                 adaptadorActual.updateList(filteredMunicipis);
                 llistaResultatsBuscador.setVisibility(filteredMunicipis.isEmpty() ? View.GONE : View.VISIBLE);
