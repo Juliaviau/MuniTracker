@@ -3,10 +3,12 @@ package com.example.MuniTracker;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -25,7 +27,9 @@ public class FragmentConfiguracio extends Fragment {
     FragmentConfiguracioBinding binding;
     // Canviar mode clar fosc app
     // Veure anunci
-
+    boolean nightmode;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
     public FragmentConfiguracio() {
         // Required empty public constructor
@@ -58,6 +62,39 @@ public class FragmentConfiguracio extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentConfiguracioBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+
+        sharedPreferences = getActivity().getSharedPreferences("MODE", Context.MODE_PRIVATE);
+        nightmode = sharedPreferences.getBoolean("nightmode", false);
+
+        if (nightmode) {
+            binding.switchCompat.setChecked(true);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+
+        binding.switchCompat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (nightmode) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    editor = sharedPreferences.edit();
+                    editor.putBoolean("nightmode",false);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    editor = sharedPreferences.edit();
+                    editor.putBoolean("nightmode",true);
+                }
+                editor.apply();
+            }
+        });
+
+        /*binding.switchCompat.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                binding.switchCompat.setText("Mode fosc");
+            } else {
+                binding.switchCompat.setText("Mode clar");
+            }
+
+        });*/
 
         binding.buttoninici.setOnClickListener(new View.OnClickListener() {
             @Override

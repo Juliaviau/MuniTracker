@@ -3,5 +3,39 @@
     <style name="Base.Theme.MuniTracker" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <!-- Customize your light theme here. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/blau_mapa_fosc</item>
+        <item name="android:navigationBarColor" tools:targetApi="l">@color/blau_mapa_fosc</item>
+
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+
+        <!--<item name="colorPrimary">@color/my_light_primary</item>
+        <item name="colorPrimaryVariant">@color/my_light_primary_variant</item>
+        <item name="colorOnPrimary">@color/my_light_on_primary</item>
+
+
+        <item name="colorSecondary">@color/my_light_secondary</item>
+        <item name="colorSecondaryVariant">@color/my_light_secondary_variant</item>
+        <item name="colorOnSecondary">@color/my_light_on_secondary</item>-->
     </style>
+
+
+    <style name="ScreenBackground"><item name="android:background">@color/blau_mapa_fosc</item></style>
+    <style name="TextColor"><item name="android:textColor">@color/white</item></style>
+
+    <style name="Theme.MuniTracker" parent="Base.Theme.MuniTracker" />
+
+    <!--  splashscreen -->
+    <style name="SplashScreen" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/backgroung_splashscreen</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/white</item>
+    </style>
+
+
+
+
+
+
+
 </resources>
