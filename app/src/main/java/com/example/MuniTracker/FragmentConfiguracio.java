@@ -27,9 +27,9 @@ public class FragmentConfiguracio extends Fragment {
     FragmentConfiguracioBinding binding;
     // Canviar mode clar fosc app
     // Veure anunci
-    boolean nightmode;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
+    //boolean nightmode;
+    //SharedPreferences sharedPreferences;
+    //SharedPreferences.Editor editor;
 
     public FragmentConfiguracio() {
         // Required empty public constructor
@@ -63,7 +63,7 @@ public class FragmentConfiguracio extends Fragment {
         binding = FragmentConfiguracioBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        sharedPreferences = getActivity().getSharedPreferences("MODE", Context.MODE_PRIVATE);
+        /*sharedPreferences = getActivity().getSharedPreferences("MODE", Context.MODE_PRIVATE);
         nightmode = sharedPreferences.getBoolean("nightmode", false);
 
         if (nightmode) {
@@ -85,7 +85,7 @@ public class FragmentConfiguracio extends Fragment {
                 }
                 editor.apply();
             }
-        });
+        });*/
 
         /*binding.switchCompat.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
