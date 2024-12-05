@@ -62,7 +62,7 @@ public class FragmentEstadistiques extends Fragment {
     private AtomicInteger visitatsProvTarragona = new AtomicInteger();
     private AtomicInteger visitatsProvGirona = new AtomicInteger();
 
-    int[] customColors = {
+    int[] colorsGrafiques = {
             Color.parseColor("#4E79A7"), // Azul oscuro
             Color.parseColor("#F28E2B"), // Naranja cálido
             Color.parseColor("#E15759"), // Rojo suave
@@ -85,19 +85,6 @@ public class FragmentEstadistiques extends Fragment {
     private List<String> vegueries = Arrays.asList("Alt Pirineu i Aran", "Barcelona", "Camp de Tarragona", "Catalunya Central", "Girona", "Lleida", "Penedès", "Terres de l'Ebre");
 
     private Map<String, AtomicInteger> visitatsPerComarcaL = new HashMap<>();
-    private Map<String, AtomicInteger> visitatsPerComarcaG = new HashMap<>();
-    private Map<String, AtomicInteger> visitatsPerComarcaT = new HashMap<>();
-    private Map<String, AtomicInteger> visitatsPerComarcaB = new HashMap<>();
-    private Map<String, AtomicInteger> visitatsPerComarca = new HashMap<>();
-
-    private List<String> comarquesB = Arrays.asList(
-            "Alt Penedès", "Anoia", "Bages", "Baix Llobregat", "Barcelonès", "Garraf", "Maresme", "Osona", "Vallès Occidental", "Vallès Oriental","Lluçanès");//10
-    private List<String> comarquesT = Arrays.asList(
-            "Alt Camp", "Baix Camp", "Baix Ebre", "Baix Penedès", "Conca de Barberà", "Montsià", "Priorat", "Ribera d'Ebre", "Tarragonès", "Terra Alta");//10
-    private List<String> comarquesG = Arrays.asList(
-            "Alt Empordà", "Baix Empordà", "Cerdanya", "Garrotxa", "Gironès", "Pla de l'Estany", "La Selva", "Ripollès");//8
-    private List<String> comarquesL = Arrays.asList(
-            "Alta Ribagorça", "Alt Urgell", "Cerdanya", "Garrigues", "Noguera", "Pallars Jussà", "Pallars Sobirà", "Pla d'Urgell", "Segarra", "Segrià", "Solsonès", "Urgell", "Val d'Aran");//13
 
     private List<String> comarques = Arrays.asList(
             "Alt Penedès", "Anoia", "Bages", "Baix Llobregat", "Barcelonès", "Garraf", "Maresme", "Osona", "Vallès Occidental", "Vallès Oriental",
@@ -250,7 +237,7 @@ public class FragmentEstadistiques extends Fragment {
         }
 
         BarDataSet dataSet = new BarDataSet(entries, "");
-        dataSet.setColors(customColors);
+        dataSet.setColors(colorsGrafiques);
         dataSet.setValueTextSize(12f);
 
         BarData barData = new BarData(dataSet);
@@ -331,7 +318,7 @@ public class FragmentEstadistiques extends Fragment {
         BarChart chart = getView().findViewById(R.id.barChartGa);
 
         BarDataSet dataSet = new BarDataSet(entries, "");
-        dataSet.setColors(customColors);
+        dataSet.setColors(colorsGrafiques);
         dataSet.setValueTextSize(12f);
 
         BarData barData = new BarData(dataSet);
@@ -392,7 +379,7 @@ public class FragmentEstadistiques extends Fragment {
 
         ArrayList<Integer> colors = new ArrayList<>();
         for (int i = 0; i < yValues.size(); i++) {
-            colors.add(customColors[i % customColors.length]);
+            colors.add(colorsGrafiques[i % colorsGrafiques.length]);
         }
         dataSet.setColors(colors);
 
@@ -456,7 +443,7 @@ public class FragmentEstadistiques extends Fragment {
             colors.add(Color.parseColor("#66BB6A")); // Verd per Girona
             colors.add(Color.parseColor("#42A5F5")); // Blau per Barcelona
             colors.add(Color.parseColor("#FF7043")); // Vermell per Tarragona
-            dataSet.setColors(customColors);
+            dataSet.setColors(colorsGrafiques);
 
             // Configura el text de les dades al gràfic
             PieData data = new PieData(dataSet);
