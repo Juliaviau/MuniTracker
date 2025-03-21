@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.android.application) apply false
     id("com.android.library") version "8.1.1" apply false
+//    id("kotlin-kapt") apply false
 
 }
 
