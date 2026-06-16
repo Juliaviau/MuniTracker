@@ -7,7 +7,7 @@
     android:background="#DCD9D9"
     android:padding="16dp"
     android:scrollbars="vertical"
-    tools:context=".FragmentPerfil">
+    tools:context=".Fragments.FragmentPerfil">
 
     <LinearLayout
         android:layout_width="match_parent"

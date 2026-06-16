@@ -1,4 +1,4 @@
-package com.example.MuniTracker;
+package com.example.MuniTracker.Fragments;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -7,21 +7,13 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.ListAdapter;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -37,18 +29,17 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.MuniTracker.databinding.FragmentMapesBinding;
+import com.example.MuniTracker.MunicipiViewModel;
+import com.example.MuniTracker.R;
+import com.example.MuniTracker.Entity.Visita;
+import com.example.MuniTracker.VisitaDialogFragment;
 import com.example.MuniTracker.databinding.FragmentPerfilBinding;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class FragmentPerfil extends Fragment {
 

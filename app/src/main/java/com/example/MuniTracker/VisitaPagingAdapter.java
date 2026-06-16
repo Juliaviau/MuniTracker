@@ -11,6 +11,8 @@ import androidx.paging.PagingDataAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.MuniTracker.Entity.Visita;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;

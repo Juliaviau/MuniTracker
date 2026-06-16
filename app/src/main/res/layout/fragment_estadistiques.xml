@@ -1,323 +1,347 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#DCD9D9"
-    android:layout_marginBottom="10dp"
-    tools:context=".FragmentEstadistiques">
+    tools:context=".Fragments.FragmentEstadistiques">
 
+    <!-- 1. HEADER INTEGRAT -->
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="@drawable/estil_header_config"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="24dp"
+        android:paddingTop="20dp"
+        android:elevation="4dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Estadístiques"
+                android:textColor="#FFFFFF"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <!-- Text canviat i polit -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descobreix el teu progrés pel territori"
+                android:textColor="#DDFFFFFF"
+                android:textSize="16sp"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 2. COS PRINCIPAL AMB CARDVIEWS (Classificat) -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="145dp"> <!-- Solapament elegant amb el header -->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="40dp">
 
-            <TextView
+            <!-- TARGETA 1: PROGRESS GENERAL DE MUNICIPIS -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:gravity="center"
-                android:text="Estadístiques"
-                android:textSize="22dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Municipis visitats"
-                android:textSize="16dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/munvisi"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="S'han visitat x municipis d'un total de 804."
-                android:textSize="14dp" />
-
-
-            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="2dp"
-                android:layout_marginVertical="16dp"
+                android:layout_marginVertical="10dp"
                 app:cardBackgroundColor="#FFFFFF"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="18dp">
-
-                    <!-- Barra de progreso, centrada -->
-                    <ProgressBar
-                        android:id="@+id/progressBar"
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_width="0dp"
-                        android:layout_height="22dp"
-                        android:layout_weight="1"
-                        android:progressDrawable="@drawable/progress_bar_custom" />
-
-                    <!-- Texto del porcentaje, con ancho fijo -->
-                    <TextView
-                        android:id="@+id/indicadorpercentatge"
-                        android:layout_width="50dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:paddingStart="4dp"
-                        android:textColor="#444444"
-                        android:textSize="14sp" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="15dp"
-                android:text="Distribució dels municipis visitats"
-                android:textSize="16dp"
-                android:textStyle="bold" />
-
-            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="2dp"
-                android:layout_marginVertical="16dp"
-                app:cardBackgroundColor="#FFFFFF"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="4dp">
-                <com.github.mikephil.charting.charts.PieChart
-                    android:id="@+id/pieChart"
-                    android:layout_width="350dp"
-                    android:layout_height="350dp"
-                    android:layout_gravity="center"
-                    android:layout_marginVertical="15dp" />
-            </androidx.cardview.widget.CardView>
-
-
-            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="2dp"
-                android:layout_marginVertical="16dp"
-                app:cardBackgroundColor="#FFFFFF"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="4dp">
-                <com.github.mikephil.charting.charts.PieChart
-                    android:id="@+id/pieChartVegueria"
-                    android:layout_width="350dp"
-                    android:layout_height="350dp"
-                    android:layout_gravity="center"
-                    android:layout_marginVertical="15dp" />
-            </androidx.cardview.widget.CardView>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="Percentatge de municipis visitats per comarques"
-                android:textSize="16dp"
-                android:textStyle="bold" />
-
-
-            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:background="#00F8F8F8"
-                android:padding="6dp">
-
-                <LinearLayout
-                    android:id="@+id/progress_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:spacing="8dp" />
-            </ScrollView>
+                    android:padding="20dp">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="10dp"
-                android:text="Top 10 municipis més visitats"
-                android:textSize="16dp"
-                android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Municipis visitats"
+                        android:textColor="#222222"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
-            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="2dp"
-                android:layout_marginVertical="16dp"
-                app:cardBackgroundColor="#FFFFFF"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="4dp">
+                    <TextView
+                        android:id="@+id/munvisi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="S'han visitat x municipis d'un total de 804."
+                        android:textColor="#555555"
+                        android:textSize="16sp" />
 
-                <com.github.mikephil.charting.charts.BarChart
-                    android:id="@+id/barChartGa"
-                    android:layout_width="match_parent"
-                    android:layout_height="500dp"
-                    android:layout_marginVertical="15dp"
-                    android:layout_marginHorizontal="10dp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="16dp">
+
+                        <ProgressBar
+                            android:id="@+id/progressBar"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="0dp"
+                            android:layout_height="18dp"
+                            android:layout_weight="1"
+                            android:progressDrawable="@drawable/progress_bar_custom" />
+
+                        <TextView
+                            android:id="@+id/indicadorpercentatge"
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:textColor="#222222"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            tools:text="25%" />
+                    </LinearLayout>
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <TextView
+            <!-- TARGETA 2: PIECHART MUNICIPIS -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="10dp"
-                android:text="Top 5 comarques més visitades"
-                android:textSize="16dp"
-                android:textStyle="bold" />
-
-            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="2dp"
-                android:layout_marginVertical="16dp"
+                android:layout_marginVertical="10dp"
                 app:cardBackgroundColor="#FFFFFF"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="4dp">
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
 
-                <com.github.mikephil.charting.charts.BarChart
-                    android:id="@+id/barChartCovi"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="500dp"
-                    android:layout_marginVertical="15dp"
-                    android:layout_marginHorizontal="10dp"/>
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Distribució dels municipis visitats"
+                        android:textColor="#222222"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pieChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="320dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="12dp" />
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <TextView
+            <!-- TARGETA 3: PIECHART VEGUERIES -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="10dp"
-                android:text="Top 3 vegueries més visitades"
-                android:textSize="16dp"
-                android:textStyle="bold" />
-
-            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="2dp"
-                android:layout_marginVertical="16dp"
+                android:layout_marginVertical="10dp"
                 app:cardBackgroundColor="#FFFFFF"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="4dp">
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
 
-                <com.github.mikephil.charting.charts.BarChart
-                    android:id="@+id/barChartVevi"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="500dp"
-                    android:layout_marginVertical="15dp"
-                    android:layout_marginHorizontal="10dp"/>
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Distribució per vegueries"
+                        android:textColor="#222222"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pieChartVegueria"
+                        android:layout_width="match_parent"
+                        android:layout_height="320dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="12dp" />
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <TextView
+            <!-- TARGETA 4: PROGRESS DINÀMIC COMARQUES -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="10dp"
-                android:text="Top 3 províncies més visitades"
-                android:textSize="16dp"
-                android:textStyle="bold" />
-
-            <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="2dp"
-                android:layout_marginVertical="16dp"
+                android:layout_marginVertical="10dp"
                 app:cardBackgroundColor="#FFFFFF"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="4dp">
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
 
-                <com.github.mikephil.charting.charts.BarChart
-                    android:id="@+id/barChartPrvi"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="500dp"
-                    android:layout_marginVertical="15dp"
-                    android:layout_marginHorizontal="10dp"/>
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Percentatge visitat per comarques"
+                        android:textColor="#222222"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:id="@+id/progress_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="12dp" />
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- TARGETA 5: TOP 10 MUNICIPIS (BARCHART) -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Top 10 municipis més visitats"
+                        android:textColor="#222222"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/barChartGa"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp"
+                        android:layout_marginTop="12dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- TARGETA 6: TOP 5 COMARQUES (BARCHART) -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Top 5 comarques més visitades"
+                        android:textColor="#222222"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/barChartCovi"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp"
+                        android:layout_marginTop="12dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- TARGETA 7: TOP 3 VEGUERIES (BARCHART) -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Top 3 vegueries més visitades"
+                        android:textColor="#222222"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/barChartVevi"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp"
+                        android:layout_marginTop="12dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- TARGETA 8: TOP 3 PROVÍNCIES (BARCHART) -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Top 3 províncies més visitades"
+                        android:textColor="#222222"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/barChartPrvi"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp"
+                        android:layout_marginTop="12dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Separador final de cortesia per fer scroll còmode -->
             <View
                 android:layout_width="match_parent"
-                android:layout_height="60dp" />
+                android:layout_height="70dp" />
 
-
-            <!--TextView
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Comarques de la província de Barcelona"
-                android:layout_marginBottom="5dp"
-                android:textSize="14dp"/>
-
-            <com.github.mikephil.charting.charts.HorizontalBarChart
-                android:id="@+id/barChartB"
-                android:layout_marginTop="15dp"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"/>
-
-            <TextView
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Comarques de la província de Girona"
-                android:layout_marginBottom="5dp"
-                android:textSize="14dp"/>
-
-            <com.github.mikephil.charting.charts.HorizontalBarChart
-                android:id="@+id/barChartG"
-                android:layout_marginTop="15dp"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"/>
-
-            <TextView
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Comarques de la província de Tarragona"
-                android:layout_marginBottom="5dp"
-                android:textSize="14dp"/>
-
-            <com.github.mikephil.charting.charts.HorizontalBarChart
-                android:id="@+id/barChartT"
-                android:layout_marginTop="15dp"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"/>
-
-            <TextView
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Comarques de la província de Lleida"
-                android:layout_marginBottom="5dp"
-                android:textSize="14dp"/>
-
-            <com.github.mikephil.charting.charts.HorizontalBarChart
-                android:id="@+id/barChartL"
-                android:layout_marginTop="15dp"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginBottom="100dp"/-->
         </LinearLayout>
     </ScrollView>
-
 </FrameLayout>

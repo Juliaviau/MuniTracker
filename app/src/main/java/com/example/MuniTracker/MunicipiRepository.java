@@ -6,9 +6,9 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
-import androidx.paging.Pager;
-import androidx.paging.PagingConfig;
-import androidx.paging.PagingData;
+
+import com.example.MuniTracker.Entity.Municipi;
+import com.example.MuniTracker.Entity.Visita;
 
 import java.util.List;
 import java.util.concurrent.Executors;

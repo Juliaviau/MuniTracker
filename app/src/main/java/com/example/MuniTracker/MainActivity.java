@@ -10,29 +10,53 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.MuniTracker.Fragments.FragmentConfiguracio;
+import com.example.MuniTracker.Fragments.FragmentEstadistiques;
+import com.example.MuniTracker.Fragments.FragmentLogin;
+import com.example.MuniTracker.Fragments.FragmentMapes;
+import com.example.MuniTracker.Fragments.FragmentPerfil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.splashscreen.SplashScreen; // Recuerda añadir la dependencia si no la tienes
+import android.os.Bundle;
+import android.view.MenuItem;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity {
 
+    // 1. Variable para controlar el estado de la carga de datos
+    private boolean isKeepOnScreen = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // 2. INICIALIZA EL SPLASH AQUÍ (Siempre antes de super.onCreate)
+        SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        startActivity(new Intent(MainActivity.this, FragmentLogin.class));
+        // 3. Condición para mantener el Splash visible mientras cargan los datos
+        splashScreen.setKeepOnScreenCondition(() -> isKeepOnScreen);
 
-        // Cargar el fragmento inicial
+        // 4. Lanzamos tu método de carga de datos (API, mapas, base de datos, etc.)
+        cargarDatosDeLaApp();
+
+        // 5. Cargamos directamente el fragmento inicial del mapa
         loadFragment(new FragmentMapes(), true);
 
+        // Configuración del BottomNavigationView
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
-
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 Fragment fragment = null;
                 int itemId = menuItem.getItemId();
                 if (itemId == R.id.mapaId) {
-                    fragment = new FragmentMapes();  // Regresar al mapa
+                    fragment = new FragmentMapes();
                 } else if (itemId == R.id.altreId) {
                     fragment = new FragmentPerfil();
                 } else if (itemId == R.id.estadistiquesId) {
@@ -42,20 +66,32 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if (fragment != null) {
-                    loadFragment(fragment, true);  // Recargar fragmento seleccionado
+                    loadFragment(fragment, true);
                 }
-                return true;  // Indica que el item fue seleccionado
+                return true;
             }
         });
+    }
+
+    // 6. Tu función asíncrona para cargar los datos necesarios antes de mostrar la App
+    private void cargarDatosDeLaApp() {
+        // Este Handler simula una carga de 2.5 segundos (reemplázalo por tu lógica real)
+        new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Cuando tus datos estén listos, cambiamos a false y el Splash desaparecerá solo
+                isKeepOnScreen = false;
+            }
+        }, 2500);
     }
 
     private void loadFragment(Fragment fragment, boolean reloadMap) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frameLayout, fragment);  // Siempre usa replace
+        fragmentTransaction.replace(R.id.frameLayout, fragment);
 
         if (fragment instanceof FragmentMapes && reloadMap) {
-            fragmentTransaction.addToBackStack(null);  // Asegura que el estado anterior sea restaurado
+            fragmentTransaction.addToBackStack(null);
         }
         fragmentTransaction.commit();
     }

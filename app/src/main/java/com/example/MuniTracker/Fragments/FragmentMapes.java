@@ -1,4 +1,4 @@
-package com.example.MuniTracker;
+package com.example.MuniTracker.Fragments;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -55,6 +55,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.example.MuniTracker.MapesHelper;
+import com.example.MuniTracker.Entity.Municipi;
+import com.example.MuniTracker.MunicipiViewModel;
+import com.example.MuniTracker.R;
+import com.example.MuniTracker.SearchAdapter;
+import com.example.MuniTracker.Entity.Visita;
+import com.example.MuniTracker.VisitaDialogFragment;
 import com.example.MuniTracker.databinding.FragmentMapesBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -68,7 +76,7 @@ public class FragmentMapes extends Fragment {
     MapesHelper mapesHelper;
     String tipusMapa = "m";
     BottomSheetDialog bottomSheetDialog;
-    String colorVisitat = "rgb(166, 94, 46)";
+    //String colorVisitat = Color.parseColor(paletaActual[4]);
 
     private static final String TERRITORY_TYPE_MUNICIPALITY = "m";
     private static final String TERRITORY_TYPE_COMARCA = "c";
@@ -82,6 +90,17 @@ public class FragmentMapes extends Fragment {
     private MunicipiViewModel viewModel;
 
     private Map<String, String> cachedSVGs = new HashMap<>();
+
+    // Copia la mateixa estructura de colors que hem definit al FragmentConfiguracio
+    private final String[][] PALETES = {
+            {"#fff7b2", "#ffd966", "#ffa631", "#d98a2d", "#a65e2e"}, // 0. Groc/Taronja (Original)
+            {"#E0F3F8", "#ABD9E9", "#74ADD1", "#4575B4", "#313695"}, // 1. Oceà Blau
+            {"#E8F5E9", "#A5D6A7", "#66BB6A", "#388E3C", "#1B5E20"}, // 2. Bosc Verd
+            {"#FCE4EC", "#F48FB1", "#F06292", "#E91E63", "#880E4F"}  // 3. Magenta Elèctric
+    };
+
+    // Variable per saber quins 5 colors s'estan utilitzant actualment
+    private String[] paletaActual;
 
     @Override
     public void onAttach(Context context) {
@@ -107,12 +126,28 @@ public class FragmentMapes extends Fragment {
         //pintarMunicipisVisitats();
     }
 
+
+
+
+
+
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentMapesBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         context = requireContext();
+
+        android.content.SharedPreferences prefs = context.getSharedPreferences("ConfigApp", android.content.Context.MODE_PRIVATE);
+        int indexPaleta = prefs.getInt("paleta_seleccionada", 0);
+        paletaActual = PALETES[indexPaleta]; // Assignem l'array de 5 colors d'aquella paleta
+
+        binding.llegendaColor25.setBackgroundColor(Color.parseColor(paletaActual[0]));
+        binding.llegendaColor50.setBackgroundColor(Color.parseColor(paletaActual[1]));
+        binding.llegendaColor75.setBackgroundColor(Color.parseColor(paletaActual[2]));
+        binding.llegendaColorComplet.setBackgroundColor(Color.parseColor(paletaActual[4]));
+
+
         //View view = inflater.inflate(R.layout.fragment_mapes, container, false);
         viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
 
@@ -236,6 +271,17 @@ public class FragmentMapes extends Fragment {
 
         return view;
     }
+
+
+
+
+
+
+
+
+
+
+
 
     private void setupTerritoryButton(Button button, String territoryType, SearchAdapter adapter) {
         button.setOnClickListener(v -> {
@@ -468,7 +514,7 @@ public class FragmentMapes extends Fragment {
                     pintarMunicipisVisitats();
                     // actualizarBottomSheet();
 
-                    canviarColorSVG(visita.municipiId, colorVisitat);
+                    canviarColorSVG(visita.municipiId, String.valueOf(Color.parseColor(paletaActual[4])));
                     carregarMapa(TERRITORY_TYPE_MUNICIPALITY);
 
                     viewModel.setVisitaEliminada(false);
@@ -646,7 +692,7 @@ public class FragmentMapes extends Fragment {
         NestedScrollView scroll = bottomSheetView.findViewById(R.id.scrollView);
         View viewBottom = bottomSheetView.findViewById(R.id.viewbottom);
 
-        boolean municipiVisitat = comparaColor(originalColor, colorVisitat);//rgb(27, 58, 95) es el blau fosc
+        boolean municipiVisitat = comparaColor(originalColor, String.valueOf(Color.parseColor(paletaActual[4])));//rgb(27, 58, 95) es el blau fosc
         MunicipiViewModel viewModel = new ViewModelProvider(this, viewModelFactory).get(MunicipiViewModel.class);
 
         if (municipiVisitat) {
@@ -765,7 +811,7 @@ public class FragmentMapes extends Fragment {
         viewModel.obtenirMunicipisVisitats().observe(getViewLifecycleOwner(), municipisVisitats -> {
             if (municipisVisitats != null) {
                 for (Municipi municipi : municipisVisitats) {
-                    canviarColorSVG(municipi.id, String.format("#%06X", (0xFFFFFF & ContextCompat.getColor(context, R.color.llegComplet))));
+                    canviarColorSVG(municipi.id, String.format("#%06X", (0xFFFFFF &  Color.parseColor(paletaActual[4]) )/*(0xFFFFFF & ContextCompat.getColor(context, R.color.llegComplet))*/));
                 }
             }
         });
@@ -784,14 +830,36 @@ public class FragmentMapes extends Fragment {
     //50 75
     //75 100
     //100
-    public int obtenirColorPerPercentatge(double percentatge) {
+    /*public int obtenirColorPerPercentatge(double percentatge) {
         if (percentatge == 0.0) return ContextCompat.getColor(context, R.color.blau_mapa);
         else if (percentatge <= 25.0) return ContextCompat.getColor(context, R.color.lleg25);
         else if (percentatge <= 50.0) return ContextCompat.getColor(context, R.color.lleg50);
         else if (percentatge <= 75.0) return ContextCompat.getColor(context, R.color.lleg75);
         else if (percentatge < 100.0) return ContextCompat.getColor(context, R.color.lleg99);
         else return ContextCompat.getColor(context, R.color.llegComplet);
+    }*/
+
+    public int obtenirColorPerPercentatge(double percentatge) {
+        // Si és 0, es manté el color de fons del mapa que ja tenies
+        if (percentatge == 0.0) {
+            return ContextCompat.getColor(context, R.color.blau_mapa);
+        }
+
+        // Si s'ha de pintar, agafem el color corresponent del nostre array dinàmic
+        if (percentatge <= 25.0) {
+            return Color.parseColor(paletaActual[0]); // lleg25 dinàmic
+        } else if (percentatge <= 50.0) {
+            return Color.parseColor(paletaActual[1]); // lleg50 dinàmic
+        } else if (percentatge <= 75.0) {
+            return Color.parseColor(paletaActual[2]); // lleg75 dinàmic
+        } else if (percentatge < 100.0) {
+            return Color.parseColor(paletaActual[3]); // lleg99 dinàmic
+        } else {
+            return Color.parseColor(paletaActual[4]); // llegComplet dinàmic
+        }
     }
+
+
 
     public interface ColorCallback {
         void onColorReceived(String color);

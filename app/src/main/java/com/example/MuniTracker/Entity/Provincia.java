@@ -1,13 +1,12 @@
-package com.example.MuniTracker;
+package com.example.MuniTracker.Entity;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "comarcas")
-public class Comarca {
-    @PrimaryKey
-    @NonNull
+@Entity(tableName = "provincias")
+public class Provincia {
+    @PrimaryKey @NonNull
     public String id;
     public String nombre;
 }

@@ -1,16 +1,15 @@
 package com.example.MuniTracker;
 
 import android.app.Application;
-import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.paging.Pager;
-import androidx.paging.PagingConfig;
-import androidx.paging.PagingData;
+
+import com.example.MuniTracker.Entity.Municipi;
+import com.example.MuniTracker.Entity.Visita;
 
 import java.util.List;
 import java.util.concurrent.Executors;

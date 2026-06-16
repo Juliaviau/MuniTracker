@@ -1,4 +1,4 @@
-package com.example.MuniTracker;
+package com.example.MuniTracker.Entity;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

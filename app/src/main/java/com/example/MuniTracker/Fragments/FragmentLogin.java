@@ -1,44 +1,18 @@
-package com.example.MuniTracker;
+package com.example.MuniTracker.Fragments;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.TextView;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.os.Bundle;
-import android.app.Activity;
 
+import com.example.MuniTracker.R;
 import com.example.MuniTracker.databinding.FragmentLoginBinding;
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.util.Log;
-import android.view.View;
-
-import android.widget.TextView;
-
-
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.HashMap;
 
 public class FragmentLogin extends AppCompatActivity {
 

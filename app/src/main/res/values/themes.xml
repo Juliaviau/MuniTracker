@@ -28,9 +28,32 @@
 
     <!--  splashscreen -->
 
-    <style name="SplashScreen" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <!--style name="SplashScreen" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowBackground">@drawable/backgroung_splashscreen</item>
         <item name="android:statusBarColor" tools:targetApi="l">@color/white</item>
+    </style>
+
+    <!-  splashscreen 2-->
+
+    <!--style- name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/fons</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.MuniTracker</item>
+    </style-->
+
+    <!-- Tema para la SplashScreen oficial -->
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <!-- 1. El fondo de la pantalla de carga -->
+        <item name="windowSplashScreenBackground">@color/white</item>
+
+        <!-- 2. Tu logo/icono (puede ser un vector animado o estático) -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+
+        <!-- 3. Duración de la animación del icono (opcional, máximo 1000ms) -->
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+
+        <!-- 4. El tema real que usará tu MainActivity cuando el Splash termine -->
+        <item name="postSplashScreenTheme">@style/Base.Theme.MuniTracker</item>
     </style>
 
 </resources>

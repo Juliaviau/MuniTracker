@@ -5,8 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.paging.PagingSource;
 import androidx.paging.PagingState;
 
-import java.io.IOException;
-import java.util.List;
+import com.example.MuniTracker.Entity.Visita;
 
 import kotlin.coroutines.Continuation;
 
