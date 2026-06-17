@@ -226,21 +226,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Top 10 municipis més visitats"
-                        android:textColor="#222222"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                    android:paddingTop="20dp"
+                    android:paddingBottom="15dp"> <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Top 10 municipis més visitats"
+                    android:textColor="#222222"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:paddingHorizontal="20dp" />
 
                     <com.github.mikephil.charting.charts.HorizontalBarChart
                         android:id="@+id/barChartGa"
                         android:layout_width="match_parent"
-                        android:layout_height="400dp"
-                        android:layout_marginTop="12dp"/>
+                        android:layout_height="320dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginHorizontal="0dp" />
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

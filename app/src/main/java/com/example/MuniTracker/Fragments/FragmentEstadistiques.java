@@ -209,38 +209,86 @@ public class FragmentEstadistiques extends Fragment {
     private void configurarGraficHoritzontal(HorizontalBarChart chart, ArrayList<BarEntry> entries, ArrayList<String> labels) {
         if (entries.isEmpty()) return;
 
+        // 1. Algorisme intel·ligent per tallar els noms en dues línies amb \n
+        final ArrayList<String> labelsModificades = new ArrayList<>();
+        for (String label : labels) {
+            if (label.length() > 14 && label.contains(" ")) {
+                int mig = label.length() / 2;
+                int espaiMesProper = -1;
+                int distanciaMinima = Integer.MAX_VALUE;
+
+                for (int i = 0; i < label.length(); i++) {
+                    if (label.charAt(i) == ' ') {
+                        int dist = Math.abs(i - mig);
+                        if (dist < distanciaMinima) {
+                            distanciaMinima = dist;
+                            espaiMesProper = i;
+                        }
+                    }
+                }
+
+                if (espaiMesProper != -1) {
+                    String primeraPart = label.substring(0, espaiMesProper);
+                    String segonaPart = label.substring(espaiMesProper + 1);
+                    labelsModificades.add(primeraPart + "\n" + segonaPart);
+                } else {
+                    labelsModificades.add(label);
+                }
+            } else {
+                labelsModificades.add(label);
+            }
+        }
+
         BarDataSet dataSet = new BarDataSet(entries, "");
         dataSet.setColors(colorsGrafiques);
-        dataSet.setValueTextSize(12f);
+        dataSet.setValueTextSize(11f);
         dataSet.setValueTextColor(Color.parseColor("#333333"));
 
         BarData barData = new BarData(dataSet);
-        barData.setBarWidth(0.6f); // Control d'amplada de les barres perquè respirin
+        barData.setBarWidth(0.55f);
 
-        // Eix X (A l'esquerra ara: els noms es llegeixen perfectament de costat)
+        // 2. Configurar l'Eix X amb el Formatter que accepta salts de línia de forma nativa
         XAxis xAxis = chart.getXAxis();
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
+
+        // TRUC: Utilitzem com.github.mikephil.charting.formatter.ValueFormatter
+        // per obligar al gràfic a renderitzar el text amb el salt de línia
+        xAxis.setValueFormatter(new com.github.mikephil.charting.formatter.ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                int index = (int) value;
+                if (index >= 0 && index < labelsModificades.size()) {
+                    return labelsModificades.get(index);
+                }
+                return "";
+            }
+        });
+
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setTextSize(13);
+        xAxis.setTextSize(11); // Una mica més petita perquè respiri millor amb dues línies
         xAxis.setTextColor(Color.parseColor("#222222"));
-        xAxis.setDrawGridLines(false); // Sense ratlles lletges de fons
+        xAxis.setDrawGridLines(false);
         xAxis.setDrawAxisLine(true);
         xAxis.setGranularity(1f);
-        xAxis.setLabelCount(labels.size());
+        xAxis.setLabelCount(labelsModificades.size());
 
-        // Eix Y (A dalt/A baix: valors numèrics de visites)
+        // 3. Configurar l'Eix Y (Valors)
         YAxis yAxisLeft = chart.getAxisLeft();
         yAxisLeft.setDrawGridLines(false);
         yAxisLeft.setGranularity(1f);
         yAxisLeft.setTextColor(Color.parseColor("#777777"));
+        yAxisLeft.setAxisMinimum(0f);
 
-        chart.getAxisRight().setEnabled(false); // Fora l'eix secundari duplicat
+        chart.getAxisRight().setEnabled(false);
 
-        // Ajustaments generals del gràfic
+        // Marge extra de seguretat a l'esquerra (perquè no es tallin els noms de dues línies)
+        // i a la dreta (perquè no es talli el número de visites)
+        chart.setExtraLeftOffset(15f);
+        chart.setExtraRightOffset(30f);
+
         chart.setData(barData);
         chart.setFitBars(true);
         chart.setDrawValueAboveBar(true);
-        chart.getLegend().setEnabled(false); // No cal llegenda, el nom és al costat de cada barra
+        chart.getLegend().setEnabled(false);
         chart.getDescription().setEnabled(false);
 
         chart.animateY(800, Easing.EaseOutCubic);
