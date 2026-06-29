@@ -84,6 +84,56 @@ public class MunicipiViewModel extends AndroidViewModel {
         return porcentaje;
     }
 
+    public LiveData<String> obtenirComarcaPerMunicipiId(String municipiId) {
+        MutableLiveData<String> comarcaLiveData = new MutableLiveData<>();
+        Executors.newSingleThreadExecutor().execute(() -> {
+            String resultat = municipiRepository.getComarcaPerMunicipiId(municipiId);
+            comarcaLiveData.postValue(resultat != null ? resultat : "Desconeguda");
+        });
+        return comarcaLiveData;
+    }
+
+
+    public LiveData<String> getMunicipiTalismaa() {
+        MutableLiveData<String> talisma = new MutableLiveData<>();
+        Executors.newSingleThreadExecutor().execute(() -> {
+            String resultat = municipiRepository.obtenirMunicipiTalisma();
+            talisma.postValue(resultat != null ? resultat : "Cap");
+        });
+        return talisma;
+    }
+    public LiveData<String> getMunicipiTalisma() {
+        MutableLiveData<String> talisma = new MutableLiveData<>();
+        Executors.newSingleThreadExecutor().execute(() -> {
+            String resultat = municipiRepository.obtenirMunicipiTalisma();
+            String finalResultat = (resultat != null ? resultat : "Cap");
+
+            // Forcem que s'enviï al fil de la interfície d'usuari directament
+            new android.os.Handler(android.os.Looper.getMainLooper()).post(() -> {
+                talisma.setValue(finalResultat);
+            });
+        });
+        return talisma;
+    }
+
+    public LiveData<String> getUltimaConquesta() {
+        MutableLiveData<String> ultima = new MutableLiveData<>();
+        Executors.newSingleThreadExecutor().execute(() -> {
+            String resultat = municipiRepository.obtenirUltimaConquesta();
+            ultima.postValue(resultat != null ? resultat : "Cap");
+        });
+        return ultima;
+    }
+
+    public LiveData<Integer> getComptadorMunicipisUnics() {
+        MutableLiveData<Integer> comptador = new MutableLiveData<>();
+        Executors.newSingleThreadExecutor().execute(() -> {
+            int resultat = municipiRepository.obtenirComptadorMunicipisUnics();
+            comptador.postValue(resultat);
+        });
+        return comptador;
+    }
+
     public LiveData<Integer> nombreMunicipisVisitats() {
         MutableLiveData<Integer> porcentaje = new MutableLiveData<>();
         Executors.newSingleThreadExecutor().execute(() -> {
@@ -140,6 +190,10 @@ public class MunicipiViewModel extends AndroidViewModel {
     public void setVisitaEliminada(boolean b) {
         municipiRepository.setVisitaEliminada(b);
     }
+
+
+
+
 
     /*public void deleteMunicipi(Municipi municipi) {
         municipiRepository.deleteMunicipi(municipi);

@@ -43,20 +43,20 @@ public class VisitaPagingAdapter extends PagingDataAdapter<Visita, VisitaPagingA
     static class VisitaViewHolder extends RecyclerView.ViewHolder {
         private final TextView dataTextView;
         private final TextView municipiTextView;
-        private final ImageView notesIcona;
+    //    private final ImageView notesIcona;
 
         public VisitaViewHolder(@NonNull View itemView) {
             super(itemView);
             dataTextView = itemView.findViewById(R.id.datavis);
             municipiTextView = itemView.findViewById(R.id.municipivis);
-            notesIcona = itemView.findViewById(R.id.contenotes);
+         //   notesIcona = itemView.findViewById(R.id.contenotes);
         }
 
         public void bind(Visita visita) {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
             dataTextView.setText(sdf.format(new Date(visita.dataVisita)));
             municipiTextView.setText(visita.municipiId);
-            notesIcona.setVisibility(!visita.notes.isEmpty() ? View.VISIBLE : View.GONE);
+           // notesIcona.setVisibility(!visita.notes.isEmpty() ? View.VISIBLE : View.GONE);
 
             itemView.setOnClickListener(v -> {
                 // Aquí puedes manejar el clic en la vista de la visita, por ejemplo, mostrar un diálogo con más detalles

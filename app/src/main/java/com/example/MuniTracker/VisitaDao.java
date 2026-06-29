@@ -28,6 +28,26 @@ public interface VisitaDao {
 
 
 
+    // 1. Rebre el municipi més visitat de tots (Talismà)
+    @Query("SELECT municipiId FROM visites GROUP BY municipiId ORDER BY COUNT(municipiId) DESC LIMIT 1")
+    String obtenirMunicipiTalisma();
+
+    // 2. Rebre l'últim municipi que s'ha visitat cronològicament (Última conquesta)
+    @Query("SELECT municipiId FROM visites ORDER BY dataVisita DESC LIMIT 1")
+    String obtenirUltimaConquesta();
+
+    // 3. El recompte total de municipis visitats (per calcular el rang i la barra de progrés)
+    @Query("SELECT COUNT(DISTINCT municipiId) FROM visites")
+    int obtenirComptadorMunicipisUnics();
+
+
+
+
+
+
+
+
+
     @Query("SELECT COUNT(*) FROM visites WHERE municipiId = :municipiId")
     LiveData<Integer> getNumeroVisitesByMunicipi(String municipiId);
 

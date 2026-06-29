@@ -12,14 +12,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.MuniTracker.MunicipiViewModel;
 import com.example.MuniTracker.R;
 import com.example.MuniTracker.databinding.FragmentConfiguracioBinding;
 
@@ -76,11 +80,14 @@ public class FragmentConfiguracio extends Fragment {
         }
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentConfiguracioBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+        MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
+
 
         /*sharedPreferences = getActivity().getSharedPreferences("MODE", Context.MODE_PRIVATE);
         nightmode = sharedPreferences.getBoolean("nightmode", false);
@@ -130,10 +137,13 @@ public class FragmentConfiguracio extends Fragment {
         binding.cardEliminarDades.setOnClickListener(v -> {
             new AlertDialog.Builder(getContext())
                     .setTitle("Esborrar totes les dades?")
+                //    .setTitle(R.string.eliminar_datos_titulo)
                     .setMessage("Aquesta acció eliminarà el teu historial, mapes guardats i preferències. No es pot desfer.")
                     .setPositiveButton("Eliminar", (dialog, which) -> {
                         // Aquí poses el teu codi per netejar SharedPreferences, SQLite, etc.
                         //esborrarDadesDeLApp();
+                        viewModel.eliminarTotMunicipiVisites();
+                        Toast.makeText(context, R.string.datos_eliminados, Toast.LENGTH_SHORT).show();
                     })
                     .setNegativeButton("Cancel·lar", null)
                     .setIcon(android.R.drawable.ic_dialog_alert)

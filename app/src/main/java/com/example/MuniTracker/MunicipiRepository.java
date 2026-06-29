@@ -100,6 +100,21 @@ public class MunicipiRepository implements Observer<Integer> {
         }
     }
 
+    public String obtenirMunicipiTalisma() {
+        return visitaDao.obtenirMunicipiTalisma();
+    }
+
+    public String obtenirUltimaConquesta() {
+        return visitaDao.obtenirUltimaConquesta();
+    }
+
+    public int obtenirComptadorMunicipisUnics() {
+        return visitaDao.obtenirComptadorMunicipisUnics();
+    }
+
+    public String getComarcaPerMunicipiId(String municipiId) {
+        return municipiDao.obtenirComarcaPerMunicipiId(municipiId);
+    }
 
     public int getPorcentajeVisitadosComarca(String comarcaId) {
         return municipiDao.getVisitadosMunicipisInComarca(comarcaId);
@@ -202,6 +217,9 @@ public class MunicipiRepository implements Observer<Integer> {
     public LiveData<List<ComarcaVisitCount>> getTop3MostVisitedProvincies() {
         return visitaDao.getTop3MostVisitedProvincies();
     }
+
+
+
 
 
 

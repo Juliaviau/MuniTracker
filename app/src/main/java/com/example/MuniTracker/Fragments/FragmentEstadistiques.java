@@ -239,11 +239,19 @@ public class FragmentEstadistiques extends Fragment {
             }
         }
 
+        java.text.DecimalFormat formatEnters = new java.text.DecimalFormat("###,###,##0");
+        com.github.mikephil.charting.formatter.ValueFormatter entersFormatter = new com.github.mikephil.charting.formatter.ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return formatEnters.format(value);
+            }
+        };
+
         BarDataSet dataSet = new BarDataSet(entries, "");
         dataSet.setColors(colorsGrafiques);
         dataSet.setValueTextSize(11f);
         dataSet.setValueTextColor(Color.parseColor("#333333"));
-
+        dataSet.setValueFormatter(entersFormatter);
         BarData barData = new BarData(dataSet);
         barData.setBarWidth(0.55f);
 
@@ -277,6 +285,7 @@ public class FragmentEstadistiques extends Fragment {
         yAxisLeft.setGranularity(1f);
         yAxisLeft.setTextColor(Color.parseColor("#777777"));
         yAxisLeft.setAxisMinimum(0f);
+        yAxisLeft.setValueFormatter(entersFormatter);
 
         chart.getAxisRight().setEnabled(false);
 

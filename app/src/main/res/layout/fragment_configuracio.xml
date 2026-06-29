@@ -42,13 +42,13 @@
                 android:layout_marginTop="4dp" />
         </LinearLayout>
 
-        <com.airbnb.lottie.LottieAnimationView
+        <!--com.airbnb.lottie.LottieAnimationView
             android:id="@+id/animation_view"
             android:layout_width="70dp"
             android:layout_height="70dp"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/gearloader" />
+            app:lottie_rawRes="@raw/gearloader" /-->
     </LinearLayout>
 
     <LinearLayout

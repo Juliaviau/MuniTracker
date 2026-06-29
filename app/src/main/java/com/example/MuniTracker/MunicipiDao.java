@@ -51,6 +51,13 @@ public interface MunicipiDao {
     @Query("DELETE FROM municipis WHERE id = :municipi")
     void eliminarMunicipi(String municipi);
 
+    @Query("SELECT comarca_id FROM municipis WHERE id = :municipiId" )
+    String obtenirComarcaPerMunicipiId(String municipiId);
+
+
+
+
+
     /*default int getPorcentajeVisitadosInComarca(String comarcaId) {
         int total = getTotalMunicipisInComarca(comarcaId);
         int visitados = getVisitadosMunicipisInComarca(comarcaId);

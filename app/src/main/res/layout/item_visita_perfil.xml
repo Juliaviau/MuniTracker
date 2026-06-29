@@ -1,50 +1,93 @@
-<!-- res/layout/item_visita.xml -->
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="10dp"
-    android:layout_marginVertical="2dp"
-    android:layout_marginHorizontal="5dp"
-    android:background="@drawable/rounded_card">
-
+    android:paddingVertical="12dp"
+    android:paddingHorizontal="4dp"
+    android:background="?android:attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
         <TextView
-            android:id="@+id/datavis"
+            android:id="@+id/municipivis"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="casual"
-            android:textSize="18sp"
-            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textColor="#222222"
             android:textStyle="bold"
-            android:paddingBottom="4dp"
-            android:text="11/11/2024" />
+            tools:text="Les Planes d'Hostoles"/>
 
-        <ImageView
-            android:id="@+id/contenotes"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/baseline_notes_24"/>
+        <TextView
+            android:id="@+id/datavis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="#888888"
+            tools:text="29/06/2026" />
     </LinearLayout>
 
-
-
-
-
-    <TextView
-        android:id="@+id/municipivis"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="casual"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        android:text="Les Planes d'Hostoles"/>
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="2dp">
+
+        <TextView
+            android:id="@+id/comarcavis"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="12sp"
+            android:textColor="#4E79A7"
+            tools:text="La Garrotxa" />
+
+        <ImageView
+            android:id="@+id/iconaNotaPetita"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:src="@drawable/baseline_notes_24"
+            app:tint="#888888"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:contentDescription="Té anotacions" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutPreviewNotes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="6dp"
+        android:background="#F8F9FA"
+        android:padding="8dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/textPreviewNotes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="#666666"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textStyle="italic"
+            tools:text="he visitat les preses de la presó" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#F0F0F0"
+        android:layout_marginTop="12dp" />
 </LinearLayout>

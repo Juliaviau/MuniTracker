@@ -1,76 +1,286 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#DCD9D9"
-    android:padding="16dp"
-    android:scrollbars="vertical"
     tools:context=".Fragments.FragmentPerfil">
 
     <LinearLayout
+        android:id="@+id/headerLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/zonaNom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:fontFamily="casual"
-            android:textSize="24sp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:paddingBottom="10dp"
-            android:gravity="center" />
-
-        <Button
-            android:id="@+id/eliminarTot"
-            android:layout_width="280dp"
-            android:layout_height="wrap_content"
-            android:text="Eliminar totes les dades"
-            android:layout_gravity="center_horizontal"
-            style="@style/Widget.MaterialComponents.Button"
-            android:backgroundTint="@color/blau_mapa_fosc"
-            android:textColor="@android:color/white"
-            android:layout_marginVertical="10dp"
-            android:layout_marginBottom="10dp"
-            android:padding="10dp"
-            android:layout_marginHorizontal="10dp"
-            android:paddingHorizontal="24dp" />
-
-        <TextView
-            android:id="@+id/zonaIfnfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Totes les visites"
-            android:fontFamily="casual"
-            android:layout_marginTop="20dp"
-            android:textSize="24sp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:paddingBottom="8dp"
-            android:gravity="center" />
-
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchViewperfil"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:layout_margin="6dp"
-            android:queryHint="Cerca municipi"
-            android:background="@drawable/search_view_background_blanc"/>
+        android:layout_height="130dp"
+        android:background="@drawable/estil_header_config"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="24dp"
+        android:elevation="4dp">
 
         <LinearLayout
-            android:id="@+id/visitasContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/zonaNom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="El teu Diari"
+                android:textColor="#FFFFFF"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="El registre oficial de les teves aventures"
+                android:textColor="#DDFFFFFF"
+                android:textSize="14sp"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="120dp"
+        android:paddingHorizontal="16dp">
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="3dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fites d'explorador"
+                    android:textColor="#111111"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#EAEAEA"
+                    android:layout_marginVertical="8dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="3"
+                    android:layout_marginBottom="14dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Rang actual"
+                            android:textColor="#777777"
+                            android:textSize="12sp" />
+                        <TextView
+                            android:id="@+id/textRangViatger"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#3F51B5"
+                            android:textStyle="bold"
+                            android:textSize="15sp"
+                            android:layout_marginTop="3dp"
+                            tools:text="Nòmada" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Municipi talismà"
+                            android:textColor="#777777"
+                            android:textSize="12sp" />
+                        <TextView
+                            android:id="@+id/textMunicipiTalisma"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#E65100"
+                            android:textStyle="bold"
+                            android:textSize="15sp"
+                            android:layout_marginTop="3dp"
+                            tools:text="Girona" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Última conquesta"
+                            android:textColor="#777777"
+                            android:textSize="12sp" />
+                        <TextView
+                            android:id="@+id/textUltimaConquesta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#2E7D32"
+                            android:textStyle="bold"
+                            android:textSize="15sp"
+                            android:layout_marginTop="3dp"
+                            tools:text="L'Albi" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textProgresSeguentRang"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#555555"
+                    android:textSize="12sp"
+                    tools:text="4% de Catalunya completat. Falten 3 per a Local" />
+
+                <ProgressBar
+                    android:id="@+id/progressRang"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="16dp"
+                    android:progressDrawable="@drawable/progress_bar_perfil"
+                    tools:progress="60" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#F8F9FA"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2"
+                        android:layout_marginBottom="6dp">
+
+                        <TextView
+                            android:id="@+id/medallaRookie"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="🥉 Local (10+)"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="#A5A5A5"
+                            android:gravity="center" />
+
+                        <TextView
+                            android:id="@+id/medallaNomada"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="🥈 Comarcal (50+)"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="#A5A5A5"
+                            android:gravity="center" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/medallaExplorador"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="🥇 Explorador (200+)"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="#A5A5A5"
+                            android:gravity="center" />
+
+                        <TextView
+                            android:id="@+id/medallaMestre"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="👑 Mestre (500+)"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="#A5A5A5"
+                            android:layout_weight="1"
+                            android:gravity="center" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:orientation="vertical"
             android:background="@drawable/rounded_background"
-            android:padding="8dp"
-            android:layout_margin="6dp"
-            android:elevation="4dp" />
+            android:padding="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="75dp"
+            android:elevation="3dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cronologia de visites"
+                android:textColor="#111111"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchViewperfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="8dp"
+                android:queryHint="Filtra per municipi..."
+                android:background="@drawable/search_view_background_blanc"
+                app:iconifiedByDefault="false"
+                app:queryBackground="@android:color/transparent"
+                android:elevation="1dp" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/visitasContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </ScrollView>
+        </LinearLayout>
     </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+</FrameLayout>
