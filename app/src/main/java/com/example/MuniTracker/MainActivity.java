@@ -1,7 +1,13 @@
 package com.example.MuniTracker;
 
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -15,6 +21,7 @@ import com.example.MuniTracker.Fragments.FragmentEstadistiques;
 import com.example.MuniTracker.Fragments.FragmentLogin;
 import com.example.MuniTracker.Fragments.FragmentMapes;
 import com.example.MuniTracker.Fragments.FragmentPerfil;
+import com.example.MuniTracker.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,16 +32,19 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
+
 
 public class MainActivity extends AppCompatActivity {
+
 
     // 1. Variable para controlar el estado de la carga de datos
     private boolean isKeepOnScreen = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // 2. INICIALIZA EL SPLASH AQUÍ (Siempre antes de super.onCreate)
         SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -72,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     // 6. Tu función asíncrona para cargar los datos necesarios antes de mostrar la App
     private void cargarDatosDeLaApp() {
         // Este Handler simula una carga de 2.5 segundos (reemplázalo por tu lógica real)

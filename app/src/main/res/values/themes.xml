@@ -56,4 +56,36 @@
         <item name="postSplashScreenTheme">@style/Base.Theme.MuniTracker</item>
     </style>
 
+    <style name="Tema.Paleta.Original" parent="Theme.MuniTracker">
+        <item name="colorLlegenda0">@color/original_0</item>
+        <item name="colorLlegenda25">@color/original_25</item>
+        <item name="colorLlegenda50">@color/original_50</item>
+        <item name="colorLlegenda75">@color/original_75</item>
+        <item name="colorLlegenda100">@color/original_100</item>
+    </style>
+
+    <style name="Tema.Paleta.Ocea" parent="Theme.MuniTracker">
+        <item name="colorLlegenda0">@color/ocea_0</item>
+        <item name="colorLlegenda25">@color/ocea_25</item>
+        <item name="colorLlegenda50">@color/ocea_50</item>
+        <item name="colorLlegenda75">@color/ocea_75</item>
+        <item name="colorLlegenda100">@color/ocea_100</item>
+    </style>
+
+    <style name="Tema.Paleta.Bosc" parent="Theme.MuniTracker">
+        <item name="colorLlegenda0">@color/bosc_0</item>
+        <item name="colorLlegenda25">@color/bosc_25</item>
+        <item name="colorLlegenda50">@color/bosc_50</item>
+        <item name="colorLlegenda75">@color/bosc_75</item>
+        <item name="colorLlegenda100">@color/bosc_100</item>
+    </style>
+
+    <style name="Tema.Paleta.Magenta" parent="Theme.MuniTracker">
+        <item name="colorLlegenda0">@color/magenta_0</item>
+        <item name="colorLlegenda25">@color/magenta_25</item>
+        <item name="colorLlegenda50">@color/magenta_50</item>
+        <item name="colorLlegenda75">@color/magenta_75</item>
+        <item name="colorLlegenda100">@color/magenta_100</item>
+    </style>
+
 </resources>

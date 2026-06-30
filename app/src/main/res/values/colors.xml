@@ -28,4 +28,28 @@
 
     <!--color name="llegComplet">#251B5F</color>
     <color name="llegCompletTTT">#1b3a5f</color-->
+
+    <color name="original_0">#fff7b2</color>
+    <color name="original_25">#ffd966</color>
+    <color name="original_50">#ffa631</color>
+    <color name="original_75">#d98a2d</color>
+    <color name="original_100">#a65e2e</color>
+
+    <color name="ocea_0">#E0F3F8</color>
+    <color name="ocea_25">#ABD9E9</color>
+    <color name="ocea_50">#74ADD1</color>
+    <color name="ocea_75">#4575B4</color>
+    <color name="ocea_100">#313695</color>
+
+    <color name="bosc_0">#E8F5E9</color>
+    <color name="bosc_25">#A5D6A7</color>
+    <color name="bosc_50">#66BB6A</color>
+    <color name="bosc_75">#388E3C</color>
+    <color name="bosc_100">#1B5E20</color>
+
+    <color name="magenta_0">#FCE4EC</color>
+    <color name="magenta_25">#F48FB1</color>
+    <color name="magenta_50">#F06292</color>
+    <color name="magenta_75">#E91E63</color>
+    <color name="magenta_100">#880E4F</color>
 </resources>

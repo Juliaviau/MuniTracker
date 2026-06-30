@@ -5,197 +5,127 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#DCD9D9"
+    android:background="#F5F5F7"
     tools:context=".Fragments.FragmentMapes">
 
-    <!-- Layout per botons de selecció de capes -->
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
     <LinearLayout
         android:id="@+id/buttonLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp"
-        android:background="@color/blau_mapa"
-        android:gravity="center"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
-
-            <Button
-                android:id="@+id/btProvincies"
-                android:layout_width="170dp"
-                android:layout_height="wrap_content"
-                android:text="Províncies"
-                android:backgroundTint="@color/blau_mapa_fosc"
-                android:layout_marginRight="10dp"/>
-
-            <Button
-                android:id="@+id/btVegueries"
-                android:layout_width="170dp"
-                android:layout_height="wrap_content"
-                android:text="Vegueries"
-                android:backgroundTint="@color/blau_mapa_fosc"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
-
-            <Button
-                android:id="@+id/btComarques"
-                android:layout_width="170dp"
-                android:layout_height="wrap_content"
-                android:text="Comarques"
-                android:backgroundTint="@color/blau_mapa_fosc"
-                android:layout_marginRight="10dp"/>
-
-            <Button
-                android:id="@+id/btMunicipis"
-                android:layout_width="170dp"
-                android:layout_height="wrap_content"
-                android:text="Municipis"
-                android:backgroundTint="@color/blau_mapa_fosc"/>
-        </LinearLayout>
-
-        <!-- SearchView per buscar municipis -->
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:queryHint="Cerca municipi"
-            android:background="@drawable/search_view_background"/>
+            android:layout_height="50dp"
+            android:background="@drawable/search_view_background_blanc"
+            android:elevation="4dp"
+            app:iconifiedByDefault="false"
+            app:queryBackground="@android:color/transparent"
+            app:queryHint="Cerca un territori..." />
 
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:scrollbars="none">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupFiltres"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:singleLine="true"
+                app:singleSelection="true"
+                app:selectionRequired="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/btMunicipis"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Municipis"
+                    android:checked="true"
+                    app:chipBackgroundColor="@drawable/selector_chip_background"
+                    android:textColor="@drawable/selector_text_chip"
+                    app:chipCornerRadius="20dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/btComarques"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Comarques"
+                    app:chipBackgroundColor="@drawable/selector_chip_background"
+                    android:textColor="@drawable/selector_text_chip"
+                    app:chipCornerRadius="20dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/btVegueries"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vegueries"
+                    app:chipBackgroundColor="@drawable/selector_chip_background"
+                    android:textColor="@drawable/selector_text_chip"
+                    app:chipCornerRadius="20dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/btProvincies"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Províncies"
+                    android:checked="false"
+                    app:chipBackgroundColor="@drawable/selector_chip_background"
+                    android:textColor="@drawable/selector_text_chip"
+                    app:chipCornerRadius="20dp" />
+
+
+
+
+
+
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
     </LinearLayout>
 
-    <FrameLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/resultsRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/buttonLayout"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:background="@drawable/search_view_background_blanc"
+        android:elevation="6dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/buttonLayout" />
 
-        <WebView
-            android:id="@+id/webView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/resultsRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:visibility="gone" />
-    </FrameLayout>
-
-    <LinearLayout
-        android:id="@+id/legendLayout"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardLlegenda"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp"
-        android:background="#CCFFFFFF"
+        app:cardCornerRadius="14dp"
+        app:cardElevation="6dp"
+        app:cardBackgroundColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="16dp"
-        android:visibility="gone"
-        android:layout_marginBottom="65dp">
+        android:layout_marginBottom="85dp">
 
         <LinearLayout
+            android:id="@+id/legendContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="4dp">
-            <View
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@color/blau_mapa" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="No visitat"
-                android:textColor="#000000" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="4dp">
-            <View
-                android:id="@+id/llegendaColor25"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@color/lleg25" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="Percentatge &lt; 25"
-                android:textColor="#000000" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="4dp">
-            <View
-                android:id="@+id/llegendaColor50"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@color/lleg50" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="Percentatge &lt; 50"
-                android:textColor="#000000" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="4dp">
-            <View
-                android:id="@+id/llegendaColor75"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@color/lleg75" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="Percentatge &lt; 75"
-                android:textColor="#000000" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <View
-                android:id="@+id/llegendaColorComplet"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@color/llegComplet" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="Tot visitat"
-                android:textColor="#000000" />
-        </LinearLayout>
-
-    </LinearLayout>
+            android:orientation="vertical"
+            android:padding="12dp" />
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

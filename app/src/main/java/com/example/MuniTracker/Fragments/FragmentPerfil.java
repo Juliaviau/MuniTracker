@@ -39,6 +39,7 @@ import com.example.MuniTracker.Entity.Visita;
 import com.example.MuniTracker.VisitaDialogFragment;
 import com.example.MuniTracker.databinding.FragmentPerfilBinding;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -60,6 +61,17 @@ public class FragmentPerfil extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        android.content.SharedPreferences prefs = context.getSharedPreferences("ConfigApp", android.content.Context.MODE_PRIVATE);
+        int indexPaleta = prefs.getInt("paleta_seleccionada", 0);
+
+
+        switch (indexPaleta) {
+            case 0: context.setTheme(R.style.Tema_Paleta_Original); break;
+            case 1: context.setTheme(R.style.Tema_Paleta_Ocea); break;
+            case 2: context.setTheme(R.style.Tema_Paleta_Bosc); break;
+            case 3: context.setTheme(R.style.Tema_Paleta_Magenta); break;
+        }
+
         super.onCreate(savedInstanceState);
        // binding = FragmentPerfilBinding.inflate(getLayoutInflater());
         configurarStatusBar();
@@ -126,7 +138,11 @@ public class FragmentPerfil extends Fragment {
             binding.medallaMestre.setTextColor(android.graphics.Color.parseColor("#A5A5A5"));
 
             // Calculem el percentatge real del país completat
-            int percentatgeTotalPais = (total * 100) / TOTAL_MUNICIPIS_CAT;
+            double percentatgeTotalPaisd = (total * 100.0) / TOTAL_MUNICIPIS_CAT;
+            String percentatgeTotalPais = String.format(Locale.getDefault(), "%.1f", percentatgeTotalPaisd);
+
+            Log.d("DEBUG_UI", "Pintant percentatge: " + percentatgeTotalPais + "%");
+
             binding.textProgresSeguentRang.setText(percentatgeTotalPais+"% de Catalunya completat");
             if (total == null || total == 0) {
                 binding.textRangViatger.setText("Començant");

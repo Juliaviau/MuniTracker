@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorLlegenda0" format="color" />
+    <attr name="colorLlegenda25" format="color" />
+    <attr name="colorLlegenda50" format="color" />
+    <attr name="colorLlegenda75" format="color" />
+    <attr name="colorLlegenda100" format="color" />
+</resources>

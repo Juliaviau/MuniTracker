@@ -38,6 +38,7 @@ import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.io.IOException;
@@ -110,6 +111,18 @@ public class FragmentMapes extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        android.content.SharedPreferences prefs = context.getSharedPreferences("ConfigApp", android.content.Context.MODE_PRIVATE);
+        int indexPaleta = prefs.getInt("paleta_seleccionada", 0);
+
+
+        switch (indexPaleta) {
+            case 0: context.setTheme(R.style.Tema_Paleta_Original); break;
+            case 1: context.setTheme(R.style.Tema_Paleta_Ocea); break;
+            case 2: context.setTheme(R.style.Tema_Paleta_Bosc); break;
+            case 3: context.setTheme(R.style.Tema_Paleta_Magenta); break;
+        }
+
         super.onCreate(savedInstanceState);
         binding = FragmentMapesBinding.inflate(getLayoutInflater());
         // Precargar mapas en memoria
@@ -129,7 +142,11 @@ public class FragmentMapes extends Fragment {
 
 
 
-
+    private int obtenirColorDelTema(int attrId) {
+        TypedValue typedValue = new TypedValue();
+        getContext().getTheme().resolveAttribute(attrId, typedValue, true);
+        return typedValue.data;
+    }
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -142,10 +159,10 @@ public class FragmentMapes extends Fragment {
         int indexPaleta = prefs.getInt("paleta_seleccionada", 0);
         paletaActual = PALETES[indexPaleta]; // Assignem l'array de 5 colors d'aquella paleta
 
-        binding.llegendaColor25.setBackgroundColor(Color.parseColor(paletaActual[0]));
+        /*binding.llegendaColor25.setBackgroundColor(Color.parseColor(paletaActual[0]));
         binding.llegendaColor50.setBackgroundColor(Color.parseColor(paletaActual[1]));
         binding.llegendaColor75.setBackgroundColor(Color.parseColor(paletaActual[2]));
-        binding.llegendaColorComplet.setBackgroundColor(Color.parseColor(paletaActual[4]));
+        binding.llegendaColorComplet.setBackgroundColor(Color.parseColor(paletaActual[4]));*/
 
 
         //View view = inflater.inflate(R.layout.fragment_mapes, container, false);
@@ -170,8 +187,10 @@ public class FragmentMapes extends Fragment {
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setUseWideViewPort(true);
 
-        layoutLlegenda = view.findViewById(R.id.legendLayout);
-        layoutLlegenda.setVisibility(View.GONE);
+        //layoutLlegenda = view.findViewById(R.id.legendLayout);
+        //layoutLlegenda.setVisibility(View.GONE);
+
+        actualitzarLlegenda(TERRITORY_TYPE_MUNICIPALITY);
 
         carregarMapa(TERRITORY_TYPE_MUNICIPALITY);
 
@@ -272,19 +291,85 @@ public class FragmentMapes extends Fragment {
         return view;
     }
 
+    private void actualitzarLlegenda(String territoryType) {
+        LinearLayout container = binding.legendContainer;
+        container.removeAllViews(); // Esborrem l'antiga llegenda
+
+        // Títol capçalera de la llegenda
+        TextView titol = new TextView(getContext());
+        titol.setTextSize(11);
+        titol.setTypeface(null, android.graphics.Typeface.BOLD);
+        titol.setTextColor(Color.parseColor("#777777"));
+        LinearLayout.LayoutParams paramsTitol = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        paramsTitol.setMargins(0, 0, 0, 12);
+        titol.setLayoutParams(paramsTitol);
 
 
 
+        if (territoryType == TERRITORY_TYPE_MUNICIPALITY) {
+            titol.setText("Estat del municipi");
+            container.addView(titol);
+
+            // El "No visitat" fa servir el color de base (0%), i el visitat el màxim (100%)
+            afegirElementLlegenda(container, obtenirColorDelTema(R.attr.colorLlegenda0), "No visitat");
+            afegirElementLlegenda(container, obtenirColorDelTema(R.attr.colorLlegenda100), "Visitat");
+        } else {
+            titol.setText("Percentatge Conquesta");
+            container.addView(titol);
+
+            // Es demana per nom d'etiqueta genèrica de l'attrs.xml!
+            afegirElementLlegenda(container, obtenirColorDelTema(R.attr.colorLlegenda0), "Verge (0%)");
+            afegirElementLlegenda(container, obtenirColorDelTema(R.attr.colorLlegenda25), "Iniciat (< 25%)");
+            afegirElementLlegenda(container, obtenirColorDelTema(R.attr.colorLlegenda50), "A meitat (< 50%)");
+            afegirElementLlegenda(container, obtenirColorDelTema(R.attr.colorLlegenda75), "Avançat (< 75%)");
+            afegirElementLlegenda(container, obtenirColorDelTema(R.attr.colorLlegenda100), "Conquerit (100%)");
+        }
+    }
+
+    // Funció auxiliar per muntar les línies horitzontals ràpidament sense duplicar codi
+    private void afegirElementLlegenda(LinearLayout container, int colorHex, String text) {
+        LinearLayout row = new LinearLayout(getContext());
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setGravity(android.view.Gravity.CENTER_VERTICAL);
+        LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        rowParams.setMargins(0, 0, 0, 8);
+        row.setLayoutParams(rowParams);
+
+        // Quadre de color
+        View box = new View(getContext());
+        LinearLayout.LayoutParams boxParams = new LinearLayout.LayoutParams(14, 14); // Mida de 14dp equivalents
+        final float scale = getContext().getResources().getDisplayMetrics().density;
+        int pixels = (int) (14 * scale + 0.5f);
+        boxParams.width = pixels;
+        boxParams.height = pixels;
+        box.setLayoutParams(boxParams);
+        box.setBackgroundColor(colorHex);
+
+        // Text descriptiu
+        TextView tv = new TextView(getContext());
+        tv.setText(text);
+        tv.setTextSize(12);
+        tv.setTextColor(Color.parseColor("#222222"));
+        LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        textParams.setMarginStart((int) (8 * scale + 0.5f));
+        tv.setLayoutParams(textParams);
+
+        row.addView(box);
+        row.addView(tv);
+        container.addView(row);
+    }
 
 
 
+    private void setupTerritoryButton(com.google.android.material.chip.Chip chip , String territoryType, SearchAdapter adapter) {
+        chip.setOnClickListener(v -> {
 
+            chip.setChecked(true);
+            actualitzarLlegenda(territoryType);
 
-
-
-
-    private void setupTerritoryButton(Button button, String territoryType, SearchAdapter adapter) {
-        button.setOnClickListener(v -> {
             tipusMapa = territoryType;
             carregarMapa(territoryType); // Usar mapas precargados
             adaptadorActual = adapter;
@@ -294,7 +379,7 @@ public class FragmentMapes extends Fragment {
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
-                    layoutLlegenda.setVisibility(View.VISIBLE);
+                    //layoutLlegenda.setVisibility(View.VISIBLE);
                     switch (territoryType) {
                         case TERRITORY_TYPE_MUNICIPALITY:
                             pintarMunicipisVisitats();

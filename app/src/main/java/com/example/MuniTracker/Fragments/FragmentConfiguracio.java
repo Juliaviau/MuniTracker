@@ -152,6 +152,7 @@ public class FragmentConfiguracio extends Fragment {
 
         AtomicReference<SharedPreferences> prefs = new AtomicReference<>(context.getSharedPreferences("ConfigApp", Context.MODE_PRIVATE));
         int indexPaleta = prefs.get().getInt("paleta_seleccionada", 0);
+
         paletaActual = PALETES[indexPaleta]; // Assignem l'array de 5 colors d'aquella paleta
         binding.txtNomPaleta.setText("Tema actual: " + NOMS_PALETES[indexPaleta]);
 
@@ -237,6 +238,8 @@ public class FragmentConfiguracio extends Fragment {
                         binding.vistaColor75.setBackgroundColor(Color.parseColor(colorsTriats[2]));
                         binding.vistaColor99.setBackgroundColor(Color.parseColor(colorsTriats[3]));
                         binding.vistaColorComplet.setBackgroundColor(Color.parseColor(colorsTriats[4]));
+
+
                     })
                     .show();
         });
