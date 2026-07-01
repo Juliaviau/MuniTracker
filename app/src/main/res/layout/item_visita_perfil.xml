@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="12sp"
-            android:textColor="#4E79A7"
+            android:textColor="?attr/colorLlegenda100"
             tools:text="La Garrotxa" />
 
         <ImageView

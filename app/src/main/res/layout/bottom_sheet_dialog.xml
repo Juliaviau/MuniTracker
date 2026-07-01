@@ -1,101 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp"
-
-    android:gravity="center"
-    android:clipToPadding="true">
+    android:paddingHorizontal="24dp"
+    android:paddingBottom="24dp"
+    android:background="@android:color/transparent">
 
     <com.google.android.material.bottomsheet.BottomSheetDragHandleView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"/>
+
     <TextView
         android:id="@+id/zonaNom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Nom de la zona"
-        android:fontFamily="casual"
-        android:textSize="24sp"
-        android:textColor="@color/black"
+        android:textSize="26sp"
+        android:textColor="#222222"
         android:textStyle="bold"
-        android:paddingBottom="10dp"
-        android:gravity="center" />
-
-
+        android:gravity="center"
+        android:layout_marginBottom="4dp" />
 
     <TextView
         android:id="@+id/zonaIfnfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Visites anteriors"
-        android:fontFamily="casual"
-        android:textSize="18sp"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:paddingBottom="2dp"
-        android:gravity="center" />
+        android:text="S'han visitat 0 de 0 municipis"
+        android:textSize="15sp"
+        android:textColor="#555555"
+        android:gravity="center"
+        android:layout_marginBottom="20dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="20dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="20dp"
+        android:paddingHorizontal="4dp">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
             android:id="@+id/indicadorpercentatge"
-            android:gravity="center"
-            android:textSize="16dp"
-            android:text="50%"/>
+            android:layout_width="65dp"
+            android:layout_height="wrap_content"
+            android:text="33,33 %"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="#1E293B"
+            android:gravity="center"/>
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleHorizontal"
+        <FrameLayout
+            android:id="@+id/customProgressTrack"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:progressDrawable="@drawable/progress_bar_progress"
-            android:max="100"
-            android:progress="0"
-            android:layout_margin="16dp"/>
+            android:layout_height="16dp"
+            android:background="@drawable/bg_progress_track"
+            android:layout_weight="1">
 
+            <!-- L'indicador que creix (Capa inferior) -->
+            <View
+                android:id="@+id/customProgressIndicator"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_progress_indicator"
+                android:backgroundTint="?attr/colorLlegenda100" />
+
+            <!-- La icona de meta (Capa superior, alineada a la dreta) -->
+            <ImageView
+                android:id="@+id/progressGoalIcon"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="6dp"
+                android:src="@drawable/ic_trophy"
+                android:contentDescription="Meta"
+                app:tint="#94A3B8" /> <!-- Gris apagat per defecte -->
+
+        </FrameLayout>
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollViewS"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:visibility="visible"
-        android:background="@drawable/rounded_background"
-        android:padding="8dp"
-        android:scrollbars="vertical"
+        android:layout_height="wrap_content"
+        android:maxHeight="220dp"
         android:clipToPadding="false"
-        android:elevation="4dp">
+        android:paddingHorizontal="4dp"
+        android:paddingVertical="4dp">
 
         <LinearLayout
             android:id="@+id/visitasContainerS"
             android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:orientation="vertical"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
     </androidx.core.widget.NestedScrollView>
 
-
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/closeButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Tornar al mapa"
+        android:textColor="#888888"
         android:layout_gravity="center"
-        android:background="@drawable/estilboto"
-        android:layout_marginBottom="10dp"
-        android:backgroundTint="#D88479"
-        android:textColor="@android:color/white"
-        android:layout_marginTop="20dp"
-        android:padding="6dp"
-        android:paddingHorizontal="12dp" />
+        android:layout_marginTop="16dp" />
 
 </LinearLayout>

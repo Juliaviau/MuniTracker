@@ -1,82 +1,126 @@
-<!-- bottom_sheet_agregar_visita.xml -->
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="26dp"
+    android:background="@android:color/transparent">
 
+    <View
+        android:layout_width="40dp"
+        android:layout_height="5dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#E2E8F0"
+        android:layout_marginBottom="24dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
-
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="28dp">
 
         <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="top"
-android:layout_marginLeft="12dp"
+            android:id="@+id/lottiePin"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginBottom="8dp"
             app:lottie_rawRes="@raw/pin"
             app:lottie_loop="true"
-            app:lottie_autoPlay="true"/>
+            app:lottie_autoPlay="true" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Marcar municipi com a visitat"
+            android:textColor="#0F172A"
+            android:textSize="21sp"
             android:textStyle="bold"
-            android:textSize="20dp"
-            android:textAlignment="textStart"
-            android:layout_marginTop="10dp"
-            android:text="Marcar municipi com a visitat" />
-
+             />
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="La teva experiència (opcional)"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#64748B"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="4dp"/>
 
     <EditText
         android:id="@+id/notasEditText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:hint="Escriure nota..."
-        android:textColorHint="#888888"
-        android:textColor="#333333"
+        android:layout_height="110dp"
         android:background="@drawable/editext_background"
-        android:textSize="16sp"
+        android:hint="Què hi vas fer? Descriu records, rutes o anècdotes..."
+        android:textColorHint="#94A3B8"
+        android:textColor="#1E293B"
+        android:textSize="15sp"
+        android:padding="16dp"
         android:gravity="start|top"
         android:inputType="textMultiLine"
-        android:imeOptions="flagNoEnterAction"
         android:scrollbars="vertical"
         android:maxLines="5"
-        android:layout_margin="16dp" />
+        android:layout_marginBottom="24dp"/>
 
-    <DatePicker
-        android:id="@+id/fechaTextView"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:padding="8dp"
-        android:calendarViewShown="true"
-        android:background="@drawable/date_picker_background"
-        android:theme="@style/CustomDatePickerStyle"/>
+        android:text="Data de la visita"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#64748B"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="4dp"/>
 
+    <!-- ... resta del codi ... -->
+
+    <LinearLayout
+        android:id="@+id/btnSeleccionarFecha"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:background="@drawable/editext_background"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginBottom="24dp">
+
+        <!-- CORREGIT: Ara usa correctament android:layout_height en lloc de android:height -->
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@android:drawable/ic_menu_my_calendar"
+            app:tint="#64748B" />
+
+        <TextView
+            android:id="@+id/txtFechaSeleccionada"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:text="Selecciona una data..."
+            android:textColor="#0F172A"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- ... resta del codi ... -->
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/guardarButton"
-        android:layout_marginTop="20dp"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Guardar"
-        android:textSize="16sp"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="GUARDAR VISITA"
+        android:textSize="15sp"
+        android:textStyle="bold"
         android:textColor="#FFFFFF"
-        android:padding="12dp"
-        android:background="@drawable/guardar_background" />
-
-
-
+        android:background="@drawable/guardar_background"
+        android:backgroundTint="?attr/colorLlegenda100"
+        android:elevation="2dp" />
 
 </LinearLayout>

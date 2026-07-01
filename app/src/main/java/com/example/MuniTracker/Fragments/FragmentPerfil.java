@@ -3,6 +3,7 @@ package com.example.MuniTracker.Fragments;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -389,23 +390,21 @@ public class FragmentPerfil extends Fragment {
         TextView notesTextView = view.findViewById(R.id.succesdesc);
         ScrollView scrollView = view.findViewById(R.id.scrollView);
 
-        notesTextView.setText(visita.notes.isEmpty() ? getString(R.string.no_notas_disponibles) : visita.notes);
-
-        notesTextView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                notesTextView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-                int maxScrollHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics());
-                scrollView.getLayoutParams().height = Math.min(notesTextView.getHeight(), maxScrollHeight);
-                scrollView.requestLayout();
-            }
-        });
+        // Si no hi ha notes guardades
+        if (visita.notes == null || visita.notes.trim().isEmpty()) {
+            notesTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            notesTextView.setText(getString(R.string.no_notas_disponibles));
+            notesTextView.setTextColor(Color.parseColor("#94A3B8")); // Gris suau de placeholder
+        } else {
+            notesTextView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+            notesTextView.setText(visita.notes);
+            notesTextView.setTextColor(Color.parseColor("#334155")); // El teu color fosc de text de l'app
+        }
     }
 
     private void configurarBotonesDialog(View view, AlertDialog dialog, Visita visita) {
         ImageButton editboto = view.findViewById(R.id.btnModificar);
-        ImageButton elimboto = view.findViewById(R.id.btnEliminar);
+        ImageButton elimboto = view.findViewById(R.id.btnEliminarvisita);
         AppCompatImageButton tancarButton = view.findViewById(R.id.btntancar);
         MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
 
@@ -426,18 +425,30 @@ public class FragmentPerfil extends Fragment {
     }
 
     private void eliminarVisita(Visita visita, AlertDialog dialog, MunicipiViewModel viewModel) {
-        ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage(getString(R.string.eliminando));
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+        // Creem el diàleg de confirmació natiu
+        new AlertDialog.Builder(context)
+                .setTitle("Eliminar visita")
+                .setMessage("Estàs segur que vols esborrar la visita a " + visita.municipiId + "? Aquesta acció no es pot desfer.")
+                .setPositiveButton("Eliminar", (dialogInterface, i) -> {
+                    // Si l'usuari confirma, es mostra el progrés i s'elimina
+                    ProgressDialog progressDialog = new ProgressDialog(context);
+                    progressDialog.setMessage(getString(R.string.eliminando));
+                    progressDialog.setCancelable(false);
+                    progressDialog.show();
 
-        viewModel.deleteVisita(visita);
-        viewModel.getVisitaEliminada().observe(getViewLifecycleOwner(), eliminada -> {
-            if (eliminada) {
-                progressDialog.dismiss();
-                viewModel.setVisitaEliminada(false);
-                dialog.dismiss();
-            }
-        });
+                    viewModel.deleteVisita(visita);
+                    viewModel.getVisitaEliminada().observe(getViewLifecycleOwner(), eliminada -> {
+                        if (eliminada) {
+                            progressDialog.dismiss();
+                            viewModel.setVisitaEliminada(false);
+                            dialog.dismiss(); // Tanca el diàleg principal de la nota
+                        }
+                    });
+                })
+                .setNegativeButton("Cancel·lar", (dialogInterface, i) -> {
+                    // Si cancel·la, simplement tanquem la confirmació sense fer res més
+                    dialogInterface.dismiss();
+                })
+                .show();
     }
 }
