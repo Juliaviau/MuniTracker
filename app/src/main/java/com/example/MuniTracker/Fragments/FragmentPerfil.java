@@ -426,7 +426,7 @@ public class FragmentPerfil extends Fragment {
 
     private void eliminarVisita(Visita visita, AlertDialog dialog, MunicipiViewModel viewModel) {
         // Creem el diàleg de confirmació natiu
-        new AlertDialog.Builder(context)
+        new AlertDialog.Builder(context, R.style.CustomAlertDialog)
                 .setTitle("Eliminar visita")
                 .setMessage("Estàs segur que vols esborrar la visita a " + visita.municipiId + "? Aquesta acció no es pot desfer.")
                 .setPositiveButton("Eliminar", (dialogInterface, i) -> {

@@ -88,4 +88,11 @@
         <item name="colorLlegenda100">@color/magenta_100</item>
     </style>
 
+
+    <style name="CustomAlertDialog" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/alert_dialog_rounded_bg</item>
+        <item name="colorPrimary">?attr/colorLlegenda100</item>
+        <item name="android:textColorPrimary">#0F172A</item>
+        <item name="android:textColorSecondary">#475569</item>
+    </style>
 </resources>

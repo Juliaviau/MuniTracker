@@ -567,7 +567,7 @@ public class FragmentMapes extends Fragment {
 
         // ACCIÓ D'ELIMINAR AMB CONFIRMACIÓ
         elimboto.setOnClickListener(v -> {
-            new AlertDialog.Builder(context)
+            new AlertDialog.Builder(context, R.style.CustomAlertDialog)
                     .setTitle("Eliminar visita")
                     .setMessage("Estàs segur que vols esborrar la visita a " + visita.municipiId + "? Aquesta acció no es pot desfer.")
                     .setPositiveButton("Eliminar", (dialogInterface, i) -> {
