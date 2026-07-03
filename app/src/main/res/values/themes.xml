@@ -23,7 +23,6 @@
     <style name="ScreenBackground"><item name="android:background">@color/fons</item></style>
     <style name="TextColor"><item name="android:textColor">@color/black</item></style>
 
-
     <style name="Theme.MuniTracker" parent="Base.Theme.MuniTracker" />
 
     <!--  splashscreen -->

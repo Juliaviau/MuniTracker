@@ -602,7 +602,6 @@ public class FragmentMapes extends Fragment {
         }
         dialog.show();
     }
-    //
 
     private void mostrarZona(String zonaId, String originalColor, String originalViewBox, TipoZona tipoZona, ViewModelProvider.Factory viewModelFactory) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
