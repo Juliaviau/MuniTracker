@@ -26,7 +26,7 @@ public class VisitaDialogFragment extends BottomSheetDialogFragment {
     private final String notesOriginal;
     private final long dataOriginal;
     private static Context context;
-    private long dataSeleccionadaTimestamp; // Variable interna per guardar la data triada
+    private long dataSeleccionadaTimestamp;
 
     public interface VisitaCallback {
         void onVisitaAdded(long data, String notes);
@@ -65,14 +65,12 @@ public class VisitaDialogFragment extends BottomSheetDialogFragment {
         TextView txtFechaSeleccionada = view.findViewById(R.id.txtFechaSeleccionada);
         Button agregarButton = view.findViewById(R.id.guardarButton);
 
-        // Inicialitzem la data seleccionada amb la que ens arriba o amb la d'avui mateix
         if (dataOriginal != 0) {
             dataSeleccionadaTimestamp = dataOriginal;
         } else {
             dataSeleccionadaTimestamp = System.currentTimeMillis();
         }
 
-        // Formatejador per pintar la data en text polit i llegible
         SimpleDateFormat sdf = new SimpleDateFormat("dd 'de' MMMM 'de' yyyy", Locale.getDefault());
         txtFechaSeleccionada.setText(sdf.format(new Date(dataSeleccionadaTimestamp)));
 
@@ -82,11 +80,10 @@ public class VisitaDialogFragment extends BottomSheetDialogFragment {
 
         // Configurar l'obertura del calendari de Material Design en prémer el camp de la data
         btnSeleccionarFecha.setOnClickListener(v -> {
-            // Li passem el CustomDatePickerStyle a través del mètode setTheme()
             MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
                     .setTitleText("Selecciona la data de visita")
                     .setSelection(dataSeleccionadaTimestamp)
-                    .setTheme(R.style.CustomDatePickerStyle) // <-- LA CLAU DE COLOR AQUÍ
+                    .setTheme(R.style.CustomDatePickerStyle)
                     .build();
 
             datePicker.addOnPositiveButtonClickListener(selection -> {
@@ -99,12 +96,10 @@ public class VisitaDialogFragment extends BottomSheetDialogFragment {
             datePicker.show(getParentFragmentManager(), "DATE_PICKER");
         });
 
-        // Configurar el botó de guardar visita (Es manté igual, només canvia d'on treu la data)
         agregarButton.setOnClickListener(v -> {
             String notes = notasEditText.getText().toString();
 
             if (callback != null) {
-                // Li passem exactament el timestamp net que espera el teu mètode original
                 callback.onVisitaAdded(dataSeleccionadaTimestamp, notes);
             }
             dismiss(); // Tancar el BottomSheet
