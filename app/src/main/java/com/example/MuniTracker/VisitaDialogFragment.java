@@ -46,7 +46,6 @@ public class VisitaDialogFragment extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Assegura't que el nom del layout coincideixi amb el teu fitxer XML (per exemple, bottom_sheet_agregar_visita)
         android.content.SharedPreferences prefs = context.getSharedPreferences("ConfigApp", android.content.Context.MODE_PRIVATE);
         int indexPaleta = prefs.getInt("paleta_seleccionada", 0);
 
@@ -78,7 +77,6 @@ public class VisitaDialogFragment extends BottomSheetDialogFragment {
             notasEditText.setText(notesOriginal);
         }
 
-        // Configurar l'obertura del calendari de Material Design en prémer el camp de la data
         btnSeleccionarFecha.setOnClickListener(v -> {
             MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
                     .setTitleText("Selecciona la data de visita")
@@ -102,7 +100,7 @@ public class VisitaDialogFragment extends BottomSheetDialogFragment {
             if (callback != null) {
                 callback.onVisitaAdded(dataSeleccionadaTimestamp, notes);
             }
-            dismiss(); // Tancar el BottomSheet
+            dismiss();
         });
 
         return view;

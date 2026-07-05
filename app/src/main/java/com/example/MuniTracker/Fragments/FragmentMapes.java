@@ -96,7 +96,6 @@ public class FragmentMapes extends Fragment {
 
     private Map<String, String> cachedSVGs = new HashMap<>();
 
-    // Copia la mateixa estructura de colors que hem definit al FragmentConfiguracio
     private final String[][] PALETES = {
             {"#fff7b2", "#ffd966", "#ffa631", "#d98a2d", "#a65e2e"}, // 0. Groc/Taronja (Original)
             {"#E0F3F8", "#ABD9E9", "#74ADD1", "#4575B4", "#313695"}, // 1. Oceà Blau
@@ -104,7 +103,6 @@ public class FragmentMapes extends Fragment {
             {"#FCE4EC", "#F48FB1", "#F06292", "#E91E63", "#880E4F"}  // 3. Magenta Elèctric
     };
 
-    // Variable per saber quins 5 colors s'estan utilitzant actualment
     private String[] paletaActual;
 
     @Override
@@ -115,7 +113,6 @@ public class FragmentMapes extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         android.content.SharedPreferences prefs = context.getSharedPreferences("ConfigApp", android.content.Context.MODE_PRIVATE);
         int indexPaleta = prefs.getInt("paleta_seleccionada", 0);
 
@@ -129,7 +126,7 @@ public class FragmentMapes extends Fragment {
 
         super.onCreate(savedInstanceState);
         binding = FragmentMapesBinding.inflate(getLayoutInflater());
-        // Precargar mapas en memoria
+
         cachedSVGs.put(TERRITORY_TYPE_MUNICIPALITY, obtenirSVG(R.raw.municipis));
         cachedSVGs.put(TERRITORY_TYPE_COMARCA, obtenirSVG(R.raw.comarquesactu));
         cachedSVGs.put(TERRITORY_TYPE_VEGUERIA, obtenirSVG(R.raw.vegueries));
@@ -261,7 +258,6 @@ public class FragmentMapes extends Fragment {
             }
         });
 
-        // Esconder la lista al pulsar la cruz del SearchView
         buscador.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
@@ -270,8 +266,6 @@ public class FragmentMapes extends Fragment {
             }
         });
 
-        // Esconder la lista cuando se hace clic fuera del SearchView
-        //TODO: NO FA RES AQUESTA PART. EN TOCAR LA PANTALLA AMAGR LA LLISTA
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -328,7 +322,6 @@ public class FragmentMapes extends Fragment {
         }
     }
 
-    // Funció auxiliar per muntar les línies horitzontals ràpidament sense duplicar codi
     private void afegirElementLlegenda(LinearLayout container, int colorHex, String text) {
         LinearLayout row = new LinearLayout(getContext());
         row.setOrientation(LinearLayout.HORIZONTAL);
@@ -538,9 +531,6 @@ public class FragmentMapes extends Fragment {
             notesTextView.setText(visita.notes);
         }
 
-        // NOTA: Hem eliminat el OnGlobalLayoutListener perquè el ScrollView
-        // ara es gestiona de manera intel·ligent i dinàmica directament des de l'XML.
-
         ImageButton elimboto = view.findViewById(R.id.btnEliminarvisita);
         ImageButton editboto = view.findViewById(R.id.btnModificar);
         ImageButton tancarButton = view.findViewById(R.id.btntancar);
@@ -565,13 +555,11 @@ public class FragmentMapes extends Fragment {
             bottomSheet.show(getParentFragmentManager(), "AgregarVisitaBottomSheet");
         });
 
-        // ACCIÓ D'ELIMINAR AMB CONFIRMACIÓ
         elimboto.setOnClickListener(v -> {
             new AlertDialog.Builder(context, R.style.CustomAlertDialog)
                     .setTitle("Eliminar visita")
                     .setMessage("Estàs segur que vols esborrar la visita a " + visita.municipiId + "? Aquesta acció no es pot desfer.")
                     .setPositiveButton("Eliminar", (dialogInterface, i) -> {
-                        // Si l'usuari confirma, executem la lògica d'esborrat que ja tenies
                         progressDialog.show();
                         viewModel.deleteVisita(visita);
                         viewModel.getVisitaEliminada().observe(getViewLifecycleOwner(), eliminada -> {
@@ -584,7 +572,7 @@ public class FragmentMapes extends Fragment {
                                 carregarMapa(TERRITORY_TYPE_MUNICIPALITY);
 
                                 viewModel.setVisitaEliminada(false);
-                                dialog.dismiss(); // Tanquem el diàleg principal de la visita
+                                dialog.dismiss();
                             } else {
                                 progressDialog.dismiss();
                                 Toast.makeText(context, "No s'ha pogut eliminar la visita", Toast.LENGTH_SHORT).show();
@@ -638,7 +626,6 @@ public class FragmentMapes extends Fragment {
         TextView infoMuni = bottomSheetView.findViewById(R.id.zonaIfnfo);
         TextView indicadorPercentatge = bottomSheetView.findViewById(R.id.indicadorpercentatge);
 
-        // Canviem el ProgressBar al nou component de Material
         //com.google.android.material.progressindicator.LinearProgressIndicator progressBar = bottomSheetView.findViewById(R.id.progressBar);
         LinearLayout visitasContainer = bottomSheetView.findViewById(R.id.visitasContainerS);
 
@@ -646,7 +633,6 @@ public class FragmentMapes extends Fragment {
         LiveData<Integer> quantitatVisitada;
         int totalMunicipis;
 
-        // 1. Assignació de dades segons el tipus de zona (Molt més net)
         switch (tipoZona) {
             case COMARCA:
                 quantitatVisitada = viewModel.obtenirQuantitatMunicipisVisitatsComarca(zonaId);
@@ -674,25 +660,20 @@ public class FragmentMapes extends Fragment {
                 break;
         }
 
-        // 2. Control de progressió i percentatges dinàmics
-        // Busquem els nous components customitzats
         View progressTrack = bottomSheetView.findViewById(R.id.customProgressTrack);
         View progressIndicator = bottomSheetView.findViewById(R.id.customProgressIndicator);
 
         quantitatVisitada.observe(getViewLifecycleOwner(), visitats -> {
-            // 1. Calculem el percentatge matemàtic (Ex: 0.3333)
             double percentatge = totalMunicipis == 0 ? 0 : (double) visitats / totalMunicipis;
 
             DecimalFormat df = new DecimalFormat("#.##");
             indicadorPercentatge.setText(df.format(percentatge * 100) + " %");
             infoMuni.setText("S'han visitat " + visitats + " de " + totalMunicipis + " municipis");
 
-            // 2. Esperem que Android sàpiga l'amplada real del fons per escalar l'indicador correctament
             progressTrack.post(() -> {
                 int ampladaTotal = progressTrack.getWidth();
                 int ampladaFinalIndicador = (int) (ampladaTotal * percentatge);
 
-                // 3. Animem l'amplada de la vista des de 0 fins al seu percentatge de forma suada i contínua
                 ValueAnimator anim = ValueAnimator.ofInt(0, ampladaFinalIndicador);
                 anim.addUpdateListener(valueAnimator -> {
                     int val = (Integer) valueAnimator.getAnimatedValue();
@@ -707,7 +688,6 @@ public class FragmentMapes extends Fragment {
 
             ImageView goalIcon = bottomSheetView.findViewById(R.id.progressGoalIcon);
 
-// Si s'ha completat tota la comarca, il·luminem el trofeu!
             if (visitats == totalMunicipis && totalMunicipis > 0) {
                 goalIcon.setImageTintList(ColorStateList.valueOf(Color.parseColor("#EAB308"))); // Color or modern
             } else {
@@ -716,17 +696,14 @@ public class FragmentMapes extends Fragment {
         });
     }
 
-    // 🔥 Funció auxiliar unificada: Dibuixa els municipis idèntic al llistat de visites normals
     private void omplirLlistaMunicipis(LinearLayout container, List<Municipi> municipis) {
         container.removeAllViews();
         for (Municipi municipi : municipis) {
             TextView visitaTextView = new TextView(context);
 
-            // Icona i nom amb format elegant
             visitaTextView.setText("📍  " + municipi.id);
             visitaTextView.setPadding(32, 24, 32, 24); // El mateix padding de contrast
 
-            // Reutilitzem el disseny blanc amb ombres tridimensionals
             visitaTextView.setBackgroundResource(R.drawable.rounded_card);
             visitaTextView.setTextSize(14);
             visitaTextView.setTextColor(Color.parseColor("#1E293B")); // Gris fosc de gran contrast
@@ -761,7 +738,6 @@ public class FragmentMapes extends Fragment {
         Button markAsVisitedButton = bottomSheetView.findViewById(R.id.visit);
         NestedScrollView scroll = bottomSheetView.findViewById(R.id.scrollView);
         View viewBottom = bottomSheetView.findViewById(R.id.viewbottom);
-
 
         Log.d("COLOR", paletaActual[4] + " " + originalColor);
 
@@ -811,30 +787,24 @@ public class FragmentMapes extends Fragment {
         TextView visitaTextView = new TextView(context);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
-        // 1. Text amb espaiat i un guió mitjà net si notes està buit
         String textNotes = (visita.notes != null && !visita.notes.trim().isEmpty()) ? visita.notes : "Sense comentaris";
         visitaTextView.setText("📅  " + sdf.format(new Date(visita.dataVisita)) + "   •   " + textNotes);
 
-        // 2. Marges interns més amplis (Paddings) per donar aire a les dades
         visitaTextView.setPadding(32, 24, 32, 24);
 
-        // 3. Assignem el fons blanc que acabem de modificar
         visitaTextView.setBackgroundResource(R.drawable.rounded_card);
 
-        // 4. Mida i color contrastat de la lletra (Gris fosc de debò, gairebé negre)
         visitaTextView.setTextSize(14);
         visitaTextView.setTextColor(Color.parseColor("#1E293B"));
         visitaTextView.setTypeface(null, Typeface.BOLD); // Mantenim negreta per marcar importància
 
-        // 5. El truc mestre: Elevació nativa (Ombra tridimensional)
         visitaTextView.setElevation(3f);
 
-        // 6. Configurar els marges externs perquè no s'enganxin entre elles
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         );
-        params.setMargins(4, 8, 4, 8); // Deixem espai vertical entre targetes
+        params.setMargins(4, 8, 4, 8);
         visitaTextView.setLayoutParams(params);
 
         visitaTextView.setOnClickListener(v ->  {
@@ -855,8 +825,6 @@ public class FragmentMapes extends Fragment {
     enum TipoZona {
         COMARCA, PROVINCIA, VEGUERIA, MUNICIPI
     }
-
-    //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
 
     private void pintarVegueriesPerVisites() {
         MunicipiViewModel viewModel = new ViewModelProvider(this).get(MunicipiViewModel.class);
@@ -928,12 +896,10 @@ public class FragmentMapes extends Fragment {
     }*/
 
     public int obtenirColorPerPercentatge(double percentatge) {
-        // Si és 0, es manté el color de fons del mapa que ja tenies
         if (percentatge == 0.0) {
             return ContextCompat.getColor(context, R.color.blau_mapa);
         }
 
-        // Si s'ha de pintar, agafem el color corresponent del nostre array dinàmic
         if (percentatge <= 25.0) {
             return Color.parseColor(paletaActual[0]); // lleg25 dinàmic
         } else if (percentatge <= 50.0) {
@@ -946,7 +912,6 @@ public class FragmentMapes extends Fragment {
             return Color.parseColor(paletaActual[4]); // llegComplet dinàmic
         }
     }
-
 
 
     public interface ColorCallback {
@@ -983,19 +948,15 @@ public class FragmentMapes extends Fragment {
     public void onResume() {
         super.onResume();
 
-        // Restaurar el estado de los municipios visitados
         restoreVisitedMunicipalities();
 
-        // Recargar el WebView si es necesario
         if (webView != null) {
             webView.reload();
         }
     }
     private void restoreVisitedMunicipalities() {
-        // Restaurar la lista de municipios desde SharedPreferences o alguna fuente persistente
         SharedPreferences preferences = getActivity().getSharedPreferences("MunicipalitiesPrefs", Context.MODE_PRIVATE);
         String visitedMunicipalities = preferences.getString("visited_municipalities", "");
-        // Aquí puedes usar la lista de municipios para pintarlos nuevamente en el mapa
     }
 
 
